@@ -44,14 +44,14 @@ fig.update_xaxes(title_text='Time',showline=True, linewidth=2, linecolor='black'
 fig.update_yaxes(title_text='y', showline=True, linewidth=2, linecolor='black', mirror=True, row=1, col=1)
 fig.update_yaxes(title_text='u', showline=True, linewidth=2, linecolor='black', mirror=True, row=2, col=1)
 
-fig.show()
+# fig.show()
 
 
-nstep = 100 # Choose training data lenth
+nstep = 400 # Choose training data lenth
 x = np.linspace(0,nstep-1, nstep)
 
 # random signal generation
-
+np.random.seed(5) # seed to get constant result in each run
 a_range = [0,2]
 a = np.random.rand(nstep) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 a[0] = 0
@@ -103,7 +103,7 @@ fig.update_xaxes(title_text='Time',showline=True, linewidth=2, linecolor='black'
 fig.update_yaxes(title_text='y', showline=True, linewidth=2, linecolor='black', mirror=True, row=1, col=1)
 fig.update_yaxes(title_text='u', showline=True, linewidth=2, linecolor='black', mirror=True, row=2, col=1)
 
-fig.show()
+# fig.show()
 
 # """# 3. Evaluate the Random Input Signal"""
 
@@ -127,7 +127,7 @@ fig.update_xaxes(showline=True, linewidth=2, linecolor='black', mirror=True, row
 fig.update_xaxes(title_text='Time',showline=True, linewidth=2, linecolor='black', mirror=True, row=2, col=1)
 fig.update_yaxes(title_text='y', showline=True, linewidth=2, linecolor='black', mirror=True, row=1, col=1)
 fig.update_yaxes(title_text='u', showline=True, linewidth=2, linecolor='black', mirror=True, row=2, col=1)
-fig.show()
+# fig.show()
 
 
 # """# 4. Train LSTM Network"""
@@ -139,12 +139,13 @@ import joblib
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
+from keras.layers import SimpleRNN
 from keras.layers import Dropout
 from keras.callbacks import EarlyStopping
 from keras.models import load_model
 
-window = 5 # windodw size for past value
-P = 10 # Prediction Horizon for future prediction
+window = 10 # window size for past value
+P = 1 # Prediction Horizon for future prediction
 #Load training data
 data = pd.DataFrame(
         {"u": u,
@@ -170,13 +171,13 @@ fig.update_layout(
     )
 fig.update_xaxes(title_text='Time',showline=True, linewidth=2, linecolor='black', mirror=True)
 fig.update_yaxes(title_text='y', showline=True, linewidth=2, linecolor='black', mirror=True)
-fig.show()
+# fig.show()
 
 #%% Save MinMaxScaler file
 joblib.dump(s1, 's1.sav')
 joblib.dump(s2, 's2.sav')
 
-val_ratio = 0.5
+val_ratio = 0.5 # or train ratio?
 cut_index = np.int(nstep*val_ratio) # index number to separate the training and validation set
 print(cut_index)
 Xs_train = Xs[0:cut_index]
@@ -187,14 +188,14 @@ Ys_val = Ys[cut_index:]
 X_train = []
 Y_train = []
 for i in range(window,len(Xs_train)-P):
-    X_train.append(Xs_train[i-window:i+P,:])
-    Y_train.append(Ys_train[i:i+P])
+    X_train.append(Xs_train[i-window:i,:])
+    Y_train.append([Ys_train[i]])
 
 X_val = []
 Y_val = []
 for i in range(window,len(Xs_val)-P):
-    X_val.append(Xs_val[i-window:i+P,:])
-    Y_val.append(Ys_val[i:i+P])
+    X_val.append(Xs_val[i-window:i,:])
+    Y_val.append([Ys_val[i]])
 
 # """## (For Training) Preparing new LSTM Input data replacing the *y(k+1), .. y(k+P)* with *y(k)* """
 
@@ -227,29 +228,60 @@ fig.update_layout(
     )
 fig.update_xaxes(title_text='Time',showline=True, linewidth=2, linecolor='black', mirror=True)
 fig.update_yaxes(title_text='y', showline=True, linewidth=2, linecolor='black', mirror=True)
-fig.show()
+# fig.show()
 
 # # # Initialize LSTM model
 model = Sequential()
-
-model.add(LSTM(units=100, return_sequences=True, \
+# network structure: {2, 100, 1}
+model.add(SimpleRNN(units=100, \
           input_shape=(X_train.shape[1],X_train.shape[2])))
 model.add(Dropout(0.2))
-model.add(LSTM(units=100, return_sequences=True))
-model.add(Dropout(0.2))
-model.add(LSTM(units=100))
-model.add(Dropout(0.2))
-model.add(Dense(units=Y_train.shape[1])) #units = number of outputs
-model.compile(optimizer = 'adam', loss = 'mean_squared_error',\
-              metrics = ['accuracy'])
-# Allow for early exit
-es = EarlyStopping(monitor='loss',mode='min',verbose=1,patience=10)
 
-# Fit (and time) LSTM model
+# or ...
+# network structure: {2, 100, 50, 1}
+# model.add(SimpleRNN(units=100, \
+#           input_shape=(X_train.shape[1],X_train.shape[2]), return_sequences=True))
+# model.add(Dropout(0.2))
+# model.add(SimpleRNN(units=50))
+# model.add(Dropout(0.2))
+
+model.add(Dense(units=Y_train.shape[1])) #units = number of outputs
+model.compile(optimizer='adam', loss='mean_squared_error',\
+              metrics=['accuracy'])
+# Allow for early exit
+es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10)
+
+# Fit (and time) SimpleRNN model
 t0 = time.time()
-history = model.fit(X_train, Y_train, epochs = 300, batch_size = 250, callbacks=[es], verbose=1, validation_data=(X_val, Y_val))
+history = model.fit(X_train, Y_train, epochs=300, batch_size=32, callbacks=[es], verbose=1, validation_data=(X_val, Y_val))
 t1 = time.time()
 print('Runtime: %.2f s' %(t1-t0))
+
+# Save Weights
+from pickle import dump
+W, Wh, b = [], [], []
+for sub_w in model.weights:
+    sub_type = (sub_w.name.split('/')[-1]).split(':')[0]
+    if sub_type == 'kernel':  # Weights (W)
+        W.append(sub_w.numpy())
+
+    if sub_type == 'recurrent_kernel':  # Recurrent Weights (Wh)
+        Wh.append(sub_w.numpy())
+
+    if sub_type == 'bias':  # Biases (b)
+        b.append(sub_w.numpy())
+
+file = open(file='saved_weights.pkl',mode='wb')  # Saving variables
+dump([W, Wh, b], file)
+file.close()
+
+# Save input/output data
+file = open(file='saved_data.pkl',mode='wb')
+dump([X_train, Y_train], file)
+file.close()
+
+# Save network model
+model.save('SimpleRNN_model')
 
 # Plot loss
 plt.figure(figsize=(6,5))
@@ -288,18 +320,34 @@ plt.legend()
 #   model = load_model('model.h5')
 
 # # Verify the fit of the model
-# t0 = time.time()
-# Yp_train = model.predict(X_train)
-# Yp_val = model.predict(X_val)
-# t1 = time.time()
-# print('Runtime: %.2f s' %(t1-t0))
+t0 = time.time()
+Yp_train = model.predict(X_train)
+Yp_val = model.predict(X_val)
+t1 = time.time()
+print('Runtime: %.2f s' %(t1-t0))
 
 # # un-scale outputs
-# Yu_train = s2.inverse_transform(Yp_train)
-# Ym_train = s2.inverse_transform(Y_train)
+Yu_train = s2.inverse_transform(Yp_train)
+Ym_train = s2.inverse_transform(Y_train)
 
-# Yu_val = s2.inverse_transform(Yp_val)
-# Ym_val = s2.inverse_transform(Y_val)
+Yu_val = s2.inverse_transform(Yp_val)
+Ym_val = s2.inverse_transform(Y_val)
+
+plt.figure(0, figsize=(30,4))
+plt.subplot(1,2,1)
+plt.plot(data.index[window:cut_index-P],Yu_train[:,0],'r-',label='SimpleRNN')
+plt.plot(data.index[window:cut_index-P],Ym_train[:,0],'b--',label='Measured')
+plt.title('Training')
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(data.index[cut_index+window:-P],Yu_val[:,0],'r-',label='SimpleRNN')
+plt.plot(data.index[cut_index+window:-P],Ym_val[:,0],'b--',label='Measured')
+plt.title('Validation')
+plt.legend()
+plt.show()
+
+
+
 
 # plt.figure(0, figsize=(30,4))
 # plt.subplot(1,2,1)
@@ -312,6 +360,7 @@ plt.legend()
 # plt.plot(data.index[cut_index+window:-P],Ym_val[:,0],'b--',label='Measured')
 # plt.title('Validation')
 # plt.legend()
+# plt.show()
 
 # plt.figure(1, figsize=(12,2))
 # plt.subplot(1,2,1)
