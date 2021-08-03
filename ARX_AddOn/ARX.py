@@ -129,6 +129,8 @@ class ARX:
             labels.append(label+'_pred')
 
         YP = DataFrame(YP, columns=labels)
+        YP.fillna(method='ffill', inplace=True)
+        YP.fillna(method='bfill', inplace=True)
         return YP
 
 

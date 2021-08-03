@@ -21,16 +21,28 @@ def pull_only_signals(url, grid='auto'):
     end = worksheet.display_range['End']
 
     search_df = spy.search(url, estimate_sample_period=worksheet.display_range, quiet=True)
+    capsules_list = search_df[search_df['Type'].str.contains('Calc')]['Name'].to_list()
+    signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
+
     if search_df.empty:
         return pd.DataFrame()
-    search_signals_df = search_df[search_df['Type'].str.contains('Signal')]
-    
-    df = spy.pull(search_signals_df, start=start, end=end, grid=grid, header='ID', quiet=True,
+    search_all_df = search_df[search_df['Type'].str.contains('al')]
+
+    all_df = spy.pull(search_all_df, start=start, end=end, grid='auto', header='ID', quiet=True,
                   status=spy.Status(quiet=True))
-    if df.empty:
-        return pd.DataFrame()
-    df.columns = df.query_df['Name']
-    return df
+    if all_df.empty:
+        return pd.DataFrame(), pd.DataFrame()
+    all_df.columns = all_df.query_df['Name']
+    all_df.dropna(inplace=True)
+    signal_df = all_df[signal_list]
+    if signal_df.empty:
+        return pd.DataFrame(), pd.DataFrame()
+    capsule_df = all_df[capsules_list]
+    if capsule_df.empty:
+        return signal_df, pd.DataFrame()
+    signal_df.columns = signal_list
+    capsule_df.columns = capsules_list
+    return signal_df, capsule_df
 
 
 def parse_url(url):
