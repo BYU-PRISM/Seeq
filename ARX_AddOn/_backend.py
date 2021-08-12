@@ -1,5 +1,5 @@
 """
-This is a file that contains some functions (it could be classes) to perform backend calculations
+This is a dummy file that contains some functions (it could be classes) to perform backend calculations
 """
 
 from urllib.parse import parse_qs, unquote, urlparse

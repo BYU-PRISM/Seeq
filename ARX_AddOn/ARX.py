@@ -111,7 +111,8 @@ class ARX:
 
         YP = Y.iloc[:Nd_max].to_numpy()
         yo = YP[-NA:].transpose()
-
+#         print(YP)
+#         print(yo)
         NI = max(0, NA-NB-NK)
         for k in range(NI, lu-NB-NK):
             y_p = zeros(NY)
@@ -170,6 +171,11 @@ class ARX:
 
         U = X[cause]
         Y = X[effect]
+        # n_a = n_a + 5
+        # n_b = n_b + 3
+
+        # print(len(grangered_struct))
+        # print(grangered_struct)
 
         return U, Y, n_a, n_b
 
