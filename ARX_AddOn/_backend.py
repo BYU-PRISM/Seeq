@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 import numpy as np
 import pandas as pd
 from seeq import spy
+import re
 
 
 def create_new_signal(signal_a: np.array, signal_b: np.array, index: pd.Index, operation):
@@ -21,7 +22,7 @@ def pull_only_signals(url, grid='auto'):
     end = worksheet.display_range['End']
 
     search_df = spy.search(url, estimate_sample_period=worksheet.display_range, quiet=True)
-    capsules_list = search_df[search_df['Type'].str.contains('Calc')]['Name'].to_list()
+    capsules_list = search_df[search_df['Type'].str.contains('CalculatedCondition')]['Name'].to_list()
     signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
 
     if search_df.empty:
@@ -32,6 +33,7 @@ def pull_only_signals(url, grid='auto'):
                   status=spy.Status(quiet=True))
     if all_df.empty:
         return pd.DataFrame(), pd.DataFrame()
+    
     all_df.columns = all_df.query_df['Name']
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
@@ -42,7 +44,7 @@ def pull_only_signals(url, grid='auto'):
         return signal_df, pd.DataFrame()
     signal_df.columns = signal_list
     capsule_df.columns = capsules_list
-    return signal_df, capsule_df
+    return signal_df, capsule_df, search_df
 
 
 def parse_url(url):
@@ -70,6 +72,22 @@ def get_workbook_worksheet_workstep_ids(url):
         workstep_id = params['workstepId'][0]
     return workbook_id, worksheet_id, workstep_id
 
+def create_formula_variable_name(names):
+    
+    formula_name = []
+    for item in names:
+        item = item.lower()
+        item = re.split("_| | ",item)
+        f_name = '$'
+        for i in item:
+            f_name += i
+        formula_name.append(f_name)
+
+    return formula_name
+
 
 def push_signal(df, workbook_id, worksheet_name):
     spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
+    
+def push_formula(formula, workbook_id, worksheet_name):
+    spy.push(metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
