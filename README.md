@@ -6,7 +6,7 @@ Multiple iterations of the one-step-ahead prediction return the multi-step predi
 
 Here is an example formular with $na=$3, $nb=$2 for the single input and single output system,
 
-$y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k}+b_{2} u_{k-1}$
+$$ y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k}+b_{2} u_{k-1} $$
 
 ARX: Auto-Regressive with eXogenous input  
 $a$: ARX coefficient for the past output value  
