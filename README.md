@@ -4,7 +4,7 @@
 
 <!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true) -->
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/digital_twin_illustraion.jpg" width="600" height="200">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/digital_twin_illustraion.jpg" align="center" width="600" height="200">
 
 ----
 
@@ -17,7 +17,7 @@ Add-on back and forth. It also provides the model result in a formula to predict
 for the time range beyond the training data. The model result can be used for many different data 
 analytics tasks, plus for the model development tasks for the Advanced Process Control applications.
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" width="650" height="200">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="200">
 
 ----
 
