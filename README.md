@@ -1,5 +1,5 @@
 <p align="left">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.svg" width="300" height="100">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png" width="300" height="100">
 </p>
 
 ## System Identification
@@ -18,7 +18,7 @@ for the time range beyond the training data. The model result can be used for ma
 analytics tasks, plus for the model development tasks for the Advanced Process Control applications.
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="150">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Digital_twin_inout.png" align="center" width="650" height="150">
 </p>
 
 ## What does Seeq-System Identification do?
@@ -30,7 +30,7 @@ Seeq-System Identification Add-on provides a spectrum of the prediction model ra
 1. Hybrid Physics and Machine learning model identification
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" align="center" width="600" height="150">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Blackbox.png" align="center" width="600" height="150">
 </p>
 
 ## ARX model
@@ -42,7 +42,7 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 </p>
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Onestep-ahead.png" align="center" width="300" height="100">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Onestep-ahead.png" align="center" width="300" height="100">
 </p>
 
 ARX: Auto-Regressive with eXogenous input  
@@ -72,16 +72,16 @@ Although the ARX model can be more detailed by increasing the number of terms ($
 
 ## Overview
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview0.jpg" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview0.jpg" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview1.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview1.png" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview2.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview2.png" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview3.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview3.png" align="center" width="800" height="450">
 </p>
 
 # User Guide
