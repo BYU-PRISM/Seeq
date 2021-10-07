@@ -152,11 +152,11 @@ The change log can be found [**here**](https://seeq12.github.io/seeq-correlation
 # Support
 
 Code related issues (e.g. bugs, feature requests) can be created in the
-[issue tracker](https://github.com/seeq12/seeq-correlation/issues)
+[issue tracker](https://github.com/BYU-PRISM/Seeq/issues)
 Any other general comments or questions (non-code related) can be emailed to
 [Seeq](mailto:applied.research@seeq.com?subject=[seeq-correlation]%20General%20Question)
 
-Maintainer: Alberto Rivas
+<!-- Maintainer: Alberto Rivas -->
 
 
 ----
@@ -168,7 +168,7 @@ Please cite this work as:
 ```shell
 seeq-correlation v0.0.20
 Seeq Corporation, 2021
-https://github.com/seeq12/seeq-correlation
+https://github.com/BYU-PRISM/Seeq
 ```
 
 
