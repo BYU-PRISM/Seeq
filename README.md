@@ -90,7 +90,7 @@ The backend of **seeq-System Identification** requires **Python 3.7** or later.
 
 ## Dependencies
 
-See [`requirements.txt`](https://github.com/seeq12/seeq-correlation/tree/master/requirements.txt) file for a list of
+See [`requirements.txt`](https://github.com/BYU-PRISM/Seeq/blob/main/requirements.txt) file for a list of
 dependencies and versions. Additionally, you will need to install the `seeq` module with the appropriate version that
 matches your Seeq server. For more information on the `seeq` module see [seeq at pypi](https://pypi.org/project/seeq/)
 
@@ -107,7 +107,7 @@ If you want to install **seeq-correlation** as a Seeq Add-on Tool, you will need
 
 The latest build of the project can be found [here](https://pypi.seeq.com/) as a wheel file. The file is published as a
 courtesy to the user, and it does not imply any obligation for support from the publisher. Contact
-[Seeq](mailto:applied.research@seeq.com?subject=[seeq-correlation]%20General%20Question) if you required credentials to
+[Seeq](mailto:applied.research@seeq.com?subject=[seeq-sysid]%20General%20Question) if you required credentials to
 access the site.
 
 
