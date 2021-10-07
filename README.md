@@ -20,7 +20,6 @@ analytics tasks, plus for the model development tasks for the Advanced Process C
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="200">
 </p>
-
 ----
 
 ## What does Seeq-System Identification do?
