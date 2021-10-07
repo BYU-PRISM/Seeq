@@ -76,6 +76,10 @@ courtesy to the user, and it does not imply any obligation for support from the 
 [Seeq](mailto:applied.research@seeq.com?subject=[seeq-correlation]%20General%20Question) if you required credentials to
 access the site.
 
+
+https://user-images.githubusercontent.com/55245976/136426388-6b44382e-9542-4239-a43a-2cd49d667c3d.mp4
+
+
 1. Create a **new** Seeq Data Lab project and open the **Terminal** window
 2. Run `pip install seeq-correlation --extra-index-url https://pypi.seeq.com --trusted-host pypi.seeq.com`
 3. Run `python -m seeq.addons.correlation [--users <users_list> --groups <groups_list>]`
