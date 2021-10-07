@@ -27,7 +27,7 @@ analytics tasks, plus for the model development tasks for the Advanced Process C
 1. Black-box model identification (Neural Networks-based models)
 1. Hybrid Physics and Machine learning model identification
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" width="600" height="200">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" width="600" height="150">
 
 
 ## Overview
