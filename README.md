@@ -2,22 +2,22 @@
 
 # System Identification
 
-![Gui](\SysID_Gui.png)
-
+![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true)
 
 ----
 
-**seeq-System Identification** is a Python module to calculate and monitor cross-correlations among time-series signals. It also
-calculates the time shifts (lead or lag) that maximize the cross-correlations of each signal pair. The module includes a
-user interface (UI) designed to interact with the Seeq server. Specifically, the UI can be installed as an Add-on Tool
-in Seeq Workbench.
+**seeq-System Identification** is a Python module to identify digital twin models for time-series data. It provides 
+various types of models to identify the system dynamics allowing users to get the model prediction value quickly. Add-On 
+module can be integrated into the Seeq Workbench and passing the data from the Workbench and Identified model results
+from the Add-on back and forth. It also provides the model result in a formular so that it can be used for predict the 
+system behavior for the time range beyond the training data.
 
 ----
 
 # User Guide
 
-[**seeq-correlation User Guide**](https://seeq12.github.io/seeq-correlation/user_guide.html)
-provides a more in-depth explanation of correlation analysis and how seeq-correlation works
+[**seeq-System Identification User Guide**](https://seeq12.github.io/seeq-correlation/user_guide.html)
+provides a more in-depth explanation of System Identification and how seeq-System Identification works
 
 ----
 
