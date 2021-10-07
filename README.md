@@ -30,11 +30,14 @@ Seeq-System Identification Add-on provides a spectrum of the prediction model ra
 1. Black-box model identification (Neural Networks-based models)
 1. Hybrid Physics and Machine learning model identification
 
+<p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" align="center" width="600" height="150">
-
+</p>
 
 ## Overview
+<p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png" align="center" width="800" height="500">
+</p>
 
 
 https://user-images.githubusercontent.com/55245976/136423446-9babb1da-41e6-4fcc-8bc0-066f98fc189d.mp4
