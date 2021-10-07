@@ -4,7 +4,7 @@
 
 <!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true) -->
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg" align="center" width="600" height="200">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg" align="center">
 </p>
 
 ## SeeQ-System Identification is .. 
