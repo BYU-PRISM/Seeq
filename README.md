@@ -2,6 +2,7 @@
 
 # System Identification
 
+![Gui](\SysID_Gui.png)
 
 
 ----
