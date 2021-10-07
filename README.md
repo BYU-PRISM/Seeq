@@ -41,7 +41,9 @@ Seeq-System Identification Add-on provides a spectrum of the prediction model ra
 
 
 # User Guide
+
 https://user-images.githubusercontent.com/55245976/136423446-9babb1da-41e6-4fcc-8bc0-066f98fc189d.mp4
+
 [**SeeQ-System Identification User Guide**](https://github.com/BYU-PRISM/Seeq/blob/main/README.md)
 provides a more in-depth explanation of System Identification and how seeq-System Identification works
 
