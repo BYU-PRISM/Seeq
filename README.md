@@ -45,15 +45,20 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/Onestep-ahead.png" align="center" width="300" height="100">
 </p>
 
-ARX: Auto-Regressive with eXogenous input
-a: ARX coefficient for the past output value
-b: ARX coefficient for the past input value
-<img src="https://render.githubusercontent.com/render/math?math=\large n_a">: Number of terms for the past output value
-$nb$: Number of terms for the past input value
-$nk$: Delay between input and output
-$k$: present time step
-Here is another example formular with **delay** ($na=$3, $nb=$2, $nk=$2),
-$y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$
+ARX: Auto-Regressive with eXogenous input  
+a: ARX coefficient for the past output value  
+b: ARX coefficient for the past input value  
+<img src="https://render.githubusercontent.com/render/math?math=\large n_a">: Number of terms for the past output value  
+<img src="https://render.githubusercontent.com/render/math?math=\large n_b">: Number of terms for the past input value  
+<img src="https://render.githubusercontent.com/render/math?math=\large n_c">: Delay between input and output  
+<img src="https://render.githubusercontent.com/render/math?math=\large k">: present time step  
+Here is another example formular with **delay** ($na=$3, $nb=$2, $nk=$2),  
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large $y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$ " >
+</p>
+
+$y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$  
 
 
 
