@@ -2,17 +2,27 @@
 
 # System Identification
 
-![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true)
+<!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true) -->
+
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png" width="800" height="500">
 
 ----
 
-**seeq-System Identification** is a Python module to identify digital twin models for time-series data. It provides 
-various types of models to identify the system dynamics allowing users to get the model prediction value quickly. Add-On 
-module can be integrated into the Seeq Workbench and passing the data from the Workbench and Identified model results
-from the Add-on back and forth. It also provides the model result in a formular so that it can be used for predict the 
-system behavior for the time range beyond the training data.
+## Seeq-System Identification is .. 
+a Python module to identify digital twin models for time-series data.
+It provides various models to identify the system dynamics allowing users to get the model prediction 
+value quickly. The Add-On module can be integrated into the Seeq Workbench and passing the data from 
+the Workbench and Identified model results from the Add-on back and forth. It also provides the model 
+result in a formula to predict the system behavior for the time range beyond the training data.
 
 ----
+
+## What does Seeq-System Identification do?
+
+1. Grey-box model identification (ARX, Transferfunction, Subspace models)
+1. Black-box model identification (Neural Networks-based models)
+1. Hybrid Physics and Machine learning model identification
+
 
 # User Guide
 
@@ -77,7 +87,7 @@ For development work, it is highly recommended creating a python virtual environ
 working environment. If you are not familiar with python virtual environments, you can take a
 look [here](https://docs.python.org/3.8/tutorial/venv.html)
 
-Once your virtual environment is activated, you can install **Seeq-System Identification** from source with:
+Once your virtual environment is activated, you can install **seeq-correlation** from source with:
 
 ```shell
 python setup.py install
@@ -85,11 +95,11 @@ python setup.py install
 
 ## Testing
 
-There are several types of testing available for **Seeq-System Identification**
+There are several types of testing available for **seeq-correlation**
 
 ### Automatic Testing
 
-After installation, you can launch the test suite from the root directory of the project (i.e. `seeq-sysid`
+After installation, you can launch the test suite from the root directory of the project (i.e. `seeq-correlation`
 directory). You will need to have pytest >= 5.0.1 installed
 
 To run all tests:
