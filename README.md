@@ -10,7 +10,7 @@
 
 ## SeeQ-System Identification is .. 
 A Python module to identify input and output relationship for the system to create the **digital twin** 
-models for various data analytics tasks.It provides various models to identify the system dynamics 
+models for various data analytics tasks. It provides various models to identify the system dynamics 
 allowing users to get the model prediction value quickly. The Add-On module can be integrated into 
 the Seeq Workbench and passing the data from the Workbench and Identified model results from the 
 Add-on back and forth. It also provides the model result in a formula to predict the system behavior 
