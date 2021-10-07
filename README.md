@@ -58,13 +58,13 @@ Although the ARX model can be more detailed by increasing the number of terms ($
 ![Overview](https://user-images.githubusercontent.com/55245976/136428248-2e158a9e-fe03-40a8-a57c-44d3c3e6ac1e.jpg)
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview1.png" align="center" width="800" height="500">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview1.png" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview2.png" align="center" width="800" height="500">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview2.png" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview3.png" align="center" width="800" height="500">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview3.png" align="center" width="800" height="450">
 </p>
 
 # User Guide
