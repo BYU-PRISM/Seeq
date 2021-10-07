@@ -77,7 +77,7 @@ For development work, it is highly recommended creating a python virtual environ
 working environment. If you are not familiar with python virtual environments, you can take a
 look [here](https://docs.python.org/3.8/tutorial/venv.html)
 
-Once your virtual environment is activated, you can install **seeq-correlation** from source with:
+Once your virtual environment is activated, you can install **Seeq-System Identification** from source with:
 
 ```shell
 python setup.py install
@@ -85,11 +85,11 @@ python setup.py install
 
 ## Testing
 
-There are several types of testing available for **seeq-correlation**
+There are several types of testing available for **Seeq-System Identification**
 
 ### Automatic Testing
 
-After installation, you can launch the test suite from the root directory of the project (i.e. `seeq-correlation`
+After installation, you can launch the test suite from the root directory of the project (i.e. `seeq-sysid`
 directory). You will need to have pytest >= 5.0.1 installed
 
 To run all tests:
