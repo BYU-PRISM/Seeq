@@ -41,7 +41,7 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{0} y_{k} %2B a_{1} y_{k-1} %2B a_{2} y_{k-2} %2B b_{0} u_{k} %2B b_{1} u_{k-1}" >
 </p>
-**y<sub>k+1</sub>=a<sub>0</sub> y<sub>k</sub>+a<sub>1</sub> y<sub>k-1</sub>+a<sub>2</sub> y<sub>k-2</sub>+b<sub>0</sub> u<sub>k</sub>+b<sub>1</sub> u<sub>k-1</sub>**
+
 ARX: Auto-Regressive with eXogenous input
 a: ARX coefficient for the past output value
 b: ARX coefficient for the past input value
