@@ -55,8 +55,9 @@ Although the ARX model can be more detailed by increasing the number of terms ($
 
 
 ## Overview
-![Overview](https://user-images.githubusercontent.com/55245976/136428248-2e158a9e-fe03-40a8-a57c-44d3c3e6ac1e.jpg)
-
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview0.png" align="center" width="800" height="450">
+</p>
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/overview1.png" align="center" width="800" height="450">
 </p>
