@@ -35,6 +35,8 @@ Seeq-System Identification Add-on provides a spectrum of the prediction model ra
 ## Overview
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png" width="800" height="500">
 
+https://user-images.githubusercontent.com/55245976/136422191-48a7f637-2ca7-43c7-a87e-d99cf6602231.mp4
+
 # User Guide
 
 [**SeeQ-System Identification User Guide**](https://seeq12.github.io/seeq-correlation/user_guide.html)
