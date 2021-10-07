@@ -18,7 +18,7 @@ for the time range beyond the training data. The model result can be used for ma
 analytics tasks, plus for the model development tasks for the Advanced Process Control applications.
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="200">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="150">
 </p>
 
 ## What does Seeq-System Identification do?
@@ -41,6 +41,10 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 <img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{0} y_{k} %2B a_{1} y_{k-1} %2B a_{2} y_{k-2} %2B b_{0} u_{k} %2B b_{1} u_{k-1}" >
 </p>
 
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Onestep-ahead.png" align="center" width="300" height="100">
+</p>
+
 ARX: Auto-Regressive with eXogenous input
 a: ARX coefficient for the past output value
 b: ARX coefficient for the past input value
@@ -50,7 +54,15 @@ $nk$: Delay between input and output
 $k$: present time step
 Here is another example formular with **delay** ($na=$3, $nb=$2, $nk=$2),
 $y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$
+
+
+
 Although the ARX model can be more detailed by increasing the number of terms ($na$, $nb$), it could result in an overfit. Thus, it could be an essential step to compare the training and validation set, ensuring the prediction for the validation set is as good as the training set. The model fitting can be quantified using different statistical methods such as **MSE** (Mean Squared Error) or **SSE** (Sum of Squared Error)
+
+
+
+
+
 
 
 ## Overview
