@@ -144,7 +144,7 @@ run `developer_notebook.ipynb` notebook there.
 
 # Changelog
 
-The change log can be found [**here**](https://seeq12.github.io/seeq-correlation/changelog.html)
+<!-- The change log can be found [**here**](https://seeq12.github.io/seeq-correlation/changelog.html) -->
 
 
 ----
