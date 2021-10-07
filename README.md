@@ -8,7 +8,7 @@
 
 ----
 
-## Seeq-System Identification is .. 
+## SeeQ-System Identification is .. 
 A Python module to identify input and output relationship for the system to create the **digital twin** 
 models for various data analytics tasks.It provides various models to identify the system dynamics 
 allowing users to get the model prediction value quickly. The Add-On module can be integrated into 
@@ -33,7 +33,7 @@ analytics tasks, plus for the model development tasks for the Advanced Process C
 
 # User Guide
 
-[**seeq-System Identification User Guide**](https://seeq12.github.io/seeq-correlation/user_guide.html)
+[**SeeQ-System Identification User Guide**](https://seeq12.github.io/seeq-correlation/user_guide.html)
 provides a more in-depth explanation of System Identification and how seeq-System Identification works
 
 ----
