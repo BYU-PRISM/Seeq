@@ -72,7 +72,7 @@ Although the ARX model can be more detailed by increasing the number of terms ($
 
 ## Overview
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview0.jpg" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview0.jpg" align="center" width="800" height="602">
 </p>
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview1.png" align="center" width="800" height="450">
