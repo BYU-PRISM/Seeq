@@ -4,7 +4,7 @@
 
 <!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true) -->
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png" width="800" height="500">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/digital_twin_illustraion.jpg" width="600" height="200">
 
 ----
 
@@ -17,7 +17,7 @@ Add-on back and forth. It also provides the model result in a formula to predict
 for the time range beyond the training data. The model result can be used for many different data 
 analytics tasks, plus for the model development tasks for the Advanced Process Control applications.
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" width="600" height="100">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" width="650" height="200">
 
 ----
 
@@ -27,7 +27,7 @@ analytics tasks, plus for the model development tasks for the Advanced Process C
 1. Black-box model identification (Neural Networks-based models)
 1. Hybrid Physics and Machine learning model identification
 
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" width="500" height="150">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/Blackbox.png" width="600" height="200">
 
 
 ## Overview
