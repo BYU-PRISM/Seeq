@@ -54,7 +54,7 @@ b: ARX coefficient for the past input value
 Here is another example formular with **delay** ($na=$3, $nb=$2, $nk=$2),  
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\large $y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$ " >
+<img src="https://render.githubusercontent.com/render/math?math=\large y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}" >
 </p>
 
 $y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}$  
