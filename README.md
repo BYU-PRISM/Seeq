@@ -1,5 +1,5 @@
 <p align="left">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png" width="300" height="100">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png" width="400" height="100">
 </p>
 
 ## System Identification
