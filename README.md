@@ -20,7 +20,6 @@ analytics tasks, plus for the model development tasks for the Advanced Process C
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/Digital_twin_inout.png" align="center" width="650" height="200">
 </p>
-----
 
 ## What does Seeq-System Identification do?
 Seeq-System Identification Add-on provides a spectrum of the prediction model ranging from Linear-time invariant (LTI) to the Machine learning model. The white box models are consist of physics-based principles such as conservation laws and reaction kinetics for the chemical process. However, the model development requires much domain knowledge; thus, the engineering cost can be higher than data-driven models. On the other hand, the black-box models, such as Machine Learning models, are entirely driven by the data, but they require a lot of data to acquire the usable model. Greybox models are a simplified version of the white-box model by lumping several parameters into a single property. They can capture the main dynamics of the system well, but they usually can cover the relatively narrow operation range because of the linearity of the model. Seeq users can have various options of model for the specific problems from the Seeq SysID app.
