@@ -1,4 +1,6 @@
-[![N|Solid](https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.svg)](https://www.seeq.com)
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.svg" align="center"  width="600" height="200">
+</p>
 
 # System Identification
 
