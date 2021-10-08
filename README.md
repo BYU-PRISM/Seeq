@@ -47,7 +47,7 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 
 
 <img src="https://render.githubusercontent.com/render/math?math=\large ARX">: Auto-Regressive with eXogenous input   
-("Auto" indicates the past 'y' values, and "Exogenous" indicates the past 'u' serving as a model input)  
+("Auto" indicates the past 'y' values, and "Exogenous" indicates the past 'u' values serving as model inputs)  
 <img src="https://render.githubusercontent.com/render/math?math=\large a">: ARX coefficient for the past output value  
 <img src="https://render.githubusercontent.com/render/math?math=\large b">: ARX coefficient for the past input value  
 <img src="https://render.githubusercontent.com/render/math?math=\large n_a">: Number of terms for the past output value  
