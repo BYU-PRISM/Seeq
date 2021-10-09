@@ -7,7 +7,7 @@
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg">
 </p>
 
-## SeeQ-System Identification is .. 
+## Seeq-System Identification is .. 
 A Seeq Add-on built in python to identify input and output relationship for the system to create **digital twin** 
 models for various analytics and machine learning tasks. System dynamics are identified thereby
 allowing users to get dynamic predictions quickly. The Add-On is fully integrated with 
