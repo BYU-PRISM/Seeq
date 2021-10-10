@@ -125,7 +125,7 @@ https://user-images.githubusercontent.com/55245976/136426388-6b44382e-9542-4239-
 2. Run `conda init --all` and restart the terminal
 3. Run `conda install -c conda-forge slycot`
 4. Run `pip install seeq-sysid`
-5. Upload **main.ipynb** file to the Seeq Data Lab project.
+5. Upload **developer_notebook.ipynb** file to the Seeq Data Lab project.
 
 For more information about adding this addon to the seeq workbench
 [click here](https://seeq.atlassian.net/wiki/spaces/KB/pages/961675391/Add-on+Tool+Administration+and+Development).
