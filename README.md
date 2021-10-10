@@ -7,25 +7,22 @@
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg">
 </p>
 
-## SeeQ-System Identification is .. 
-A Python module to identify input and output relationship for the system to create the **digital twin** 
-models for various data analytics tasks. It provides various models to identify the system dynamics 
-allowing users to get the model prediction value quickly. The Add-On module can be integrated into 
-the Seeq Workbench and passing the data from the Workbench and Identified model results from the 
-Add-on back and forth. It also provides the model result in a formula to predict the system behavior 
-for the time range beyond the training data. The model result can be used for many different data 
-analytics tasks, plus for the model development tasks for the Advanced Process Control applications.
+## Seeq-System Identification is .. 
+A Seeq Add-on built in python to identify input and output relationship for the system to create **digital twin** 
+models for various analytics and machine learning tasks. System dynamics are identified thereby
+allowing users to get dynamic predictions quickly. The Add-On is fully integrated with 
+Seeq Workbench. Cleaned and contexutalized data from Seeq workbench can be used to identify dynamic models; the models can be pushed back into Seeq workbench. This framework supports both adhoc investigations as well as streaming predictions. The system identification framework can be used for a variety of tasks including simulation, digital twin construction, advanced process control, real time optimization, etc.
 
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Digital_twin_inout.png" align="center" width="650" height="150">
 </p>
 
 ## What does Seeq-System Identification do?
-Seeq-System Identification Add-on provides a spectrum of the prediction model ranging from Linear-time invariant (LTI) to the Machine learning model. The white box models are consist of physics-based principles such as conservation laws and reaction kinetics for the chemical process. However, the model development requires much domain knowledge; thus, the engineering cost can be higher than data-driven models. On the other hand, the black-box models, such as Machine Learning models, are entirely driven by the data, but they require a lot of data to acquire the usable model. Greybox models are a simplified version of the white-box model by lumping several parameters into a single property. They can capture the main dynamics of the system well, but they usually can cover the relatively narrow operation range because of the linearity of the model. Seeq users can have various options of model for the specific problems from the Seeq SysID app.
+The System Identification Add-on supports contruction of a variety of dynamic models. White box models are primarily based on physics-based principles such as conservation laws and reaction kinetics for the chemical process. Development of these models requires extensive domain knowledge and is typically more expensive to build and maintain. Machine learning models are largely data driven. Greybox models combine the best of both; they simplify the white-box model by lumping several parameters into fewer parameters that can be identified from data with higher degrees of confidence. These models are capable of capturing the primary dynamics of the system but are valid over smaller ranges of operation. The SysID Add-on allows users to choose a modeling option based the application.
 
 
 1. Grey-box model identification (ARX, Transferfunction, Subspace models)
-1. Black-box model identification (Neural Networks-based models)
+1. Complex model identification (Neural Networks-based models)
 1. Hybrid Physics and Machine learning model identification
 
 <p align="center">
@@ -44,17 +41,23 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Onestep-ahead.png" align="center" width="300" height="100">
 </p>
 
-<img src="https://render.githubusercontent.com/render/math?math=\large ARX">: Auto-Regressive with eXogenous input  
+
+
+<img src="https://render.githubusercontent.com/render/math?math=\large ARX">: Auto-Regressive with eXogenous input   
+("Auto" indicates the past 'y' values, and "Exogenous" indicates the past 'u' values serving as model inputs)  
 <img src="https://render.githubusercontent.com/render/math?math=\large a">: ARX coefficient for the past output value  
 <img src="https://render.githubusercontent.com/render/math?math=\large b">: ARX coefficient for the past input value  
 <img src="https://render.githubusercontent.com/render/math?math=\large n_a">: Number of terms for the past output value  
 <img src="https://render.githubusercontent.com/render/math?math=\large n_b">: Number of terms for the past input value  
 <img src="https://render.githubusercontent.com/render/math?math=\large n_c">: Delay between input and output  
 <img src="https://render.githubusercontent.com/render/math?math=\large k">: present time step  
-Here is another example formular with **delay**  <img src="https://render.githubusercontent.com/render/math?math=\small (n_a=3, n_b=2, n_k=2)">,  
+ 
+  
+  
+Here is another example formular with **delay**  <img src="https://render.githubusercontent.com/render/math?math=\small (n_a=3, n_b=2, n_c=2)">,  
 
 <p align="center">
-<img src="https://render.githubusercontent.com/render/math?math=\large y_{k+1}=a_{1} y_{k}+a_{2} y_{k-1}+a_{3} y_{k-2}+b_{1} u_{k-2}+b_{2} u_{k-1-2}" >
+<img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{1} y_{k} %2B a_{2} y_{k-1} %2B a_{3} y_{k-2} %2B b_{1} u_{k-2-2} %2B b_{2} u_{k-1-2}" >
 </p>
 
 Although the ARX model can be more detailed by increasing the number of terms <img src="https://render.githubusercontent.com/render/math?math=\normalsize (n_a, n_b)">, it could result in an overfit. Thus, it could be an essential step to compare the training and validation set, ensuring the prediction for the validation set is as good as the training set. The model fitting can be quantified using different statistical methods such as **MSE** (Mean Squared Error) or **SSE** (Sum of Squared Error)
@@ -90,13 +93,13 @@ The backend of **seeq-System Identification** requires **Python 3.7** or later.
 
 ## Dependencies
 
-See [`requirements.txt`](https://github.com/seeq12/seeq-correlation/tree/master/requirements.txt) file for a list of
+See [`requirements.txt`](https://github.com/BYU-PRISM/Seeq/blob/main/requirements.txt) file for a list of
 dependencies and versions. Additionally, you will need to install the `seeq` module with the appropriate version that
 matches your Seeq server. For more information on the `seeq` module see [seeq at pypi](https://pypi.org/project/seeq/)
 
 ## User Installation Requirements (Seeq Data Lab)
 
-If you want to install **seeq-correlation** as a Seeq Add-on Tool, you will need:
+If you want to install **seeq-System Identification** as a Seeq Add-on Tool, you will need:
 
 - Seeq Data Lab (>= R50.5.0, >=R51.1.0, or >=R52.1.0)
 - `seeq` module whose version matches the Seeq server version
@@ -107,7 +110,7 @@ If you want to install **seeq-correlation** as a Seeq Add-on Tool, you will need
 
 The latest build of the project can be found [here](https://pypi.seeq.com/) as a wheel file. The file is published as a
 courtesy to the user, and it does not imply any obligation for support from the publisher. Contact
-[Seeq](mailto:applied.research@seeq.com?subject=[seeq-correlation]%20General%20Question) if you required credentials to
+[Seeq](mailto:applied.research@seeq.com?subject=[seeq-sysid]%20General%20Question) if you required credentials to
 access the site.
 
 
