@@ -194,6 +194,6 @@ Please cite this work as:
 
 ```shell
 seeq-sysid v0.0.1
-Seeq Corporation, 2021
+BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```
