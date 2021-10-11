@@ -10,7 +10,7 @@
 ## Seeq-System Identification is ..
 A Seeq Add-on built in python to identify input and output relationship for the system to create **digital twin**
 models for various analytics and machine learning tasks. System dynamics are identified thereby
-allowing users to get dynamic predictions quickly. The Add-On is fully integrated with
+allowing users to get dynamic predictions quickly. The Add-on is fully integrated with
 Seeq Workbench. Cleaned and contexutalized data from Seeq workbench can be used to identify dynamic models; the models can be pushed back into Seeq workbench. This framework supports both adhoc investigations as well as streaming predictions. The system identification framework can be used for a variety of tasks including simulation, digital twin construction, advanced process control, real time optimization, etc.
 
 <p align="center">
