@@ -1,5 +1,0 @@
-include LICENSE
-global-exclude *.pyc
-global-exclude .ipynb_checkpoints
-graft companynamespace/addons/mypackage/deployment_notebook
-prune tests

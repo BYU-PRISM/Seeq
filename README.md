@@ -82,7 +82,7 @@ Although the ARX model can be more detailed by increasing the number of terms <i
 
 https://user-images.githubusercontent.com/55245976/136423446-9babb1da-41e6-4fcc-8bc0-066f98fc189d.mp4
 
-[**SeeQ-System Identification User Guide**](https://github.com/BYU-PRISM/Seeq/blob/main/docs/pages/user_guide.md)
+[**SeeQ-System Identification User Guide**](https://github.com/BYU-PRISM/Seeq)
 provides a more in-depth explanation of System Identification and how
 seeq-sysid works.
 
