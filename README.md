@@ -82,7 +82,7 @@ Although the ARX model can be more detailed by increasing the number of terms <i
 
 https://user-images.githubusercontent.com/55245976/136423446-9babb1da-41e6-4fcc-8bc0-066f98fc189d.mp4
 
-[**SeeQ-System Identification User Guide**](https://github.com/BYU-PRISM/Seeq/blob/main/README.md)
+[**SeeQ-System Identification User Guide**](https://github.com/BYU-PRISM/Seeq/blob/main/docs/pages/user_guide.md)
 provides a more in-depth explanation of System Identification and how
 seeq-sysid works.
 
@@ -168,11 +168,9 @@ create a whl first, install it on your virtual environment, and then
 run `developer_notebook.ipynb` notebook there.
 
 ----
-
 # Changelog
 
 <!-- The change log can be found [**here**](https://github.com/BYU-PRISM/Seeq/SysID Addon/seeq-sysid/changelog.html) -->
-
 
 ----
 
