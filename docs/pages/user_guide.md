@@ -18,9 +18,9 @@ td, th {
 
 | |  |
 | ------------ | ------------- |
-| -Millisecond | Millimetre    |
-| Second       | Centimetre    |
-| Minute       | Inch          |
+| ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/docs/pages/images/arx_panel.jpg) | Select MV:
+Select CV:     |
+
 
 
 
