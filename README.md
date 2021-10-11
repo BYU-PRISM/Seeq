@@ -181,8 +181,6 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Any other general comments or questions (non-code related) can be emailed to
 [Seeq](mailto:applied.research@seeq.com?subject=[seeq-sysid]%20General%20Question)
 
-<!-- Maintainer: Alberto Rivas -->
-
 
 ----
 
