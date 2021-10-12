@@ -170,7 +170,8 @@ run `developer_notebook.ipynb` notebook there.
 ----
 # Changelog
 
-<!-- The change log can be found [**here**](https://github.com/BYU-PRISM/Seeq/SysID Addon/seeq-sysid/changelog.html) -->
+- workbook URL paste fixed in some browsers like chrome
+- Data Lab bar removed from the addon
 
 ----
 
