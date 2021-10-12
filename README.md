@@ -189,7 +189,7 @@ Any other general comments or questions (non-code related) can be emailed to
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.0.3
+seeq-sysid v0.0.4
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```

@@ -6,12 +6,12 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='0.0.3',
+    version='0.0.4',
     packages=['seeq_sysid'],
     url='https://github.com/BYU-PRISM/Seeq',
     license='LICENSE',
-    author='Mohammad Reza Babaei, Junho Park',
-    author_email='babaei_mr@outlook.com, jnho.park@gmail.com',
+    author='Junho Park, Mohammad Reza Babaei',
+    author_email='jnho.park@gmail.com, babaei_mr@outlook.com',
     description='Seeq System Identification Addon',
     long_description=long_description,
     long_description_content_type='text/markdown',

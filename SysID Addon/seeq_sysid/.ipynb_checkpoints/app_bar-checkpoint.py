@@ -66,9 +66,9 @@ class App_Bar(v.Card):
         self.ok_url_dialog_btn = v.Btn(children=['OK'], color='#007960', text=True, loading=False)
         self.ok_url_dialog_btn.on_event('click', self.ok_url_action)
 
-        self.worksheet_url = v.TextField(v_model='', placeholder='Worksheet URL', class_='mx-4', color='#007960',
-                                         clearable=True)
-
+        self.worksheet_url = v.TextField(v_model='', placeholder='Worksheet URL', class_='mx-4', color='#007960', clearable=True)
+        self.worksheet_url.on_event('paste.stop', lambda *args: None)
+        
         control_dialog_btn_layout = v.Layout(children=[v.Spacer(), self.close_url_dialog_btn, self.ok_url_dialog_btn])
 
         dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:']),
@@ -89,12 +89,6 @@ class App_Bar(v.Card):
         
         # Adding Tooltips (tt = with tooltip)
         self.load_worksheet_tt = add_tooltip(self.load_worksheet, 'Open Worksheet')
-        
-        
-        
-        
-        
-        
         
         
         app = v.Tabs(children=self.logo +
