@@ -117,10 +117,6 @@ The latest build of the project can be found [here](https://pypi.seeq.com/) as
 [Seeq](mailto:applied.research@seeq.com?subject=[seeq-sysid]%20General%20Question) if
  you required credentials to access the site.
 
-
-https://user-images.githubusercontent.com/55245976/136426388-6b44382e-9542-4239-a43a-2cd49d667c3d.mp4
-
-
 1. Create a **new** Seeq Data Lab project and open the **Terminal** window
 2. Run `conda init --all` and restart the terminal
 3. Run `conda install -c conda-forge slycot`
