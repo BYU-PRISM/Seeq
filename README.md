@@ -139,7 +139,7 @@ For more information about adding this addon to the seeq workbench
 You can get started by cloning the repository with the command:
 
 ```shell
-git clone git@github.com:BYU-PRISM/Seeq.git
+git clone https://github.com/BYU-PRISM/Seeq.git
 ```
 
 ## Installation from source
