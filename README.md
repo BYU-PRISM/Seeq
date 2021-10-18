@@ -1,10 +1,10 @@
 <p align="left">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png" width="400" height="100"></p>
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png?raw=true" width="400" height="100"></p>
 
 ## System Identification
-<!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/SysID_Gui.png?raw=true) -->
+<!-- ![alt text](https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true) -->
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true">
 </p>
 
 ## Seeq-System Identification is ..
@@ -14,7 +14,7 @@ allowing users to get dynamic predictions quickly. The Add-on is fully integrate
 Seeq Workbench. Cleaned and contexutalized data from Seeq workbench can be used to identify dynamic models; the models can be pushed back into Seeq workbench. This framework supports both adhoc investigations as well as streaming predictions. The system identification framework can be used for a variety of tasks including simulation, digital twin construction, advanced process control, real time optimization, etc.
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Digital_twin_inout.png" align="center" width="650" height="150">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Digital_twin_inout.png?raw=true" align="center" width="650" height="150">
 </p>
 
 ## What does Seeq-System Identification do?
@@ -26,7 +26,7 @@ The System Identification Add-on supports contruction of a variety of dynamic mo
 1. Hybrid Physics and Machine learning model identification
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Blackbox.png" align="center" width="600" height="150">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Blackbox.png?raw=true" align="center" width="600" height="150">
 </p>
 
 ## ARX model
@@ -38,7 +38,7 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 </p>
 
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Onestep-ahead.png" align="center" width="300" height="100">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Onestep-ahead.png?raw=true" align="center" width="300" height="100">
 </p>
 
 
@@ -66,16 +66,16 @@ Although the ARX model can be more detailed by increasing the number of terms <i
 
 ## Overview
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview0.jpg" align="center" width="800" height="602">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview0.jpg?raw=true" align="center" width="800" height="602">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview1.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview1.png?raw=true" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview2.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview2.png?raw=true" align="center" width="800" height="450">
 </p>
 <p align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview3.png" align="center" width="800" height="450">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/overview3.png?raw=true" align="center" width="800" height="450">
 </p>
 
 # User Guide
