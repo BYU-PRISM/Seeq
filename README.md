@@ -120,10 +120,8 @@ The latest build of the project can be found [here](https://pypi.seeq.com/) as
 https://user-images.githubusercontent.com/55245976/137494969-43d93065-1e23-4e7c-952f-2397993eb269.mp4
 
 1. Create a **new** Seeq Data Lab project and open the **Terminal** window
-2. Run `conda init --all` and restart the terminal
-3. Run `conda install -c conda-forge slycot`
-4. Run `pip install seeq-sysid`
-5. Upload **developer_notebook.ipynb** file to the Seeq Data Lab project.
+2. Run `pip install seeq-sysid`
+3. Upload **developer_notebook.ipynb** file to the Seeq Data Lab project.
 
 For more information about adding this addon to the seeq workbench
 [click here](https://seeq.atlassian.net/wiki/spaces/KB/pages/961675391/Add-on+Tool+Administration+and+Development).
@@ -168,8 +166,8 @@ run `developer_notebook.ipynb` notebook there.
 ----
 # Changelog
 
-- workbook URL paste fixed in some browsers like chrome
-- Data Lab bar removed from the addon
+- Installation made easier.
+- N4SID method was removed temporarily.
 
 ----
 
@@ -187,7 +185,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.0.4
+seeq-sysid v0.0.5
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```
