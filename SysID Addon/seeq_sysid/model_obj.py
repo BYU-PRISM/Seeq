@@ -1,6 +1,5 @@
 from gekko import GEKKO
-from numpy import vstack, ones, zeros, reshape, where, linalg
-from sippy import system_identification, functionsetSIM
+from numpy import vstack, ones, zeros, reshape, where, linalg, dot
 from statsmodels.tsa.stattools import grangercausalitytests
 
 from seeq_sysid._backend import *
@@ -299,7 +298,7 @@ class Subspace(Model_Obj):
     def __init__(self,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.method = 'N4SID'
+        self.method = 'DMDc'
 
         self.U_ss = None
         self.X_ss = None
@@ -310,17 +309,17 @@ class Subspace(Model_Obj):
         u_df = df[self.mv]
         X_df = df[self.cv]
 
-        U_ss = u_df.head(1).transpose().to_numpy()
-        X_ss = X_df.head(1).transpose().to_numpy()
+        U_ss = u_df.head(1).to_numpy()
+        X_ss = X_df.head(1).to_numpy()
         self.U_ss = U_ss
         self.X_ss = X_ss
 
         self.label = [tag_label + '_pred' for tag_label in X_df.columns]
-        U_real = u_df.transpose().to_numpy()
-        X_real = X_df.transpose().to_numpy()
+        U_real = u_df.to_numpy()
+        X_real = X_df.to_numpy()
 
-        U = U_real - U_ss
-        X = X_real - X_ss
+        U = (U_real - U_ss).T
+        X = (X_real - X_ss).T
 
         if self.method == 'DMDc':
 
@@ -373,25 +372,36 @@ class Subspace(Model_Obj):
             self.D = Dtilde
 
         elif self.method == 'N4SID':
-            sys = system_identification(y=X, u=U, id_method='N4SID', SS_threshold=self.thresh)
+            pass
+    
+    
+    def simulate(self, A, B, C, D, U, X0):
+        steps = U.shape[0]
 
-            self.A = sys.A
-            self.B = sys.B
-            self.C = sys.C
-            self.D = sys.D
+        x = zeros((steps, A.shape[0]))
+        ys = zeros((steps, C.shape[0]))
+        x[0] = X0
+                  
+        for i in range(1, steps):
+            x[i] = dot(A, x[i-1]) + dot(B, U[i-1])
+            ys[i] = dot(C, x[i]) + dot(D, U[i])
+                  
+        return x, ys
 
     def forecast(self, df: DataFrame = None):
         u_df = df[self.mv]
 
-        U_real = u_df.transpose().to_numpy()
+        U_real = u_df.to_numpy()
 
         U = U_real - self.U_ss
+        
+        X0 = zeros((self.A.shape[0],))
 
-        x, ys = functionsetSIM.SS_lsim_process_form(self.A, self.B, self.C, self.D, U, zeros((self.A.shape[0], 1)))
-
+        x, ys = self.simulate(self.A, self.B, self.C, self.D, U, X0)
+        
         Ys = ys + self.X_ss
 
-        YP = DataFrame(Ys.transpose(), columns=self.label)
+        YP = DataFrame(Ys, columns=self.label)
         self.yp = YP
 
         return YP

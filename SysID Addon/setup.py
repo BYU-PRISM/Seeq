@@ -6,7 +6,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='0.0.4',
+    version='0.0.5',
     packages=['seeq_sysid'],
     url='https://github.com/BYU-PRISM/Seeq',
     license='LICENSE',
@@ -24,9 +24,7 @@ setup(
         'gekko<=1.0.1',
         'statsmodels<=0.12.2',
         'setuptools<=49.2.1',
-        'sippy-rcognita<=0.2.1',
         'seeq',
-        'control<=0.9.0',
     ],
     keywords='Seeq, Prism, System Identification, ARX, Subspace, State Space, Addon, Time Series',
     include_package_data=True,

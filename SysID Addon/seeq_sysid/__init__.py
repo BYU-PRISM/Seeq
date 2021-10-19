@@ -2,7 +2,6 @@ import ipyvuetify as v
 import ipywidgets as widgets
 
 from gekko import GEKKO
-from sippy import system_identification, functionsetSIM
 from statsmodels.tsa.stattools import grangercausalitytests
 
 from copy import deepcopy

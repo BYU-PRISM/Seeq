@@ -99,8 +99,9 @@ class SS_Panel(Left_Panel):
 
         # Drop Downs
         self.method_select = v.Select(tag='Methods',
-                                      v_model='N4SID',
-                                      items=['N4SID', 'DMDc'],
+                                      v_model='DMDc',
+#                                       items=['N4SID', 'DMDc'],
+                                      items=['DMDc'],
                                       color=self.colors['seeq_primary'],
                                       item_color=self.colors['seeq_primary'],
                                       dense=True,
