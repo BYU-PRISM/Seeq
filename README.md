@@ -111,13 +111,6 @@ If you want to install **seeq-sysid** as a Seeq Add-on Tool, you will need:
 
 ## User Installation (Seeq Data Lab)
 
-The latest build of the project can be found [here](https://pypi.seeq.com/) as
- a wheel file. The file is published as a courtesy to the user, and it
- does not imply any obligation for support from the publisher. Contact
-[Seeq](mailto:applied.research@seeq.com?subject=[seeq-sysid]%20General%20Question) if
- you required credentials to access the site.
-
-
 https://user-images.githubusercontent.com/55245976/138005258-a5e97638-363c-414c-837e-ec1778a8efee.mp4
 
 
