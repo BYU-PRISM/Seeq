@@ -20,22 +20,22 @@ def pull_signals(url, grid='auto'):
     signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
 
     if search_df.empty:
-        return DataFrame()
+        return DataFrame(), DataFrame(), DataFrame()
     search_all_df = search_df[search_df['Type'].str.contains('al')]
 
     all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='ID', quiet=True,
                       status=spy.Status(quiet=True))
     if all_df.empty:
-        return DataFrame(), DataFrame()
+        return DataFrame(), DataFrame(), DataFrame()
     
     all_df.columns = all_df.query_df['Name']
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
     if signal_df.empty:
-        return DataFrame(), DataFrame()
+        return DataFrame(), DataFrame(), DataFrame()
     capsule_df = all_df[capsules_list]
     if capsule_df.empty:
-        return signal_df, DataFrame()
+        return signal_df, DataFrame(), search_df
     signal_df.columns = signal_list
     capsule_df.columns = capsules_list
     return signal_df, capsule_df, search_df

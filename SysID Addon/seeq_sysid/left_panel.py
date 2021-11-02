@@ -71,7 +71,8 @@ class Left_Panel(v.Card):
                                   background_color='white',
                                   placeholder='Select',
                                   multiple=True,
-                                  clearable=True)
+                                  clearable=True,
+                                  solo=True)
 
         self.cv_select = v.Select(tag='Measured Variables',
                                   v_model=[],
@@ -86,7 +87,8 @@ class Left_Panel(v.Card):
                                   background_color='white',
                                   placeholder='Select',
                                   multiple=True,
-                                  clearable=True)
+                                  clearable=True,
+                                  solo=True)
 
         self.train_condition = v.Select(tag='Training Condition',
                                         v_model=[],
@@ -102,7 +104,8 @@ class Left_Panel(v.Card):
                                         placeholder='All Data',
                                         multiple=True,
                                         rounded=True,
-                                        clearable=True)
+                                        clearable=True,
+                                        solo=True)
 
         self.validation_condition = v.Select(tag='Validation Condition',
                                              v_model=[],
@@ -118,7 +121,8 @@ class Left_Panel(v.Card):
                                              placeholder='All Data',
                                              multiple=True,
                                              rounded=True,
-                                             clearable=True)
+                                             clearable=True,
+                                             solo=True)
 
         # Buttons
         self.identify_model_btn = v.Btn(name='identification button',
