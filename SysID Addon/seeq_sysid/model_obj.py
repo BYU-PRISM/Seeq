@@ -13,6 +13,7 @@ from statsmodels.tsa.stattools import grangercausalitytests
 from tensorflow import get_logger
 from tensorflow.keras import layers, callbacks, Sequential, optimizers
 from keras_tuner import RandomSearch, BayesianOptimization, HyperModel, Hyperband
+from keras_tuner.engine.hyperparameters import Int, Choice
 from pandas import read_csv, DataFrame
 get_logger().setLevel('ERROR')
 
@@ -422,6 +423,7 @@ class NN(Model_Obj):
         super().__init__(*args, **kwargs)
 
         self.nn_type = 'RNN'
+        self.tuner = None
 
     def normalize(self, df: DataFrame = None):
         df_norm = (df-self.Min) / (self.Max-self.Min)
@@ -451,24 +453,28 @@ class NN(Model_Obj):
 
         return x_train, y_train
 
-    def build_model(self, hp):
+    def build_model(self, hp, **kwargs):
         model = Sequential()
-        model.add(
-            layers.SimpleRNN(
-                input_shape=(self.window, self.p),
-                units=hp.Int("units1", min_value=5, max_value=205, step=20),
-                return_sequences=True,
+        n_layers = hp.Choice(name='n_layers', values=[1, 2, 3])
+        for i_layer in range(n_layers):
+            model.add(
+                layers.SimpleRNN(
+                    input_shape=(self.window, self.p),
+                    units=hp.Int("units{}".format(i_layer), min_value=5, max_value=205, step=20),
+                    return_sequences=True,
+                )
             )
-        )
-        model.add(layers.Dropout(0.1))
+            model.add(layers.Dropout(0.1))
         model.add(layers.Flatten())
         model.add(layers.Dense(self.q,
                                activation="linear"))
         model.compile(
             optimizer=optimizers.Adam(),
             loss="MSE",
-            metrics=["accuracy"],
+            metrics=["accuracy"]
         )
+
+        kwargs['batch_size'] = hp.Choice('batch_size', values=[32, 64, 128])
 
         return model
 
@@ -479,21 +485,28 @@ class NN(Model_Obj):
         tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=1, min_delta=1e-4)
         fit_es = callbacks.EarlyStopping(monitor='val_loss', patience=15)
 
+        # Number of Inputs & Outputs
         self.p = len(self.mv+self.cv)
         self.q = len(self.cv)
 
+        # Normalize data
         df_norm = self.normalize(df=df)
 
+        # Input/Output Data
         in_df = df_norm[self.mv+self.cv]
         out_df = df_norm[self.cv]
+
+        # Data Label
         self.label = [tag_label + '_pred' for tag_label in out_df.columns]
 
+        # Create Data Snapshots for NN
         x_train, y_train = self.create_snapshot(in_df=in_df, out_df=out_df)
 
+        # Setup Hyperparameter Optimizer
         tuner = BayesianOptimization(
             hypermodel=self.build_model,
             objective="val_loss",
-            max_trials=6,
+            max_trials=10,
             num_initial_points=2,
             alpha=1e-4,
             beta=2.6,
@@ -502,14 +515,27 @@ class NN(Model_Obj):
             project_name="Seeq_NN",
         )
 
-        tuner.search(x_train, y_train, epochs=2, validation_split=0.2, verbose=0, callbacks=[tune_es])
+        tuner.oracle.multi_worker = True
+        # hp = tuner.oracle.get_space()
+        # hp.values['batch_size'] = Choice('batch_size', values=[32, 64, 128])
+        # tuner.oracle.update_space(hp)
+
+        # Run Hyperparameter Optimizer
+        tuner.search(x_train, y_train,
+                     epochs=3, validation_split=0.2,
+                     verbose=1, callbacks=[tune_es],
+                     batch_size=128)
+        self.tuner = tuner
 
         # Get the optimal hyperparameters
         best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
+
         model = tuner.hypermodel.build(best_hps)
 
-        self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=0)
+        # Training Performance
+        self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=1)
 
+        # Save Model
         self.model = model
 
     
@@ -584,15 +610,16 @@ def granger_causality(X, Y, d):
         return (X.name, Y.name), d_YX, p_YX
 
 
-# df = read_csv('../signal_df.csv')
-# df.set_index('Time', drop=True, inplace=True)
-# nn = NN()
-# nn.Min = df.min()
-# nn.Max = df.max()
-# nn.mv = ['F_cw']
-# nn.cv = ['T1']
-# nn.window = 10
-# nn.identify(df)
-# yp = nn.forecast(df)
-# plt.plot(yp)
-# plt.plot(df[nn.cv].iloc[nn.window:])
+df = read_csv('../signal_df.csv')
+df.set_index('Time', drop=True, inplace=True)
+nn = NN()
+nn.Min = df.min()
+nn.Max = df.max()
+nn.mv = ['F_cw']
+nn.cv = ['T1']
+nn.window = 10
+nn.identify(df)
+yp = nn.forecast(df)
+plt.plot(yp)
+plt.plot(df[nn.cv].iloc[nn.window:], '--')
+plt.show()
