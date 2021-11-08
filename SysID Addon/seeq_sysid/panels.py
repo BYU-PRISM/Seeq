@@ -234,6 +234,138 @@ class SS_Panel(Left_Panel):
                              v.Divider(class_='mb-6'),
                              self.identify_push_card]
 
+            
+            
+            
+            
+            
+# Neural Network Panel
+class NN_Panel(Left_Panel):
+    def __init__(self, *args, **kwargs):
+        model_name = 'NeuralNetwork'
+        super().__init__(model_name=model_name,
+                         *args, **kwargs)
+
+        # Icons
+        title_icon = v.Icon(class_='', children=['mdi-tools'], color='white')
+
+        # Mode Switch
+        switch_values = ['Manual', 'Auto']
+        self.options_switch = v.Switch(tag='switch',
+                                       v_model=True,
+                                       inset=True,
+                                       label='Manual',
+                                       dark=False,
+                                       vertical=True,
+                                       dense=True,
+                                       )
+
+        self.options_switch.label = switch_values[self.options_switch.v_model]
+        self.options_switch.on_event('change', self.mode_select_action)
+        self.mode_row = v.Card(children=['Mode', v.Spacer(), self.options_switch], 
+                               color='none',
+                               flat=True,
+                               class_='d-flex justify-center flex-row align-center pt-1 mx-1',
+                               style_='font-size:12pt; font-weight:bold; height:40px',
+                               dense=True)
+        
+        # Auto Mode Widgets
+        self.slider_help_tip_btn = v.Btn(icon=True, v_on='help_tooltip.on', children=[v.Icon(children=['mdi-help-circle-outline'])])
+        self.slider_help_tip = v.Tooltip(bottom=True,
+                                         max_width='290px',
+                                         v_slots=[{'name': 'activator',
+                                                                'variable': 'help_tooltip',
+                                                                'children': self.slider_help_tip_btn
+                                                               }], children=['Higher computaional cost requires more time but the accuracy is higher.'])
+        
+        self.auto_slider_title = v.Row(children=[v.Icon(children=['mdi-brain'], class_='px-2 pb-0 mb-0'),
+                                                 'Computation Cost',
+                                                 v.Spacer(),
+                                                 self.slider_help_tip], 
+                                       align='center',
+                                       class_='pb-0 pt-1 px-1',
+                                       style_='font-size:11pt')
+        self.auto_mode_slider = v.Slider(tick_labels=['Low', 'Medium', 'High'], 
+                                         max=2,
+                                         v_model='0',
+                                         style_='font-size:10pt; font-weight:bold',
+                                         class_='',
+                                         dense=True,
+                                         dark=False)
+        self.auto_mode_list = [self.auto_slider_title, self.auto_mode_slider]
+        
+        
+        # Manual Mode Widgets (Coming Soon...)
+        self.manual_btn_title = v.Row(children=[v.Icon(children=['mdi-graph-outline'], class_='px-2 pb-0 mb-1'), 'Custom Neural Network'], 
+                               class_='pb-0 pt-1 px-1',
+                               style_='font-size:11pt')
+        self.manual_mode_btn = v.Btn(children=['Coming Soon...'], class_='d-flex justify-center my-1', align='center', dark=False, disabled=True)
+        self.manual_mode_btn.on_event('click', self.manual_mode_btn_action)
+        self.manual_mode_list = [self.manual_btn_title, self.manual_mode_btn]
+        
+        self.custom_nn_card = v.Card(color='white', children=['Hello World'], height='80%', align='center', class_='d-flex flex-row justify-center')
+        self.custom_nn_dialog = v.Dialog(v_model=False,
+                                         align='center',
+                                         width='50%',
+                                         class_='d-flex flex-row justify-center align-center',
+                                         align_centered=True,
+                                         children=[self.custom_nn_card])
+        
+        self.custom_nn_dialog.on_event('keydown.stop', lambda *args: None)
+
+        
+        
+        # Mode Card
+        self.mode_card = v.Card(flat=True, class_='d-flex flex-column justify-center py-1', height='80px')
+        self.mode_card.children = self.auto_mode_list
+        
+        self.switch_card = v.Card(children=[self.mode_row,
+                                            v.Divider(class_='my-2'),
+                                            self.mode_card],                           
+                                            color='white', class_='px-3 py-1 mb-4 mt-0')
+
+               
+
+        # Neural Network
+        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
+                            dark=True, center=True, align='center', flat=True,
+                            children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
+                                      '{} Settings'.format('Neural Network')])
+
+        self.children = [self.title,
+                         'Manipulated Variables (MV)', self.mv_select,
+                         'Measured Variables (CV)', self.cv_select,
+                         v.Divider(class_='mb-4'),
+                         self.switch_card,
+                         self.custom_nn_dialog,
+                         v.Divider(class_='mb-4'),
+                         'Training Conditions', self.train_condition,
+                         'Validation Conditions', self.validation_condition,
+                         v.Divider(class_='mb-6'),
+                         self.identify_push_card]
+
+    def mode_select_action(self, item, *_):
+        switch_values = ['Manual', 'Auto']
+        item.v_model != item.v_model
+        item.label = switch_values[item.v_model]
+        if item.label == 'Manual':
+            self.mode_card.children = self.manual_mode_list
+
+        elif item.label == 'Auto':
+            self.mode_card.children = self.auto_mode_list
+            
+    def manual_mode_btn_action(self, *_):
+        self.custom_nn_dialog.v_model = True
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 # Try Widgets
 
 # panel_ss = SS_Panel()

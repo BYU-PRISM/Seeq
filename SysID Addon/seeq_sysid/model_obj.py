@@ -14,7 +14,8 @@ from tensorflow import get_logger
 from tensorflow.keras import layers, callbacks, Sequential, optimizers
 from keras_tuner import RandomSearch, BayesianOptimization, HyperModel, Hyperband
 from keras_tuner.engine.hyperparameters import Int, Choice
-from pandas import read_csv, DataFrame
+from pandas import read_csv, DataFrame, concat
+
 get_logger().setLevel('ERROR')
 
 
@@ -60,13 +61,6 @@ class Model_Obj:
         self.alpha = None
         self.beta = None
 
-        self.model = None
-        self.history = None
-        self.window = None
-        self.units = None
-        self.layers = None
-        self.Min = None
-        self.Max = None
 
     def identify(self, df: DataFrame = None):
         pass
@@ -76,9 +70,6 @@ class Model_Obj:
 
     def forecast(self, df: DataFrame = None):
         pass
-
-
-
 
 
 class ARX(Model_Obj):
@@ -203,7 +194,6 @@ class ARX(Model_Obj):
                 yo[i][:NA - 1] = yo[i][1:]
                 yo[i][-1] = y_p[i]
             YP = vstack([YP, y_p])
-
 
         self.label = [tag_label + '_pred' for tag_label in Y.columns]
 
@@ -337,9 +327,9 @@ class Subspace(Model_Obj):
             omega = vstack([X1, u])
 
             Ut, St, Vht = linalg.svd(omega, full_matrices=False)
-            thresh_t = 1e-6
+            thresh_t = 1e-9
             try:
-                r_t = where(St < thresh_t)[0][0]
+                r_t = where(St < thresh_t)[0][0] + 1
             except:
                 r_t = len(St)
             #         r_t = order
@@ -353,13 +343,13 @@ class Subspace(Model_Obj):
 
             Uh, Sh, Vhh = linalg.svd(X2, full_matrices=False)
 
-            #         thresh_h = 1e-6
-            #         try:
-            #             r_h = where(Sh < thresh_t)[0][0]
-            #         except:
-            #             r_h = len(Sh)
+            thresh_h = self.thresh
+            try:
+                r_h = where(Sh < thresh_h)[0][0] + 1
+            except:
+                r_h = len(Sh)
 
-            r_h = self.order
+#             r_h = self.order
 
             uh = Uh[:, :r_h]
             # sh = Sh[:r_h]
@@ -377,8 +367,7 @@ class Subspace(Model_Obj):
 
         elif self.method == 'N4SID':
             pass
-    
-    
+
     def simulate(self, U, X0):
         A = self.A
         B = self.B
@@ -390,11 +379,11 @@ class Subspace(Model_Obj):
         x = zeros((steps, A.shape[0]))
         ys = zeros((steps, C.shape[0]))
         x[0] = X0
-                  
+
         for i in range(1, steps):
-            x[i] = dot(A, x[i-1]) + dot(B, U[i-1])
+            x[i] = dot(A, x[i - 1]) + dot(B, U[i - 1])
             ys[i] = dot(C, x[i]) + dot(D, U[i])
-                  
+
         return x, ys
 
     def forecast(self, df: DataFrame = None):
@@ -403,11 +392,11 @@ class Subspace(Model_Obj):
         U_real = u_df.to_numpy()
 
         U = U_real - self.U_ss
-        
+
         X0 = zeros((self.A.shape[0],))
 
         x, ys = self.simulate(U, X0)
-        
+
         Ys = ys + self.X_ss
 
         YP = DataFrame(Ys, columns=self.label)
@@ -420,17 +409,30 @@ class Subspace(Model_Obj):
 class NN(Model_Obj):
     def __init__(self,
                  *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
         self.nn_type = 'RNN'
+        self.mode = None
+        self.options = None
         self.tuner = None
+        self.units = None
+        self.n_layers = None
+        self.batch_size = None
+        self.max_trials = None
+        
+        self.model = None
+        self.history = None
+        self.window = 10
+        self.Min = None
+        self.Max = None
+        
+        super().__init__(*args, **kwargs)
 
     def normalize(self, df: DataFrame = None):
-        df_norm = (df-self.Min) / (self.Max-self.Min)
+        df_norm = (df - self.Min) / (self.Max - self.Min)
         return df_norm
 
     def denormalize(self, df_norm: DataFrame = None):
-        df = df_norm[self.cv] * (self.Max[self.cv]-self.Min[self.cv]) + self.Min[self.cv]
+        df = df_norm[self.cv] * (self.Max[self.cv] - self.Min[self.cv]) + self.Min[self.cv]
         return df
 
     def create_snapshot(self, in_df: DataFrame = None, out_df: DataFrame = None):
@@ -440,60 +442,53 @@ class NN(Model_Obj):
         y_train = []
 
         if in_df is not None:
-            for i in range(self.window, L - 1):
+            for i in range(self.window, L):
                 x_train.append(in_df.iloc[i - self.window:i].to_numpy())
             x_train = array(x_train)
-    
+
         if out_df is not None:
-            for i in range(self.window, L - 1):
-                y_train.append(out_df.iloc[i + 1].to_numpy())
+            for i in range(self.window, L):
+                y_train.append(out_df.iloc[i].to_numpy())
             y_train = array(y_train)
-
-
 
         return x_train, y_train
 
-    def build_model(self, hp, **kwargs):
-        model = Sequential()
-        n_layers = hp.Choice(name='n_layers', values=[1, 2, 3])
-        for i_layer in range(n_layers):
-            model.add(
-                layers.SimpleRNN(
-                    input_shape=(self.window, self.p),
-                    units=hp.Int("units{}".format(i_layer), min_value=5, max_value=205, step=20),
-                    return_sequences=True,
-                )
-            )
-            model.add(layers.Dropout(0.1))
-        model.add(layers.Flatten())
-        model.add(layers.Dense(self.q,
-                               activation="linear"))
-        model.compile(
-            optimizer=optimizers.Adam(),
-            loss="MSE",
-            metrics=["accuracy"]
-        )
+    def option_maker(self):
+        if self.mode == 0:    # Mode = Low
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1]
+            self.batch_size = [32]
+            self.max_trials = 6
 
-        kwargs['batch_size'] = hp.Choice('batch_size', values=[32, 64, 128])
+        elif self.mode == 1:    # Mode = Medium
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1, 2, 3]
+            self.batch_size = [32]
+            self.max_trials = 15
 
-        return model
-
+        elif self.mode == 2:    # Mode = High
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1, 2, 3]
+            self.batch_size = [32, 64, 128]
+            self.max_trials = 30
 
     def identify(self, df: DataFrame = None):
+        # Set Mode Options
+        self.option_maker()
 
-        # Advanced Options
-        tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=1, min_delta=1e-4)
+        # Early Stopping
+        tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=3)
         fit_es = callbacks.EarlyStopping(monitor='val_loss', patience=15)
 
         # Number of Inputs & Outputs
-        self.p = len(self.mv+self.cv)
+        self.p = len(self.mv + self.cv)
         self.q = len(self.cv)
 
         # Normalize data
         df_norm = self.normalize(df=df)
 
         # Input/Output Data
-        in_df = df_norm[self.mv+self.cv]
+        in_df = df_norm[self.mv + self.cv]
         out_df = df_norm[self.cv]
 
         # Data Label
@@ -503,10 +498,12 @@ class NN(Model_Obj):
         x_train, y_train = self.create_snapshot(in_df=in_df, out_df=out_df)
 
         # Setup Hyperparameter Optimizer
-        tuner = BayesianOptimization(
-            hypermodel=self.build_model,
+        hypermodel = Hyper_NN(units=self.units, n_layers=self.n_layers, p=self.p, q=self.q, window=self.window)
+        tuner = HyperTuner(
+            auto_bs=self.batch_size,
+            hypermodel=hypermodel,
             objective="val_loss",
-            max_trials=10,
+            max_trials=self.max_trials,
             num_initial_points=2,
             alpha=1e-4,
             beta=2.6,
@@ -522,9 +519,8 @@ class NN(Model_Obj):
 
         # Run Hyperparameter Optimizer
         tuner.search(x_train, y_train,
-                     epochs=3, validation_split=0.2,
-                     verbose=1, callbacks=[tune_es],
-                     batch_size=128)
+                     epochs=20, validation_split=0.2,
+                     verbose=0, callbacks=[tune_es])
         self.tuner = tuner
 
         # Get the optimal hyperparameters
@@ -533,55 +529,30 @@ class NN(Model_Obj):
         model = tuner.hypermodel.build(best_hps)
 
         # Training Performance
-        self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=1)
+        self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=0)
 
         # Save Model
         self.model = model
 
-    
     def forecast(self, df: DataFrame = None):
         df_norm = self.normalize(df=df)
 
-        in_df = df_norm[self.mv+self.cv]
-        
+        in_df = df_norm[self.mv + self.cv]
+
         x_train, _ = self.create_snapshot(in_df=in_df)
-    
+
         yh_norm = self.model.predict(x_train)
 
         YP_norm = DataFrame(yh_norm, columns=self.cv)
         YP = self.denormalize(YP_norm)
-
+        dummy_rows = df[self.cv].iloc[:self.window].shift(self.window)
+        YP = concat([dummy_rows, YP], ignore_index=True)
+        YP.fillna(method='bfill', inplace=True)
         YP.columns = self.label
 
         return YP
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
 def granger_causality(X, Y, d):
     p_XY = 100
     p_YX = 100
@@ -610,16 +581,63 @@ def granger_causality(X, Y, d):
         return (X.name, Y.name), d_YX, p_YX
 
 
-df = read_csv('../signal_df.csv')
-df.set_index('Time', drop=True, inplace=True)
-nn = NN()
-nn.Min = df.min()
-nn.Max = df.max()
-nn.mv = ['F_cw']
-nn.cv = ['T1']
-nn.window = 10
-nn.identify(df)
-yp = nn.forecast(df)
-plt.plot(yp)
-plt.plot(df[nn.cv].iloc[nn.window:], '--')
-plt.show()
+class Hyper_NN(HyperModel):
+    def __init__(self, units: list, n_layers: list, p: int, q: int, window: int, *args, **kwargs):
+        self.units = units
+        self.n_layers = n_layers
+        self.p = p
+        self.q = q
+        self.window = window
+        super(Hyper_NN, self).__init__(*args, **kwargs)
+
+    def build(self, hp):
+        model = Sequential()
+        n_layers = hp.Choice(name='n_layers', values=self.n_layers)
+        for i_layer in range(n_layers):
+            layer_name = "units{}".format(i_layer)
+            model.add(
+                layers.LSTM(
+                    input_shape=(self.window, self.p),
+                    units=hp.Choice(layer_name, values=self.units),
+                    return_sequences=True,
+                )
+            )
+            model.add(layers.Dropout(0.1))
+        model.add(layers.Flatten())
+        model.add(layers.Dense(self.q,
+                               activation="linear"))
+        model.compile(
+            optimizer=optimizers.Adam(),
+            loss="MSE",
+            metrics=["accuracy"]
+        )
+
+        return model
+
+
+class HyperTuner(BayesianOptimization):
+    def __init__(self, auto_bs: list, *args, **kwargs):
+        self.auto_bs = auto_bs
+        super(HyperTuner, self).__init__(*args, **kwargs)
+
+    def run_trial(self, trial, *args, **kwargs):
+        # You can add additional HyperParameters for preprocessing and custom training loops
+        # via overriding `run_trial`
+        kwargs['batch_size'] = trial.hyperparameters.Choice('batch_size', self.auto_bs)
+        # kwargs['epochs'] = trial.hyperparameters.Int('epochs', 10, 30)
+        super(HyperTuner, self).run_trial(trial, *args, **kwargs)
+
+# df = read_csv('../signal_df.csv')
+# df.set_index('Time', drop=True, inplace=True)
+# nn = NN()
+# nn.Min = df.min()
+# nn.Max = df.max()
+# nn.mv = ['F_cw']
+# nn.cv = ['T1']
+# nn.window = 10
+# nn.mode = 'High'
+# nn.identify(df)
+# yp = nn.forecast(df)
+# plt.plot(yp)
+# plt.plot(df[nn.cv].iloc[nn.window:], '--')
+# plt.show()
