@@ -64,7 +64,7 @@ class Left_Panel(v.Card):
                                   color=self.colors['seeq_primary'],
                                   item_color=self.colors['seeq_primary'],
                                   dense=True,
-                                  outlined=True,
+                                  outlined=False,
                                   class_='d-flex justify-center',
                                   style_='width: 280px; font-size:14px',
                                   filled=True,
@@ -82,7 +82,7 @@ class Left_Panel(v.Card):
                                   dense=True,
                                   class_='d-flex justify-center',
                                   style_='width: 280px; font-size:14px',
-                                  outlined=True,
+                                  outlined=False,
                                   filled=True,
                                   background_color='white',
                                   placeholder='Select',
@@ -132,7 +132,8 @@ class Left_Panel(v.Card):
                                         dense=True,
                                         elevation=4,
                                         children=['Identify Model'],
-                                        disabled=True)
+                                        disabled=True,
+                                        loading=False)
 
         self.push_model_btn = v.Btn(name='identification button',
                                     style_='color:#007960; font-size:9pt; font-weight:bold; width:130px',
@@ -159,7 +160,7 @@ class Left_Panel(v.Card):
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
                          'Measured Variables (CV)', self.cv_select,
-                         v.Divider(class_='mb-4'),
+#                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
                          'Validation Conditions', self.validation_condition,
                          v.Divider(class_='mb-4'),

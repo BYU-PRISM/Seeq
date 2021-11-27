@@ -2,7 +2,7 @@ import ipyvuetify as v
 import ipywidgets as widgets
 
 from gekko import GEKKO
-from statsmodels.tsa.stattools import grangercausalitytests
+# from statsmodels.tsa.stattools import grangercausalitytests
 
 from copy import deepcopy
 from pathlib import Path

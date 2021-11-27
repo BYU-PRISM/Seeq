@@ -4,5 +4,4 @@ plotly
 ipywidgets
 numpy
 gekko<=1.0.1
-statsmodels<=0.12.2
 seeq

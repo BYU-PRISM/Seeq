@@ -6,7 +6,7 @@ environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from gekko import GEKKO
 from numpy import vstack, ones, zeros, reshape, where, linalg, dot, array
-from statsmodels.tsa.stattools import grangercausalitytests
+# from statsmodels.tsa.stattools import grangercausalitytests
 
 # from seeq_sysid._backend import *
 
@@ -95,6 +95,7 @@ class ARX(Model_Obj):
     def __init__(self,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.model_struct = 'ARX'
 
     def identify(self, df: DataFrame = None):
 
@@ -145,14 +146,27 @@ class ARX(Model_Obj):
 
         YP = Y.iloc[:Nd_max].to_numpy()
         NI = max(0, NA - NB - NK)
-        for k in range(NI, lu - NB - NK):
-            y_p = zeros(NY)
-            for i in range(NY):
-                y_p[i] = A[i][::-1].dot(Y[k:k + NA].iloc[:, [i]]) + C[i]
-                for j in range(NU):
-                    y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+        
+        if self.model_struct == 'ARX':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = A[i][::-1].dot(Y[k:k + NA].iloc[:, [i]]) + C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
 
-            YP = vstack([YP, y_p])
+                YP = vstack([YP, y_p])
+        
+        elif self.model_struct == 'FIR':
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+#                     y_p[i] = C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+
+                YP = vstack([YP, y_p])
+        
 
         labels = []
         for label in Y.columns:
@@ -185,15 +199,28 @@ class ARX(Model_Obj):
         yo = YP[-NA:].transpose()
 
         NI = max(0, NA - NB - NK)
-        for k in range(NI, lu - NB - NK):
-            y_p = zeros(NY)
-            for i in range(NY):
-                y_p[i] = A[i][::-1].dot(yo[i]) + C[i]
-                for j in range(NU):
-                    y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
-                yo[i][:NA - 1] = yo[i][1:]
-                yo[i][-1] = y_p[i]
-            YP = vstack([YP, y_p])
+        
+        if self.model_struct == 'ARX':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = A[i][::-1].dot(yo[i]) + C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+                    yo[i][:NA - 1] = yo[i][1:]
+                    yo[i][-1] = y_p[i]
+                YP = vstack([YP, y_p])
+                
+        elif self.model_struct == 'FIR':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+                    yo[i][:NA - 1] = yo[i][1:]
+                    yo[i][-1] = y_p[i]
+                YP = vstack([YP, y_p])
 
         self.label = [tag_label + '_pred' for tag_label in Y.columns]
 
@@ -248,45 +275,45 @@ class ARX(Model_Obj):
 
         self.formula = DataFrame(formula_list)
 
-    def granger_causality(self, X: DataFrame):
-        n = len(X.columns)
-        granger_coe = DataFrame(ones((n, n)), columns=X.columns, index=X.columns)
-        grangered_struct = {}
-        cause = []
-        effect = []
+#     def granger_causality(self, X: DataFrame):
+#         n = len(X.columns)
+#         granger_coe = DataFrame(ones((n, n)), columns=X.columns, index=X.columns)
+#         grangered_struct = {}
+#         cause = []
+#         effect = []
 
-        n_a = 1
-        n_b = 1
-        for x in X.columns:
-            for y in X.columns:
-                if x == y:
-                    continue
-                try:
-                    rel, d, pvalue = granger_causality(X[x], X[y], 5)
-                except:
-                    continue
-                if pvalue < 1e-6:
-                    grangered_struct[rel] = (d, pvalue)
-                    granger_coe[rel[1]][rel[0]] = pvalue
-                    if rel[1] not in effect:
-                        effect.append(rel[1])
-                        n_b = max(n_b, d)
-                    else:
-                        n_b = max(n_b, d)
+#         n_a = 1
+#         n_b = 1
+#         for x in X.columns:
+#             for y in X.columns:
+#                 if x == y:
+#                     continue
+#                 try:
+#                     rel, d, pvalue = granger_causality(X[x], X[y], 5)
+#                 except:
+#                     continue
+#                 if pvalue < 1e-6:
+#                     grangered_struct[rel] = (d, pvalue)
+#                     granger_coe[rel[1]][rel[0]] = pvalue
+#                     if rel[1] not in effect:
+#                         effect.append(rel[1])
+#                         n_b = max(n_b, d)
+#                     else:
+#                         n_b = max(n_b, d)
 
-                    if rel[0] not in cause:
-                        cause.append(rel[0])
+#                     if rel[0] not in cause:
+#                         cause.append(rel[0])
 
-                    if (rel[0] in effect) & (rel[0] in cause):
-                        cause.remove(rel[0])
-                        n_a = max(n_a, d)
-                    # grangered_struct[(rel[1], rel[0])] = (-1.0, 1e-5)
-                    # granger_coe[rel[0]][rel[1]] = 1e-5
+#                     if (rel[0] in effect) & (rel[0] in cause):
+#                         cause.remove(rel[0])
+#                         n_a = max(n_a, d)
+#                     # grangered_struct[(rel[1], rel[0])] = (-1.0, 1e-5)
+#                     # granger_coe[rel[0]][rel[1]] = 1e-5
 
-        U = X[cause]
-        Y = X[effect]
+#         U = X[cause]
+#         Y = X[effect]
 
-        return U, Y, n_a, n_b
+#         return U, Y, n_a, n_b
 
 
 # Subspace Model
@@ -553,32 +580,32 @@ class NN(Model_Obj):
         return YP
 
 
-def granger_causality(X, Y, d):
-    p_XY = 100
-    p_YX = 100
-    d_XY = 100
-    d_YX = 100
+# def granger_causality(X, Y, d):
+#     p_XY = 100
+#     p_YX = 100
+#     d_XY = 100
+#     d_YX = 100
 
-    df = DataFrame(columns=['X', 'Y'], data=zip(X, Y))
-    gc_res = grangercausalitytests(df, d, verbose=False)
-    min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
-    for delay in gc_res:
-        if gc_res[delay][0]['params_ftest'][1] < p_XY:
-            p_XY = gc_res[delay][0]['params_ftest'][1]
-            d_XY = delay
+#     df = DataFrame(columns=['X', 'Y'], data=zip(X, Y))
+#     gc_res = grangercausalitytests(df, d, verbose=False)
+#     min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
+#     for delay in gc_res:
+#         if gc_res[delay][0]['params_ftest'][1] < p_XY:
+#             p_XY = gc_res[delay][0]['params_ftest'][1]
+#             d_XY = delay
 
-    df = DataFrame(columns=['Y', 'X'], data=zip(Y, X))
-    gc_res = grangercausalitytests(df, d, verbose=False)
-    min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
-    for delay in gc_res:
-        if gc_res[delay][0]['params_ftest'][1] < p_YX:
-            p_YX = gc_res[delay][0]['params_ftest'][1]
-            d_YX = delay
+#     df = DataFrame(columns=['Y', 'X'], data=zip(Y, X))
+#     gc_res = grangercausalitytests(df, d, verbose=False)
+#     min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
+#     for delay in gc_res:
+#         if gc_res[delay][0]['params_ftest'][1] < p_YX:
+#             p_YX = gc_res[delay][0]['params_ftest'][1]
+#             d_YX = delay
 
-    if p_XY < p_YX:
-        return (Y.name, X.name), d_XY, p_XY
-    else:
-        return (X.name, Y.name), d_YX, p_YX
+#     if p_XY < p_YX:
+#         return (Y.name, X.name), d_XY, p_XY
+#     else:
+#         return (X.name, Y.name), d_YX, p_YX
 
 
 class Hyper_NN(HyperModel):

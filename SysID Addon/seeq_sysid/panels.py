@@ -18,7 +18,33 @@ class Arx_Panel(Left_Panel):
         title_icon = v.Icon(class_='', children=['mdi-tools'], color='white')
 
         # Expanding Panel
-        # ARX Model Order
+        # ARX ModelStructure
+        self.model_struct_select = v.Select(v_model='ARX',
+                                            items=['ARX', 'FIR'],
+                                            color=self.colors['seeq_primary'],
+                                            item_color=self.colors['seeq_primary'],
+                                            dense=True,
+                                            outlined=False,
+                                            class_='pl-3 my-0 py-0',
+                                            style_='width: 150px; font-size:14px',
+                                            filled=True,
+                                            align='top',
+                                            background_color='white',
+                                            placeholder='Select',
+                                            multiple=False,
+                                            clearable=False,
+                                            solo=True)
+        self.model_struct = v.Row(children=[v.Row(children=['Type: ', v.Spacer()],
+                                                  dense=True,
+                                                  align='top',
+                                                  class_='mt-2',
+                                                  style_='font-weight:bold; color:white; font-size:13px'), self.model_struct_select],
+                                  class_='my-0 py-0',
+                                  dense=True,
+                                  style_='font-weight:bold; color:white; font-size:13px', 
+                                  align='top'
+                                 )
+        
         self.na_min = v.TextField(label='min', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
                                   style_='width:35px')
         self.na_max = v.TextField(label='max', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
@@ -39,7 +65,8 @@ class Arx_Panel(Left_Panel):
                       self.nb_min, self.nb_max],
             class_='',
             dense=True,
-            style_='font-weight:bold; color:white; font-size:13px', align='center')
+            style_='font-weight:bold; color:white; font-size:13px',
+            align='center')
 
         self.nk_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
                                   style_='width:5px')
@@ -52,17 +79,21 @@ class Arx_Panel(Left_Panel):
                         style_='font-weight:bold; color:white; font-size:13px', align='center')
 
         self.orders_panel_obj = v.ExpansionPanel(children=[
-            v.ExpansionPanelHeader(children=['Model Order'],
+            v.ExpansionPanelHeader(children=['Model Structure'],
                                    style_='font-weight:bold; color:white; font-size:12pt',
+                                   class_='my-0 py-0',
                                    dense=True,
                                    align='center',
                                    dark=True),
             v.ExpansionPanelContent(
-                children=[v.Col(children=[self.na, self.nb, self.nk],
+                children=[v.Col(children=[
+#                                           self.model_struct,
+                                          self.na, self.nb, self.nk],
                                 style_='font-size:14px; font-weight:bold',
                                 dark=True,
                                 align='center',
-                                class_='',
+                                class_='my-0 py-0',
+                                color='white',
                                 dense=True)])],
             style_='background-color:#007960')
 
@@ -74,16 +105,16 @@ class Arx_Panel(Left_Panel):
         self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
-                                      "{} Settings".format(self.model_name)])
+                                      "{} Settings".format('Time Series')])
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
                          'Measured Variables (CV)', self.cv_select,
                          self.orders_layout,
-                         v.Divider(class_='mb-4'),
+#                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
                          'Validation Conditions', self.validation_condition,
-                         v.Divider(class_='mb-6'),
+#                          v.Divider(class_='mb-6'),
                          self.identify_push_card]
 
 
@@ -105,13 +136,14 @@ class SS_Panel(Left_Panel):
                                       color=self.colors['seeq_primary'],
                                       item_color=self.colors['seeq_primary'],
                                       dense=True,
-                                      outlined=True,
+                                      outlined=False,
                                       class_='d-flex justify-center',
                                       style_='width: 280px; font-size:14px',
                                       filled=True,
                                       background_color='white',
                                       placeholder='Select',
-                                      multiple=False)
+                                      multiple=False,
+                                      solo=True)
 
         self.method_select.on_event('change', self.method_select_action)
 
@@ -167,7 +199,7 @@ class SS_Panel(Left_Panel):
                          'Measured Variables (CV)', self.cv_select,
                          'Method', self.method_select,
                          self.orders_layout,
-                         v.Divider(class_='mb-4'),
+#                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
                          'Validation Conditions', self.validation_condition,
                          v.Divider(class_='mb-6'),
@@ -228,7 +260,7 @@ class SS_Panel(Left_Panel):
                              'Measured Variables (CV)', self.cv_select,
                              'Method', self.method_select,
                              self.orders_layout,
-                             v.Divider(class_='mb-4'),
+#                              v.Divider(class_='mb-4'),
                              'Training Conditions', self.train_condition,
                              'Validation Conditions', self.validation_condition,
                              v.Divider(class_='mb-6'),
@@ -270,18 +302,64 @@ class NN_Panel(Left_Panel):
                                dense=True)
         
         # Auto Mode Widgets
-        self.slider_help_tip_btn = v.Btn(icon=True, v_on='help_tooltip.on', children=[v.Icon(children=['mdi-help-circle-outline'])])
-        self.slider_help_tip = v.Tooltip(bottom=True,
-                                         max_width='290px',
-                                         v_slots=[{'name': 'activator',
-                                                                'variable': 'help_tooltip',
-                                                                'children': self.slider_help_tip_btn
-                                                               }], children=['Higher computaional cost requires more time but the accuracy is higher.'])
+        help_table_items = [{'Feature\\Mode': 'Optimal number of units for hidden layer(s)',
+                  'Low': 'Yes',
+                  'Normal': 'Yes',
+                  'High': 'Yes'},
+                 {'Feature\\Mode': 'Optimal number of hidden layers',
+                  'Low': 'No',
+                  'Normal': 'Yes',
+                  'High': 'Yes'},
+                 {'Feature\\Mode': 'Optimal batch size',
+                  'Low': 'No',
+                  'Normal': 'No',
+                  'High': 'Yes'}]
+        columns = [
+            {'text': 'Feature\Mode', 'sortable': False, 'value': 'Feature\Mode'},
+            {'text': 'Low', 'sortable': False, 'value': 'Low', 'align': 'center'},
+            {'text': 'Normal', 'sortable': False, 'value': 'Normal', 'align': 'center'},
+            {'text': 'High', 'sortable': False, 'value': 'High', 'align': 'center'},
+        #     {'text': 'Age', 'sortable': False, 'value': 'Age', 'align': 'right'}
+        ]
+        self.help_table = v.DataTable()
+        self.help_table.headers = columns
+        self.help_table.items = help_table_items
+        self.help_table.hide_default_footer = True
+        self.help_table.disable_sort = True
         
+        self.slider_help_tip_btn = v.Btn(icon=True, children=[v.Icon(children=['mdi-help-circle-outline'])])
+        self.slider_help_tip_btn.on_event('click', self.help_action)
+
+#         self.slider_help_tip = v.Tooltip(bottom=True,
+#                                          max_width='290px',
+#                                          v_slots=[{'name': 'activator',
+#                                                                 'variable': 'help_tooltip',
+#                                                                 'children': self.slider_help_tip_btn
+#                                                                }], children=['Higher computaional cost requires more time but the accuracy is higher.'])
+        
+        self.close_help_dialog_btn = v.Btn(children=['CLOSE'], color='#007960', text=True)
+        self.close_help_dialog_btn.on_event('click', self.close_help_action)
+        
+        help_card_content = [
+#                              v.CardTitle(children=['Please Enter a Worksheet URL:']),
+                             self.help_table,
+                             self.close_help_dialog_btn
+                            ]
+
+        help_dialog_card = v.Card(children=help_card_content, class_='d-flex flex-column justify-right pa-2 ma-3 my-0', flat=True)
+
+        self.help_dialog = v.Dialog(name='OpneWB',
+                                   children=[v.Card(children=[help_dialog_card])],
+                                   v_model=False,
+                                   max_width='600px')
+        self.help_dialog.on_event('keydown.stop', lambda *args: None)
+        
+    
         self.auto_slider_title = v.Row(children=[v.Icon(children=['mdi-brain'], class_='px-2 pb-0 mb-0'),
                                                  'Computation Cost',
                                                  v.Spacer(),
-                                                 self.slider_help_tip], 
+                                                 self.help_dialog,
+                                                 self.slider_help_tip_btn], 
                                        align='center',
                                        class_='pb-0 pt-1 px-1',
                                        style_='font-size:11pt')
@@ -357,10 +435,11 @@ class NN_Panel(Left_Panel):
     def manual_mode_btn_action(self, *_):
         self.custom_nn_dialog.v_model = True
             
+    def help_action(self, *args):
+        self.help_dialog.v_model = True
             
-            
-            
-            
+    def close_help_action(self, *args):
+        self.help_dialog.v_model = None   
             
             
             

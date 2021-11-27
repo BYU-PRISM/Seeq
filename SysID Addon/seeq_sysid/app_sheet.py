@@ -86,6 +86,7 @@ class App_Sheet(v.Card):
             self.push_model_btn.disabled = True
 
     def identify_system(self, *_):
+#         self.
         self.prepare_params_general()
         self.prepare_params_spec()
 
@@ -156,6 +157,8 @@ class Arx_app_sheet(App_Sheet):
         self.model = ARX()
         self.blank_model = deepcopy(self.model)
 
+        self.model_struct = self.panel.model_struct_select
+        
         self.na_min = self.panel.na_min
         self.na_max = self.panel.na_max
 
@@ -174,6 +177,8 @@ class Arx_app_sheet(App_Sheet):
 
         self.model.nk_min = int(self.nk_min.v_model)
         self.model.nk_max = int(self.nk_max.v_model)
+        
+        self.model.model_struct = self.model_struct.v_model
 
 
 class SS_app_sheet(App_Sheet):
