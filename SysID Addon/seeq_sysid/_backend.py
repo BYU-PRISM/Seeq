@@ -4,6 +4,7 @@ This is a dummy file that contains some functions (it could be classes) to perfo
 
 from re import split
 from urllib.parse import parse_qs, unquote, urlparse
+from IPython.display import clear_output
 
 from pandas import DataFrame
 from seeq import spy
@@ -38,6 +39,9 @@ def pull_signals(url, grid='auto'):
         return signal_df, DataFrame(), search_df
     signal_df.columns = signal_list
     capsule_df.columns = capsules_list
+    
+    clear_output()
+
     return signal_df, capsule_df, search_df
 
 
