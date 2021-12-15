@@ -543,9 +543,6 @@ class NN(Model_Obj):
         )
 
         tuner.oracle.multi_worker = True
-        # hp = tuner.oracle.get_space()
-        # hp.values['batch_size'] = Choice('batch_size', values=[32, 64, 128])
-        # tuner.oracle.update_space(hp)
 
         # Run Hyperparameter Optimizer
         tuner.search(x_train, y_train,
@@ -654,10 +651,7 @@ class HyperTuner(BayesianOptimization):
         super(HyperTuner, self).__init__(*args, **kwargs)
 
     def run_trial(self, trial, *args, **kwargs):
-        # You can add additional HyperParameters for preprocessing and custom training loops
-        # via overriding `run_trial`
         kwargs['batch_size'] = trial.hyperparameters.Choice('batch_size', self.auto_bs)
-        # kwargs['epochs'] = trial.hyperparameters.Int('epochs', 10, 30)
         super(HyperTuner, self).run_trial(trial, *args, **kwargs)
 
 # df = read_csv('../signal_df.csv')
