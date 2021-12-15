@@ -6,8 +6,8 @@ from pandas import DataFrame
 from seeq_sysid._backend import push_formula
 from seeq_sysid.figure_panel import Figure_Table
 from seeq_sysid.left_panel import Left_Panel
-from seeq_sysid.model_obj import Model_Obj, ARX, Subspace
-from seeq_sysid.panels import Arx_Panel, SS_Panel
+from seeq_sysid.model_obj import Model_Obj, ARX, Subspace, NN
+from seeq_sysid.panels import Arx_Panel, SS_Panel, NN_Panel
 
 
 class App_Sheet(v.Card):
@@ -86,12 +86,15 @@ class App_Sheet(v.Card):
             self.push_model_btn.disabled = True
 
     def identify_system(self, *_):
+#         self.
         self.prepare_params_general()
         self.prepare_params_spec()
 
         train_dataset = self.create_dataset(self.train_condition.v_model)
         validation_dataset = self.create_dataset(self.validation_condition.v_model)
 
+        self.preprocess()
+        
         self.model.identify(train_dataset)
 
         self.train_results = self.model.forecast(train_dataset)
@@ -110,7 +113,7 @@ class App_Sheet(v.Card):
             self.push_model_btn.disabled = True
 
     def create_dataset(self, capsules: list):
-        signal_df = self.signal_df
+        signal_df = self.signal_df[self.mv_select.v_model+self.cv_select.v_model]
         capsule_df = self.capsule_df
 
         if not capsules:
@@ -140,6 +143,9 @@ class App_Sheet(v.Card):
 
     def prepare_params_spec(self):
         pass
+    
+    def preprocess(self):
+        pass
 
 
 class Arx_app_sheet(App_Sheet):
@@ -151,6 +157,8 @@ class Arx_app_sheet(App_Sheet):
         self.model = ARX()
         self.blank_model = deepcopy(self.model)
 
+        self.model_struct = self.panel.model_struct_select
+        
         self.na_min = self.panel.na_min
         self.na_max = self.panel.na_max
 
@@ -169,6 +177,8 @@ class Arx_app_sheet(App_Sheet):
 
         self.model.nk_min = int(self.nk_min.v_model)
         self.model.nk_max = int(self.nk_max.v_model)
+        
+        self.model.model_struct = self.model_struct.v_model
 
 
 class SS_app_sheet(App_Sheet):
@@ -188,3 +198,23 @@ class SS_app_sheet(App_Sheet):
         self.model.method = self.method.v_model
         self.model.thresh = float(self.thresh.v_model)
         self.model.order = int(self.order.v_model)
+
+        
+class NN_app_sheet(App_Sheet):
+    def __init__(self,
+                 *args, **kwargs):
+        panel = NN_Panel()
+        super().__init__(panel=panel,
+                       *args, **kwargs)
+        self.model = NN()
+        self.blank_model = deepcopy(self.model)
+        
+        self.model.mode = int(self.panel.auto_mode_slider.v_model)
+        
+    def prepare_params_spec(self):
+        self.model.mode = int(self.panel.auto_mode_slider.v_model)        
+        
+    def preprocess(self):
+        self.model.Min = self.signal_df[self.model.mv+self.model.cv].min()
+        self.model.Max = self.signal_df[self.model.mv+self.model.cv].max()
+        

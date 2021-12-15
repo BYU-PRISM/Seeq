@@ -1,14 +1,29 @@
-from gekko import GEKKO
-from numpy import vstack, ones, zeros, reshape, where, linalg, dot
-from statsmodels.tsa.stattools import grangercausalitytests
+from os import environ
 
-from seeq_sysid._backend import *
+import matplotlib.pyplot as plt
+
+environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+from gekko import GEKKO
+from numpy import vstack, ones, zeros, reshape, where, linalg, dot, array
+# from statsmodels.tsa.stattools import grangercausalitytests
+
+# from seeq_sysid._backend import *
+
+from tensorflow import get_logger
+from tensorflow.keras import layers, callbacks, Sequential, optimizers
+from keras_tuner import RandomSearch, BayesianOptimization, HyperModel, Hyperband
+from keras_tuner.engine.hyperparameters import Int, Choice
+from pandas import read_csv, DataFrame, concat
+
+get_logger().setLevel('ERROR')
 
 
 class Model_Obj:
     def __init__(self):
         self.status = False
         self.df = None
+        self.label = None
         self.formula = None
         self.mv = None
         self.cv = None
@@ -35,12 +50,17 @@ class Model_Obj:
         self.nk = None
 
         self.p = None
+        self.q = None
 
         self.eps = None
         self.A = None
         self.B = None
         self.C = None
         self.D = None
+
+        self.alpha = None
+        self.beta = None
+
 
     def identify(self, df: DataFrame = None):
         pass
@@ -52,55 +72,38 @@ class Model_Obj:
         pass
 
 
-'''
-ARX Model: y(k+1) = a_0*y(k)+a_1*y(k-1)+...+a_(na-1)*y(k-na+1) 
-                  + b_0+u(k)+b_1*u(k-1)+...+b_(nb-1)*u(k-na+1)
-
-Function Inputs:
-u: Input(s)   [pandas DataFrame]
-y: Output(s)  [pandas DataFrame]
-na: AutoRegressive term order / Ex: na=2 -> a_0*y(k) + a_1*y(k-1)
-nb: eXogenous input order     / Ex: nb=2 -> b_0*u(k) + b_1*u(k-1)
-nk: Input Delay               / Ex: nk=2 -> b_0*u(k-2) + b_1*u(k-3)
-n_u: No. of Inputs
-n_y: No. of Outputs
-
-----------------------------------------------------------------
-
-- Option 1: User can specify Input/Output DataFrame and na/nb
-- Option 2: User just specify a DataFrame and Granger Causality identify input(s)/output(s) and Identify the ARX model
-
-'''
-
-
 class ARX(Model_Obj):
+    '''
+    ARX Model: y(k+1) = a_0*y(k)+a_1*y(k-1)+...+a_(na-1)*y(k-na+1)
+                      + b_0+u(k)+b_1*u(k-1)+...+b_(nb-1)*u(k-na+1)
+
+    Function Inputs:
+    u: Input(s)   [pandas DataFrame]
+    y: Output(s)  [pandas DataFrame]
+    na: AutoRegressive term order / Ex: na=2 -> a_0*y(k) + a_1*y(k-1)
+    nb: eXogenous input order     / Ex: nb=2 -> b_0*u(k) + b_1*u(k-1)
+    nk: Input Delay               / Ex: nk=2 -> b_0*u(k-2) + b_1*u(k-3)
+    n_u: No. of Inputs
+    n_y: No. of Outputs
+
+    ----------------------------------------------------------------
+
+    - Option 1: User can specify Input/Output DataFrame and na/nb
+    - Option 2: User just specify a DataFrame and Granger Causality identify input(s)/output(s) and Identify the ARX model
+    '''
+
     def __init__(self,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.model_struct = 'ARX'
 
     def identify(self, df: DataFrame = None):
 
-        #         if Y is None:
-        #             U, Y, NA, NB = self.granger_causality(U)
-        #             inputs = U.columns.values
-        #             outputs = Y.columns.values
-        #             print('inputs= {}'.format(inputs))
-        #             print('outputs= {}'.format(outputs))
-        #         else:
-        #             inputs = U.columns.values
-        #             outputs = Y.columns.values
         self.df = df
         U = df[self.mv]
         Y = df[self.cv]
 
-        # try:
-        #     T = U['Time'].values
-        # except:
-        #     pass
         T = list(range(len(Y.index)))
-        #         self.na = NA
-        #         self.nb = NB
-        #         self.nk = NK
 
         for i_a in range(self.na_min, self.na_max + 1):
             for i_b in range(self.nb_min, self.nb_max + 1):
@@ -143,14 +146,27 @@ class ARX(Model_Obj):
 
         YP = Y.iloc[:Nd_max].to_numpy()
         NI = max(0, NA - NB - NK)
-        for k in range(NI, lu - NB - NK):
-            y_p = zeros(NY)
-            for i in range(NY):
-                y_p[i] = A[i][::-1].dot(Y[k:k + NA].iloc[:, [i]]) + C[i]
-                for j in range(NU):
-                    y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+        
+        if self.model_struct == 'ARX':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = A[i][::-1].dot(Y[k:k + NA].iloc[:, [i]]) + C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
 
-            YP = vstack([YP, y_p])
+                YP = vstack([YP, y_p])
+        
+        elif self.model_struct == 'FIR':
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+#                     y_p[i] = C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+
+                YP = vstack([YP, y_p])
+        
 
         labels = []
         for label in Y.columns:
@@ -183,21 +199,32 @@ class ARX(Model_Obj):
         yo = YP[-NA:].transpose()
 
         NI = max(0, NA - NB - NK)
-        for k in range(NI, lu - NB - NK):
-            y_p = zeros(NY)
-            for i in range(NY):
-                y_p[i] = A[i][::-1].dot(yo[i]) + C[i]
-                for j in range(NU):
-                    y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
-                yo[i][:NA - 1] = yo[i][1:]
-                yo[i][-1] = y_p[i]
-            YP = vstack([YP, y_p])
+        
+        if self.model_struct == 'ARX':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = A[i][::-1].dot(yo[i]) + C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+                    yo[i][:NA - 1] = yo[i][1:]
+                    yo[i][-1] = y_p[i]
+                YP = vstack([YP, y_p])
+                
+        elif self.model_struct == 'FIR':      
+            for k in range(NI, lu - NB - NK):
+                y_p = zeros(NY)
+                for i in range(NY):
+                    y_p[i] = C[i]
+                    for j in range(NU):
+                        y_p[i] += B[i].transpose()[j][::-1].dot(U[k:k + NB + NK].iloc[:, [j]])
+                    yo[i][:NA - 1] = yo[i][1:]
+                    yo[i][-1] = y_p[i]
+                YP = vstack([YP, y_p])
 
-        labels = []
-        for label in Y.columns:
-            labels.append(label + '_pred')
+        self.label = [tag_label + '_pred' for tag_label in Y.columns]
 
-        YP = DataFrame(YP, columns=labels)
+        YP = DataFrame(YP, columns=self.label)
         YP.fillna(method='ffill', inplace=True)
         YP.fillna(method='bfill', inplace=True)
         return YP
@@ -248,49 +275,45 @@ class ARX(Model_Obj):
 
         self.formula = DataFrame(formula_list)
 
-    def granger_causality(self, X: DataFrame):
-        n = len(X.columns)
-        granger_coe = DataFrame(ones((n, n)), columns=X.columns, index=X.columns)
-        grangered_struct = {}
-        cause = []
-        effect = []
+#     def granger_causality(self, X: DataFrame):
+#         n = len(X.columns)
+#         granger_coe = DataFrame(ones((n, n)), columns=X.columns, index=X.columns)
+#         grangered_struct = {}
+#         cause = []
+#         effect = []
 
-        n_a = 1
-        n_b = 1
-        for x in X.columns:
-            for y in X.columns:
-                if x == y:
-                    continue
-                try:
-                    rel, d, pvalue = granger_causality(X[x], X[y], 5)
-                except:
-                    continue
-                if pvalue < 1e-6:
-                    grangered_struct[rel] = (d, pvalue)
-                    granger_coe[rel[1]][rel[0]] = pvalue
-                    if rel[1] not in effect:
-                        effect.append(rel[1])
-                        n_b = max(n_b, d)
-                    else:
-                        n_b = max(n_b, d)
+#         n_a = 1
+#         n_b = 1
+#         for x in X.columns:
+#             for y in X.columns:
+#                 if x == y:
+#                     continue
+#                 try:
+#                     rel, d, pvalue = granger_causality(X[x], X[y], 5)
+#                 except:
+#                     continue
+#                 if pvalue < 1e-6:
+#                     grangered_struct[rel] = (d, pvalue)
+#                     granger_coe[rel[1]][rel[0]] = pvalue
+#                     if rel[1] not in effect:
+#                         effect.append(rel[1])
+#                         n_b = max(n_b, d)
+#                     else:
+#                         n_b = max(n_b, d)
 
-                    if rel[0] not in cause:
-                        cause.append(rel[0])
+#                     if rel[0] not in cause:
+#                         cause.append(rel[0])
 
-                    if (rel[0] in effect) & (rel[0] in cause):
-                        cause.remove(rel[0])
-                        n_a = max(n_a, d)
-                    # grangered_struct[(rel[1], rel[0])] = (-1.0, 1e-5)
-                    # granger_coe[rel[0]][rel[1]] = 1e-5
+#                     if (rel[0] in effect) & (rel[0] in cause):
+#                         cause.remove(rel[0])
+#                         n_a = max(n_a, d)
+#                     # grangered_struct[(rel[1], rel[0])] = (-1.0, 1e-5)
+#                     # granger_coe[rel[0]][rel[1]] = 1e-5
 
-        U = X[cause]
-        Y = X[effect]
+#         U = X[cause]
+#         Y = X[effect]
 
-        return U, Y, n_a, n_b
-
-    # def summary(self):
-    #     summary_str = 'y(k+1) = '
-    # for a_i in self.p['a']
+#         return U, Y, n_a, n_b
 
 
 # Subspace Model
@@ -302,8 +325,6 @@ class Subspace(Model_Obj):
 
         self.U_ss = None
         self.X_ss = None
-
-        self.label = None
 
     def identify(self, df: DataFrame = None):
         u_df = df[self.mv]
@@ -333,9 +354,9 @@ class Subspace(Model_Obj):
             omega = vstack([X1, u])
 
             Ut, St, Vht = linalg.svd(omega, full_matrices=False)
-            thresh_t = 1e-6
+            thresh_t = 1e-9
             try:
-                r_t = where(St < thresh_t)[0][0]
+                r_t = where(St < thresh_t)[0][0] + 1
             except:
                 r_t = len(St)
             #         r_t = order
@@ -349,13 +370,13 @@ class Subspace(Model_Obj):
 
             Uh, Sh, Vhh = linalg.svd(X2, full_matrices=False)
 
-            #         thresh_h = 1e-6
-            #         try:
-            #             r_h = where(Sh < thresh_t)[0][0]
-            #         except:
-            #             r_h = len(Sh)
+            thresh_h = self.thresh
+            try:
+                r_h = where(Sh < thresh_h)[0][0] + 1
+            except:
+                r_h = len(Sh)
 
-            r_h = self.order
+#             r_h = self.order
 
             uh = Uh[:, :r_h]
             # sh = Sh[:r_h]
@@ -373,19 +394,23 @@ class Subspace(Model_Obj):
 
         elif self.method == 'N4SID':
             pass
-    
-    
-    def simulate(self, A, B, C, D, U, X0):
+
+    def simulate(self, U, X0):
+        A = self.A
+        B = self.B
+        C = self.C
+        D = self.D
+
         steps = U.shape[0]
 
         x = zeros((steps, A.shape[0]))
         ys = zeros((steps, C.shape[0]))
         x[0] = X0
-                  
+
         for i in range(1, steps):
-            x[i] = dot(A, x[i-1]) + dot(B, U[i-1])
+            x[i] = dot(A, x[i - 1]) + dot(B, U[i - 1])
             ys[i] = dot(C, x[i]) + dot(D, U[i])
-                  
+
         return x, ys
 
     def forecast(self, df: DataFrame = None):
@@ -394,11 +419,11 @@ class Subspace(Model_Obj):
         U_real = u_df.to_numpy()
 
         U = U_real - self.U_ss
-        
+
         X0 = zeros((self.A.shape[0],))
 
-        x, ys = self.simulate(self.A, self.B, self.C, self.D, U, X0)
-        
+        x, ys = self.simulate(U, X0)
+
         Ys = ys + self.X_ss
 
         YP = DataFrame(Ys, columns=self.label)
@@ -407,29 +432,239 @@ class Subspace(Model_Obj):
         return YP
 
 
-def granger_causality(X, Y, d):
-    p_XY = 100
-    p_YX = 100
-    d_XY = 100
-    d_YX = 100
+# Neural Network (RNN)
+class NN(Model_Obj):
+    def __init__(self,
+                 *args, **kwargs):
 
-    df = DataFrame(columns=['X', 'Y'], data=zip(X, Y))
-    gc_res = grangercausalitytests(df, d, verbose=False)
-    min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
-    for delay in gc_res:
-        if gc_res[delay][0]['params_ftest'][1] < p_XY:
-            p_XY = gc_res[delay][0]['params_ftest'][1]
-            d_XY = delay
+        self.nn_type = 'RNN'
+        self.mode = None
+        self.options = None
+        self.tuner = None
+        self.units = None
+        self.n_layers = None
+        self.batch_size = None
+        self.max_trials = None
+        
+        self.model = None
+        self.history = None
+        self.window = 10
+        self.Min = None
+        self.Max = None
+        
+        super().__init__(*args, **kwargs)
 
-    df = DataFrame(columns=['Y', 'X'], data=zip(Y, X))
-    gc_res = grangercausalitytests(df, d, verbose=False)
-    min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
-    for delay in gc_res:
-        if gc_res[delay][0]['params_ftest'][1] < p_YX:
-            p_YX = gc_res[delay][0]['params_ftest'][1]
-            d_YX = delay
+    def normalize(self, df: DataFrame = None):
+        df_norm = (df - self.Min) / (self.Max - self.Min)
+        return df_norm
 
-    if p_XY < p_YX:
-        return (Y.name, X.name), d_XY, p_XY
-    else:
-        return (X.name, Y.name), d_YX, p_YX
+    def denormalize(self, df_norm: DataFrame = None):
+        df = df_norm[self.cv] * (self.Max[self.cv] - self.Min[self.cv]) + self.Min[self.cv]
+        return df
+
+    def create_snapshot(self, in_df: DataFrame = None, out_df: DataFrame = None):
+        L = len(in_df)
+
+        x_train = []
+        y_train = []
+
+        if in_df is not None:
+            for i in range(self.window, L):
+                x_train.append(in_df.iloc[i - self.window:i].to_numpy())
+            x_train = array(x_train)
+
+        if out_df is not None:
+            for i in range(self.window, L):
+                y_train.append(out_df.iloc[i].to_numpy())
+            y_train = array(y_train)
+
+        return x_train, y_train
+
+    def option_maker(self):
+        if self.mode == 0:    # Mode = Low
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1]
+            self.batch_size = [32]
+            self.max_trials = 6
+
+        elif self.mode == 1:    # Mode = Medium
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1, 2, 3]
+            self.batch_size = [32]
+            self.max_trials = 15
+
+        elif self.mode == 2:    # Mode = High
+            self.units = list(range(5, 206, 20))
+            self.n_layers = [1, 2, 3]
+            self.batch_size = [32, 64, 128]
+            self.max_trials = 30
+
+    def identify(self, df: DataFrame = None):
+        # Set Mode Options
+        self.option_maker()
+
+        # Early Stopping
+        tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=3)
+        fit_es = callbacks.EarlyStopping(monitor='val_loss', patience=15)
+
+        # Number of Inputs & Outputs
+        self.p = len(self.mv + self.cv)
+        self.q = len(self.cv)
+
+        # Normalize data
+        df_norm = self.normalize(df=df)
+
+        # Input/Output Data
+        in_df = df_norm[self.mv + self.cv]
+        out_df = df_norm[self.cv]
+
+        # Data Label
+        self.label = [tag_label + '_pred' for tag_label in out_df.columns]
+
+        # Create Data Snapshots for NN
+        x_train, y_train = self.create_snapshot(in_df=in_df, out_df=out_df)
+
+        # Setup Hyperparameter Optimizer
+        hypermodel = Hyper_NN(units=self.units, n_layers=self.n_layers, p=self.p, q=self.q, window=self.window)
+        tuner = HyperTuner(
+            auto_bs=self.batch_size,
+            hypermodel=hypermodel,
+            objective="val_loss",
+            max_trials=self.max_trials,
+            num_initial_points=2,
+            alpha=1e-4,
+            beta=2.6,
+            overwrite=True,
+            directory="temp_dir",
+            project_name="Seeq_NN",
+        )
+
+        tuner.oracle.multi_worker = True
+        # hp = tuner.oracle.get_space()
+        # hp.values['batch_size'] = Choice('batch_size', values=[32, 64, 128])
+        # tuner.oracle.update_space(hp)
+
+        # Run Hyperparameter Optimizer
+        tuner.search(x_train, y_train,
+                     epochs=20, validation_split=0.2,
+                     verbose=0, callbacks=[tune_es])
+        self.tuner = tuner
+
+        # Get the optimal hyperparameters
+        best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
+
+        model = tuner.hypermodel.build(best_hps)
+
+        # Training Performance
+        self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=0)
+
+        # Save Model
+        self.model = model
+
+    def forecast(self, df: DataFrame = None):
+        df_norm = self.normalize(df=df)
+
+        in_df = df_norm[self.mv + self.cv]
+
+        x_train, _ = self.create_snapshot(in_df=in_df)
+
+        yh_norm = self.model.predict(x_train)
+
+        YP_norm = DataFrame(yh_norm, columns=self.cv)
+        YP = self.denormalize(YP_norm)
+        dummy_rows = df[self.cv].iloc[:self.window].shift(self.window)
+        YP = concat([dummy_rows, YP], ignore_index=True)
+        YP.fillna(method='bfill', inplace=True)
+        YP.columns = self.label
+
+        return YP
+
+
+# def granger_causality(X, Y, d):
+#     p_XY = 100
+#     p_YX = 100
+#     d_XY = 100
+#     d_YX = 100
+
+#     df = DataFrame(columns=['X', 'Y'], data=zip(X, Y))
+#     gc_res = grangercausalitytests(df, d, verbose=False)
+#     min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
+#     for delay in gc_res:
+#         if gc_res[delay][0]['params_ftest'][1] < p_XY:
+#             p_XY = gc_res[delay][0]['params_ftest'][1]
+#             d_XY = delay
+
+#     df = DataFrame(columns=['Y', 'X'], data=zip(Y, X))
+#     gc_res = grangercausalitytests(df, d, verbose=False)
+#     min([gc_res[k][0]['params_ftest'][1] for k in gc_res])
+#     for delay in gc_res:
+#         if gc_res[delay][0]['params_ftest'][1] < p_YX:
+#             p_YX = gc_res[delay][0]['params_ftest'][1]
+#             d_YX = delay
+
+#     if p_XY < p_YX:
+#         return (Y.name, X.name), d_XY, p_XY
+#     else:
+#         return (X.name, Y.name), d_YX, p_YX
+
+
+class Hyper_NN(HyperModel):
+    def __init__(self, units: list, n_layers: list, p: int, q: int, window: int, *args, **kwargs):
+        self.units = units
+        self.n_layers = n_layers
+        self.p = p
+        self.q = q
+        self.window = window
+        super(Hyper_NN, self).__init__(*args, **kwargs)
+
+    def build(self, hp):
+        model = Sequential()
+        n_layers = hp.Choice(name='n_layers', values=self.n_layers)
+        for i_layer in range(n_layers):
+            layer_name = "units{}".format(i_layer)
+            model.add(
+                layers.LSTM(
+                    input_shape=(self.window, self.p),
+                    units=hp.Choice(layer_name, values=self.units),
+                    return_sequences=True,
+                )
+            )
+            model.add(layers.Dropout(0.1))
+        model.add(layers.Flatten())
+        model.add(layers.Dense(self.q,
+                               activation="linear"))
+        model.compile(
+            optimizer=optimizers.Adam(),
+            loss="MSE",
+            metrics=["accuracy"]
+        )
+
+        return model
+
+
+class HyperTuner(BayesianOptimization):
+    def __init__(self, auto_bs: list, *args, **kwargs):
+        self.auto_bs = auto_bs
+        super(HyperTuner, self).__init__(*args, **kwargs)
+
+    def run_trial(self, trial, *args, **kwargs):
+        # You can add additional HyperParameters for preprocessing and custom training loops
+        # via overriding `run_trial`
+        kwargs['batch_size'] = trial.hyperparameters.Choice('batch_size', self.auto_bs)
+        # kwargs['epochs'] = trial.hyperparameters.Int('epochs', 10, 30)
+        super(HyperTuner, self).run_trial(trial, *args, **kwargs)
+
+# df = read_csv('../signal_df.csv')
+# df.set_index('Time', drop=True, inplace=True)
+# nn = NN()
+# nn.Min = df.min()
+# nn.Max = df.max()
+# nn.mv = ['F_cw']
+# nn.cv = ['T1']
+# nn.window = 10
+# nn.mode = 'High'
+# nn.identify(df)
+# yp = nn.forecast(df)
+# plt.plot(yp)
+# plt.plot(df[nn.cv].iloc[nn.window:], '--')
+# plt.show()
