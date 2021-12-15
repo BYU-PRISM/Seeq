@@ -8,7 +8,7 @@ from gekko import GEKKO
 from numpy import vstack, ones, zeros, reshape, where, linalg, dot, array
 # from statsmodels.tsa.stattools import grangercausalitytests
 
-# from seeq_sysid._backend import *
+from seeq_sysid._backend import *
 
 from tensorflow import get_logger
 from tensorflow.keras import layers, callbacks, Sequential, optimizers
@@ -394,6 +394,9 @@ class Subspace(Model_Obj):
 
         elif self.method == 'N4SID':
             pass
+        
+        self.status = True
+
 
     def simulate(self, U, X0):
         A = self.A
@@ -560,6 +563,9 @@ class NN(Model_Obj):
 
         # Save Model
         self.model = model
+        
+        self.status = True
+
 
     def forecast(self, df: DataFrame = None):
         df_norm = self.normalize(df=df)
@@ -623,13 +629,13 @@ class Hyper_NN(HyperModel):
         for i_layer in range(n_layers):
             layer_name = "units{}".format(i_layer)
             model.add(
-                layers.LSTM(
+                layers.SimpleRNN(
                     input_shape=(self.window, self.p),
                     units=hp.Choice(layer_name, values=self.units),
                     return_sequences=True,
                 )
             )
-            model.add(layers.Dropout(0.1))
+            model.add(layers.Dropout(0.5))
         model.add(layers.Flatten())
         model.add(layers.Dense(self.q,
                                activation="linear"))

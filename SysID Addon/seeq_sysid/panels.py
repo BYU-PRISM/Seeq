@@ -34,34 +34,40 @@ class Arx_Panel(Left_Panel):
                                             multiple=False,
                                             clearable=False,
                                             solo=True)
+        self.model_struct_select.on_event('change', self.model_struct_action)                                
+                                          
+            
         self.model_struct = v.Row(children=[v.Row(children=['Type: ', v.Spacer()],
+                                                            dense=True,
+                                                            align='top',
+                                                            class_='mt-2',
+                                                            no_gutters=True,
+                                                            style_='font-weight:bold; color:white; font-size:13px'), self.model_struct_select],
+                                                  class_='my-0 py-0',
                                                   dense=True,
+                                                  style_='font-weight:bold; color:white; font-size:13px', 
                                                   align='top',
-                                                  class_='mt-2',
-                                                  style_='font-weight:bold; color:white; font-size:13px'), self.model_struct_select],
-                                  class_='my-0 py-0',
-                                  dense=True,
-                                  style_='font-weight:bold; color:white; font-size:13px', 
-                                  align='top'
-                                 )
+                                                  no_gutters=True
+                                                  )
         
         self.na_min = v.TextField(label='min', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:35px')
+                                  style_='width:30px')
         self.na_max = v.TextField(label='max', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:35px')
+                                  style_='width:30px')
         self.na = v.Row(
-            children=[v.Row(children=['Auto-Regressive', create_eq('$(n_a):$', 'white', 2, top='0px')], class_='mt-0'),
+            children=[v.Row(children=['Auto-Regressive', create_eq('$(n_a):$', 'white', 2, top='0px')], class_='mt-0', no_gutters=True,),
                       self.na_min, self.na_max],
+            no_gutters=True,
             class_='',
             dense=True,
             style_='font-weight:bold; color:white; font-size:13px', align='center')
 
         self.nb_min = v.TextField(label='min', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:35px', align='top')
+                                  style_='width:30px', align='top')
         self.nb_max = v.TextField(label='max', v_model='2', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:35px', align='top')
-        self.nb = v.Row(
-            children=[v.Row(children=['Exogenous Input', create_eq('$(n_b):$', 'white', 2, top='0px')], class_='mt-0'),
+                                  style_='width:30px', align='top')
+        self.nb = v.Row(no_gutters=True,
+            children=[v.Row(children=['Exogenous Input', create_eq('$(n_b):$', 'white', 2, top='0px')], class_='mt-0', no_gutters=True,),
                       self.nb_min, self.nb_max],
             class_='',
             dense=True,
@@ -73,7 +79,7 @@ class Arx_Panel(Left_Panel):
         self.nk_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
                                   style_='width:5px')
         self.nk = v.Row(children=[v.Row(children=['Input Delay', create_eq('$(n_k):$', 'white', 2, top='0px')],
-                                        class_='d-flex justify-right'), self.nk_min, self.nk_max],
+                                        class_='d-flex justify-right', no_gutters=True,), self.nk_min, self.nk_max],
                         class_='d-flex justify-right',
                         dense=True,
                         style_='font-weight:bold; color:white; font-size:13px', align='center')
@@ -83,15 +89,17 @@ class Arx_Panel(Left_Panel):
                                    style_='font-weight:bold; color:white; font-size:12pt',
                                    class_='my-0 py-0',
                                    dense=True,
+                                   no_gutters=True,
                                    align='center',
                                    dark=True),
             v.ExpansionPanelContent(
                 children=[v.Col(children=[
-#                                           self.model_struct,
+                                          self.model_struct,
                                           self.na, self.nb, self.nk],
                                 style_='font-size:14px; font-weight:bold',
                                 dark=True,
                                 align='center',
+                                no_gutters=True,
                                 class_='my-0 py-0',
                                 color='white',
                                 dense=True)])],
@@ -116,6 +124,19 @@ class Arx_Panel(Left_Panel):
                          'Validation Conditions', self.validation_condition,
 #                          v.Divider(class_='mb-6'),
                          self.identify_push_card]
+                                                  
+    def model_struct_action(self, item, *_):
+        if item.v_model == 'ARX':
+            self.na_min.v_model = '2'
+            self.na_max.v_model = '2'
+            self.na_min.disabled = False
+            self.na_max.disabled = False
+        
+        if item.v_model == 'FIR':
+            self.na_min.v_model = '0'
+            self.na_max.v_model = '0'
+            self.na_min.disabled = True
+            self.na_max.disabled = True
 
 
 # State-Space Panel
@@ -153,20 +174,25 @@ class SS_Panel(Left_Panel):
         self.threshold_box = v.TextField(label='epsilon', v_model='1e-6', dense=True, class_='pl-2 pt-1', color='white',
                                          dark=True, style_='width:70px; font-size:11pt', hint='ex: 1e-6')
         self.threshold = v.Row(
-            children=[v.Row(children=['Threshold'], class_='mt-0', style_='font-size:11pt; font-weight:bold'),
+            children=[v.Row(children=['Threshold'], class_='mt-0', style_='font-size:11pt; font-weight:bold', no_gutters=True),
                       self.threshold_box],
             class_='',
             dense=True,
+            no_gutters=True,
             style_='font-weight:bold; color:white; font-size:13px', align='center')
 
         self.order_box = v.TextField(label='Order', v_model='4', dense=True, class_='pl-2 pt-1', color='white',
                                      dark=True, style_='width:70px; font-size:11pt', hint='ex: 4')
         self.order = v.Row(children=[
-            v.Row(children=['States', create_eq('$(n):$', 'white', 2, top='0px')], class_='mt-0',
+            v.Row(children=['States', create_eq('$(n):$', 'white', 2, top='0px')], 
+                  class_='mt-0',
+                  no_gutters=True,
                   style_='font-size:11pt; font-weight:bold'), self.order_box],
             class_='',
             dense=True,
-            style_='font-weight:bold; color:white; font-size:13px', align='center')
+            style_='font-weight:bold; color:white; font-size:13px', 
+            align='center',
+            no_gutters=True)
 
         self.method_box = self.threshold
 

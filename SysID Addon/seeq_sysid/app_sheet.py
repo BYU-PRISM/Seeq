@@ -3,7 +3,7 @@ from copy import deepcopy
 import ipyvuetify as v
 from pandas import DataFrame
 
-from seeq_sysid._backend import push_formula
+from seeq_sysid._backend import push_formula, push_signal
 from seeq_sysid.figure_panel import Figure_Table
 from seeq_sysid.left_panel import Left_Panel
 from seeq_sysid.model_obj import Model_Obj, ARX, Subspace, NN
@@ -28,6 +28,7 @@ class App_Sheet(v.Card):
 
         self.train_results = None
         self.validation_results = None
+        self.all_results = None
 
         self.panel = panel
         self.canvas = Figure_Table()
@@ -46,7 +47,8 @@ class App_Sheet(v.Card):
 
         self.push_model_btn = panel.push_model_btn
         self.identify_model_btn = panel.identify_model_btn
-
+        self.validate_model_btn = panel.validate_model_btn
+        
         self.signal_df = DataFrame()
         self.capsule_df = DataFrame()
         self.tags_df = DataFrame()
@@ -56,6 +58,7 @@ class App_Sheet(v.Card):
         self.mv_select.on_event('change', self.update_panel)
         self.cv_select.on_event('change', self.update_panel)
         self.identify_model_btn.on_event('click', self.identify_system)
+        self.validate_model_btn.on_event('click', self.validate_model)
         self.push_model_btn.on_event('click', self.push_model)
 
         self.children = [self.panel, self.canvas]
@@ -83,10 +86,11 @@ class App_Sheet(v.Card):
 
         else:
             self.identify_model_btn.disabled = True
+            self.validate_model_btn.disabled = True
             self.push_model_btn.disabled = True
 
     def identify_system(self, *_):
-#         self.
+        self.identify_model_btn.loading = True
         self.prepare_params_general()
         self.prepare_params_spec()
 
@@ -109,8 +113,13 @@ class App_Sheet(v.Card):
 
         if self.model.status:
             self.push_model_btn.disabled = False
+            self.validate_model_btn.disabled = False
         else:
             self.push_model_btn.disabled = True
+            self.validate_model_btn.disabled = True
+            
+        self.identify_model_btn.loading = False
+
 
     def create_dataset(self, capsules: list):
         signal_df = self.signal_df[self.mv_select.v_model+self.cv_select.v_model]
@@ -121,6 +130,14 @@ class App_Sheet(v.Card):
 
         return signal_df[capsule_df[capsules].sum(axis=1) == True]
 
+    def validate_model(self, *_):
+        validation_dataset = self.create_dataset(self.validation_condition.v_model)
+        self.validation_results = self.model.forecast(validation_dataset)
+        self.validation_results.set_index(validation_dataset.index, inplace=True)
+        self.validation_results[self.model.cv] = validation_dataset[self.model.cv]
+
+        self.canvas.create(self.train_results, self.validation_results)
+    
     def push_model(self, *_):
         if self.general_validation():
             return None
@@ -129,6 +146,13 @@ class App_Sheet(v.Card):
 
         push_formula(self.model.formula, self.workbook_id, self.addon_worksheet)
 
+    
+    def push_data(self, *_):
+        self.all_results = self.model.forecast(self.signal_df)
+        self.all_results.set_index(self.signal_df.index, inplace=True)
+        self.all_results[self.model.cv] = self.signal_df[self.model.cv]
+        push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
+    
     def general_validation(self):
         return 0
 
@@ -194,6 +218,8 @@ class SS_app_sheet(App_Sheet):
         self.thresh = self.panel.threshold_box
         self.order = self.panel.order_box
 
+        self.push_model_btn.on_event('click', self.push_data)
+
     def prepare_params_spec(self):
         self.model.method = self.method.v_model
         self.model.thresh = float(self.thresh.v_model)
@@ -210,6 +236,8 @@ class NN_app_sheet(App_Sheet):
         self.blank_model = deepcopy(self.model)
         
         self.model.mode = int(self.panel.auto_mode_slider.v_model)
+        
+        self.push_model_btn.on_event('click', self.push_data)
         
     def prepare_params_spec(self):
         self.model.mode = int(self.panel.auto_mode_slider.v_model)        

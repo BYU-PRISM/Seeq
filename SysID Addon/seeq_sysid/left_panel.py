@@ -126,17 +126,27 @@ class Left_Panel(v.Card):
 
         # Buttons
         self.identify_model_btn = v.Btn(name='identification button',
-                                        style_='color:#007960; font-size:9pt; font-weight:bold; width:130px',
+                                        style_='color:#007960; font-size:9pt; font-weight:bold; width:75px',
                                         color='white',
                                         class_='mb-4',
                                         dense=True,
                                         elevation=4,
-                                        children=['Identify Model'],
+                                        children=['Identify'],
+                                        disabled=True,
+                                        loading=False)
+        
+        self.validate_model_btn = v.Btn(name='validation button',
+                                        style_='color:#007960; font-size:9pt; font-weight:bold; width:75px',
+                                        color='white',
+                                        class_='mb-4',
+                                        dense=True,
+                                        elevation=4,
+                                        children=['Validate'],
                                         disabled=True,
                                         loading=False)
 
         self.push_model_btn = v.Btn(name='identification button',
-                                    style_='color:#007960; font-size:9pt; font-weight:bold; width:130px',
+                                    style_='color:#007960; font-size:9pt; font-weight:bold; width:105px',
                                     color='white',
                                     class_='mb-4',
                                     dense=True,
@@ -145,7 +155,7 @@ class Left_Panel(v.Card):
                                     disabled=True)
 
         # Card
-        self.identify_push_card = v.Card(children=[self.identify_model_btn, self.push_model_btn],
+        self.identify_push_card = v.Card(children=[self.identify_model_btn, self.validate_model_btn, self.push_model_btn],
                                          style_='background:none', flat=True, class_='d-flex justify-space-between')
 
         # Title
