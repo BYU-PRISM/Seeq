@@ -277,7 +277,7 @@ class ARX(Model_Obj):
             
             formula_list.append({
                 'Name': '{}'.format(y_name[i]),
-                'Type': 'MeasuredSignal',
+                'Type': 'CalculatedSignal',
                 'Description': 'Measured {}'.format(y_name[i]),
                 'Formula': yf_name[i],
                 'Formula Parameters': formula_dic
