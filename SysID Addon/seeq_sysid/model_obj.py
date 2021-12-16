@@ -272,9 +272,19 @@ class ARX(Model_Obj):
                 'Formula': formula,
                 'Formula Parameters': formula_dic
             })
+            
+            
+            
+            formula_list.append({
+                'Name': '{}'.format(y_name[i]),
+                'Type': 'MeasuredSignal',
+                'Description': 'Measured {}'.format(y_name[i]),
+                'Formula': yf_name[i],
+                'Formula Parameters': formula_dic
+            })
 
         self.formula = DataFrame(formula_list)
-
+        print(formula_list)
 #     def granger_causality(self, X: DataFrame):
 #         n = len(X.columns)
 #         granger_coe = DataFrame(ones((n, n)), columns=X.columns, index=X.columns)
