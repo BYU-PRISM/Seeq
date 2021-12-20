@@ -125,6 +125,9 @@ For more information about adding this addon to the seeq workbench
 ## Important links
 
 * Official source code repo: https://github.com/BYU-PRISM/Seeq
+* [System Identification with Industrial Data](https://youtu.be/glWIzPPJRnQ) Webinar
+
+![Seeq Webinar](http://apmonitor.com/wiki/uploads/Main/2021_12_sysid.png)
 
 ## Source code
 
