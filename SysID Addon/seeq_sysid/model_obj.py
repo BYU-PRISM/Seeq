@@ -6,7 +6,6 @@ environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from gekko import GEKKO
 from numpy import vstack, ones, zeros, reshape, where, linalg, dot, array
-# from statsmodels.tsa.stattools import grangercausalitytests
 
 from seeq_sysid._backend import *
 
@@ -277,7 +276,7 @@ class ARX(Model_Obj):
             
             formula_list.append({
                 'Name': '{}'.format(y_name[i]),
-                'Type': 'MeasuredSignal',
+                'Type': 'CalculatedSignal',
                 'Description': 'Measured {}'.format(y_name[i]),
                 'Formula': yf_name[i],
                 'Formula Parameters': formula_dic

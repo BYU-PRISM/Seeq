@@ -5,9 +5,8 @@ from pandas import DataFrame
 
 from seeq_sysid._backend import push_formula, push_signal
 from seeq_sysid.figure_panel import Figure_Table
-from seeq_sysid.left_panel import Left_Panel
 from seeq_sysid.model_obj import Model_Obj, ARX, Subspace, NN
-from seeq_sysid.panels import Arx_Panel, SS_Panel, NN_Panel
+from seeq_sysid.panels import Left_Panel, Arx_Panel, SS_Panel, NN_Panel
 
 
 class App_Sheet(v.Card):
@@ -131,12 +130,14 @@ class App_Sheet(v.Card):
         return signal_df[capsule_df[capsules].sum(axis=1) == True]
 
     def validate_model(self, *_):
+        self.validate_model_btn.loading = True
         validation_dataset = self.create_dataset(self.validation_condition.v_model)
         self.validation_results = self.model.forecast(validation_dataset)
         self.validation_results.set_index(validation_dataset.index, inplace=True)
         self.validation_results[self.model.cv] = validation_dataset[self.model.cv]
 
         self.canvas.create(self.train_results, self.validation_results)
+        self.validate_model_btn.loading = False
     
     def push_model(self, *_):
         if self.general_validation():
