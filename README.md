@@ -127,7 +127,7 @@ For more information about adding this addon to the seeq workbench
 * Official source code repo: https://github.com/BYU-PRISM/Seeq
 * [System Identification with Industrial Data](https://youtu.be/glWIzPPJRnQ) Webinar
 
-<img align=left width=400px src='https://apmonitor.com/wiki/uploads/Main/2021_12_sysid.png'>
+<img align=left width=400px src='https://apmonitor.com/wiki/uploads/Main/2021_12_sysid.png'><br>
 
 ## Source code
 
