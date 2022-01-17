@@ -1,5 +1,5 @@
 """
-This is a dummy file that contains some functions (it could be classes) to perform backend calculations
+This file contains some functions (it could be classes) to perform backend calculations
 """
 
 from re import split
@@ -88,6 +88,6 @@ def push_signal(df, workbook_id, worksheet_name):
     spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
 
 
-def push_formula(formula, workbook_id, worksheet_name):
-    spy.push(metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
+def push_formula(df, formula, workbook_id, worksheet_name):
+    spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
              quiet=True)

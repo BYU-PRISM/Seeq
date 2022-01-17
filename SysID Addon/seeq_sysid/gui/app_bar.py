@@ -1,7 +1,7 @@
 import ipyvuetify as v
 import ipywidgets as widgets
 from pathlib import Path
-from seeq_sysid.utils import add_tooltip
+from seeq_sysid.gui.utils import add_tooltip
 
 
 class HamburgerMenu(v.Menu):
@@ -45,7 +45,7 @@ class HamburgerMenu(v.Menu):
 
 
 class App_Bar(v.Card):
-    def __init__(self, tabs: list = [], items: list = [], logo_name=Path(__file__).parent / 'data/seeq_logo.png',
+    def __init__(self, tabs: list = [], items: list = [], logo_name=Path(__file__).parent / '../data/seeq_logo.png',
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
         # add-on logo (.png)

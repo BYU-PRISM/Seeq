@@ -5,7 +5,7 @@ import ipywidgets as widgets
 
 import plotly.express as px
 
-from seeq_sysid.utils import create_eq
+from seeq_sysid.gui.utils import create_eq
 
 
 class Left_Panel(v.Card):
@@ -132,7 +132,7 @@ class Left_Panel(v.Card):
 
         # Buttons
         self.identify_model_btn = v.Btn(name='identification button',
-                                        style_='color:#007960; font-size:9pt; font-weight:bold; width:75px',
+                                        style_='color:#007960; font-size:8pt; font-weight:bold; width:75px',
                                         color='white',
                                         class_='mb-4',
                                         dense=True,
@@ -142,7 +142,7 @@ class Left_Panel(v.Card):
                                         loading=False)
         
         self.validate_model_btn = v.Btn(name='validation button',
-                                        style_='color:#007960; font-size:9pt; font-weight:bold; width:75px',
+                                        style_='color:#007960; font-size:8pt; font-weight:bold; width:75px',
                                         color='white',
                                         class_='mb-4',
                                         dense=True,
@@ -152,7 +152,7 @@ class Left_Panel(v.Card):
                                         loading=False)
 
         self.push_model_btn = v.Btn(name='identification button',
-                                    style_='color:#007960; font-size:9pt; font-weight:bold; width:105px',
+                                    style_='color:#007960; font-size:8pt; font-weight:bold; width:105px',
                                     color='white',
                                     class_='mb-4',
                                     dense=True,
@@ -186,7 +186,7 @@ class Left_Panel(v.Card):
 
 
 # ARX Model Panel
-class Arx_Panel(Left_Panel):
+class ARX_Panel(Left_Panel):
     def __init__(self, *args, **kwargs):
         model_name = 'ARX'
         super().__init__(model_name=model_name,
@@ -253,11 +253,11 @@ class Arx_Panel(Left_Panel):
             align='center')
 
         self.nk_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:5px')
-        self.nk_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:5px')
+                                  style_='width:15px', align='top')
+        self.nk_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2 mr-1', color='white', dark=True,
+                                  style_='width:15px', align='top')
         self.nk = v.Row(children=[v.Row(children=['Input Delay', create_eq('$(n_k):$', 'white', 2, top='0px')],
-                                        class_='d-flex justify-right', no_gutters=True,), self.nk_min, self.nk_max],
+                                        class_='mt-0', no_gutters=True,), v.Spacer(), self.nk_min, self.nk_max],
                         class_='d-flex justify-right',
                         dense=True,
                         style_='font-weight:bold; color:white; font-size:13px', align='center')
@@ -278,7 +278,7 @@ class Arx_Panel(Left_Panel):
                                 dark=True,
                                 align='center',
                                 no_gutters=True,
-                                class_='my-0 py-0',
+                                class_='my-0 py-0 px-0 ml-0',
                                 color='white',
                                 dense=True)])],
             style_='background-color:#007960')
@@ -291,7 +291,7 @@ class Arx_Panel(Left_Panel):
         self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
-                                      "{} Settings".format('Time Series')])
+                                      "{} Settings".format('ARX')])
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
@@ -329,9 +329,9 @@ class SS_Panel(Left_Panel):
 
         # Drop Downs
         self.method_select = v.Select(tag='Methods',
-                                      v_model='DMDc',
+                                      v_model='Least Square',
 #                                       items=['N4SID', 'DMDc'],
-                                      items=['DMDc'],
+                                      items=['Least Square'],
                                       color=self.colors['seeq_primary'],
                                       item_color=self.colors['seeq_primary'],
                                       dense=True,
@@ -371,8 +371,21 @@ class SS_Panel(Left_Panel):
             style_='font-weight:bold; color:white; font-size:13px', 
             align='center',
             no_gutters=True)
+        
+        
+        self.multiplier_min = v.TextField(label='min', v_model='1', dense=True, class_='pl-2', color='white', dark=True,
+                                  style_='width:30px', align='top', hint='>=1')
+        self.multiplier_max = v.TextField(label='max', v_model='5', dense=True, class_='pl-2', color='white', dark=True,
+                                  style_='width:30px', align='top')
+        self.multiplier = v.Row(no_gutters=True,
+            children=[v.Row(children=['Order Multiplier'], class_='mt-0', no_gutters=True,), self.multiplier_min, self.multiplier_max],
+            class_='my-0 py-0',
+            dense=True,
+            style_='font-weight:bold; color:white; font-size:13px',
+            align='center')
+        
 
-        self.method_box = self.threshold
+        self.method_box = self.multiplier
 
         self.orders_panel_obj = v.ExpansionPanel(
             children=[v.ExpansionPanelHeader(children=['Model Order'],
@@ -401,7 +414,7 @@ class SS_Panel(Left_Panel):
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
                          'Measured Variables (CV)', self.cv_select,
-                         'Method', self.method_select,
+                         # 'Method', self.method_select,
                          self.orders_layout,
 #                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
@@ -432,7 +445,7 @@ class SS_Panel(Left_Panel):
             self.children = [self.title,
                              'Manipulated Variables (MV)', self.mv_select,
                              'Measured Variables (CV)', self.cv_select,
-                             'Method', self.method_select,
+                             # 'Method', self.method_select,
                              self.orders_layout,
                              v.Divider(class_='mb-4'),
                              'Training Conditions', self.train_condition,
@@ -462,7 +475,7 @@ class SS_Panel(Left_Panel):
             self.children = [self.title,
                              'Manipulated Variables (MV)', self.mv_select,
                              'Measured Variables (CV)', self.cv_select,
-                             'Method', self.method_select,
+                             # 'Method', self.method_select,
                              self.orders_layout,
 #                              v.Divider(class_='mb-4'),
                              'Training Conditions', self.train_condition,
@@ -652,6 +665,6 @@ class NN_Panel(Left_Panel):
 # Try Widgets
 
 # panel_ss = SS_Panel()
-# panel_arx = Arx_Panel()
+# panel_arx = ARX_Panel()
 # panel_arx
 # panel_ss

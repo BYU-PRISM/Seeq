@@ -1,9 +1,9 @@
 ipyvuetify
+ipywidgets
+gekko
+numpy
 pandas
 plotly
-ipywidgets
-numpy
-gekko<=1.0.1
 seeq
-tensorflow
+tensorflow>=2.1
 keras-tuner==1.0.4

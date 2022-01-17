@@ -125,6 +125,10 @@ For more information about adding this addon to the seeq workbench
 ## Important links
 
 * Official source code repo: https://github.com/BYU-PRISM/Seeq
+* [System Identification with Industrial Data](https://youtu.be/glWIzPPJRnQ) Webinar
+
+<img align=left width=400px src='https://apmonitor.com/wiki/uploads/Main/2021_12_sysid.png'>
+<br><br><br><br><br><br><br><br><br>
 
 ## Source code
 
@@ -160,6 +164,9 @@ run `developer_notebook.ipynb` notebook there.
 ----
 # Changelog
 
+### 0.1
+- Minor improvements
+
 ### 0.0.7
 - Neural Network Model (RNN)
 - FIR Model
@@ -184,7 +191,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.0.7
+seeq-sysid v0.1
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```
