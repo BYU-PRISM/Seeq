@@ -4,6 +4,7 @@ from pandas import DataFrame
 class Model:
     def __init__(self):
         self.status = False
+        self.label = None
         self.model = None
         self.df = None
         self.label = None

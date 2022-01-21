@@ -1,30 +1,41 @@
 from gekko import GEKKO
 
 from numpy import vstack, zeros, reshape, array
+from pandas import DataFrame
 
-from seeq_sysid.model.base import Model
-from seeq_sysid._backend import *
+from .base import Model
+from re import split
+
+
+def create_formula_variable_name(names):
+    formula_name = []
+    for item in names:
+        item = item.lower()
+        item = split("_| | ", item)
+        f_name = '$'
+        for i in item:
+            f_name += i
+        formula_name.append(f_name)
+
+    return formula_name
 
 
 class ARX(Model):
-    """
-    ARX Model: y(k+1) = a_0*y(k)+a_1*y(k-1)+...+a_(na-1)*y(k-na+1)
-                      + b_0+u(k)+b_1*u(k-1)+...+b_(nb-1)*u(k-na+1)
-
-    Function Inputs:
-    u: Input(s)   [pandas DataFrame]
-    y: Output(s)  [pandas DataFrame]
-    na: AutoRegressive term order / Ex: na=2 -> a_0*y(k) + a_1*y(k-1)
-    nb: Exogenous input order     / Ex: nb=2 -> b_0*u(k) + b_1*u(k-1)
-    nk: Input Delay               / Ex: nk=2 -> b_0*u(k-2) + b_1*u(k-3)
-    n_u: Number of Inputs
-    n_y: Number of Outputs
-
-    ----------------------------------------------------------------
-
-    - Option 1: User can specify Input/Output DataFrame and na/nb
-    - Option 2: User just specify a DataFrame and Granger Causality identify input(s)/output(s) and Identify
-      the ARX model
+    """ AutoRegressive with Exogenous input (ARX)
+    Model Structure:
+    y(k+1) = a_0*y(k)+a_1*y(k-1)+...+a_(na-1)*y(k-na+1)
+              + b_0+u(k)+b_1*u(k-1)+...+b_(nb-1)*u(k-na-nk+1)
+    where:
+        u: Input(s)   [pandas DataFrame]
+        y: Output(s)  [pandas DataFrame]
+        na: AutoRegressive term order
+            na=2 -> a_0*y(k) + a_1*y(k-1)
+        nb: Exogenous input order
+            nb=2 -> b_0*u(k) + b_1*u(k-1)
+        nk: Input Delay
+            nk=2 -> b_0*u(k-2) + b_1*u(k-3)
+        n_u: Number of Inputs
+        n_y: Number of Outputs
     """
 
     def __init__(self):
@@ -33,15 +44,15 @@ class ARX(Model):
         self.model_struct = 'ARX'
 
         self.p = None
-
+        # AR part order
         self.na_min = 0
         self.na_max = 2
         self.na = None
-
+        # Exogenous part order
         self.nb_min = 0
         self.nb_max = 2
         self.nb = None
-
+        # Input delay
         self.nk_min = 0
         self.nk_max = 0
         self.nk = None
@@ -216,14 +227,6 @@ class ARX(Model):
                 'Formula': formula,
                 'Formula Parameters': formula_dic
             })
-
-            # formula_list.append({
-            #     'Name': '{}'.format(y_name[i]),
-            #     'Type': 'StoredSignal',
-            #     'Description': 'Measured {}'.format(y_name[i]),
-            #     'Formula': yf_name[i],
-            #     'Formula Parameters': formula_dic
-            # })
 
         self.formula = DataFrame(formula_list)
 

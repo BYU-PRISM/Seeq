@@ -1,8 +1,8 @@
 from numpy import hstack, zeros, linalg
+from pandas import DataFrame
 
-from seeq_sysid.model.base import Model
-from seeq_sysid.model.utils import test_train_split, shifter
-from seeq_sysid._backend import *
+from .base import Model
+from .utils import test_train_split, shifter
 
 
 # Subspace Model
@@ -27,7 +27,7 @@ class Subspace(Model):
         u_df -= self.u_ss
         y_df -= self.y_ss
 
-        self.label = [tag_label + '_pred' for tag_label in y_df.columns]
+        self.label = [tag_label + '_subspace' for tag_label in y_df.columns]
 
         u_train, u_valid, y_train, y_valid = test_train_split(u_df, y_df)
 

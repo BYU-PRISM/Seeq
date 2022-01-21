@@ -7,7 +7,7 @@ from pandas import DataFrame
 
 
 # Figures Tabs (Train+Validation) Class
-class Figure_Card(v.Card):
+class FigureCard(v.Card):
     def __init__(self,
                  width='60%',
                  height='auto',
@@ -16,7 +16,7 @@ class Figure_Card(v.Card):
                  outlined=False,
                  color='white',
                  class_='ma-4 pa-4',
-                 *args, **kwargs):
+                 **kwargs):
 
         super().__init__(width=width,
                          height=height,
@@ -25,7 +25,7 @@ class Figure_Card(v.Card):
                          outlined=outlined,
                          color=color,
                          class_=class_,
-                         *args, **kwargs)
+                         **kwargs)
 
         fig = go.FigureWidget()
 

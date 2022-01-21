@@ -9,13 +9,13 @@ get_logger().setLevel('ERROR')
 from tensorflow.keras import layers, callbacks, Sequential, optimizers
 from keras_tuner import RandomSearch, BayesianOptimization, HyperModel, Hyperband
 
-from seeq_sysid.model.base import Model
+from .base import Model
 
 
 # Neural Network (RNN)
 class NN(Model):
-    def __init__(self,
-                 *args, **kwargs):
+    def __init__(self):
+        super().__init__()
 
         self.p = None
         self.q = None
@@ -33,8 +33,6 @@ class NN(Model):
         self.window = 10
         self.Min = None
         self.Max = None
-
-        super().__init__()
 
     def normalize(self, df: DataFrame = None):
         df_norm = (df - self.Min) / (self.Max - self.Min)
@@ -101,7 +99,7 @@ class NN(Model):
         out_df = df_norm[self.cv]
 
         # Data Label
-        self.label = [tag_label + '_pred' for tag_label in out_df.columns]
+        self.label = [tag_label + '_nn' for tag_label in out_df.columns]
 
         # Create Data Snapshots for NN
         x_train, y_train = self.create_snapshot(in_df=in_df, out_df=out_df)

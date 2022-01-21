@@ -1,20 +1,20 @@
 import ipyvuetify as v
 
-from seeq_sysid.gui.table_card import Table_Card, Table_Item, Table_Header
-from seeq_sysid.gui.figure_card import Figure_Card
+from .table_card import TableCard, TableItem, TableHeader
+from .figure_card import FigureCard
 
 
 # Visualization Class (Figures+Table)
-class Figure_Table(v.Layout):
+class FigureTable(v.Layout):
     def __init__(self, *args, **kwargs):
         class_ = 'd-flex flex-column justify-right ml-1'
         style_ = 'width:100%; height:100%'
         super().__init__(class_=class_,
                          style_=style_,
-                         *args, **kwargs)
+                         **kwargs)
 
-        self.figure = Figure_Card()
-        self.table = Table_Card()
+        self.figure = FigureCard()
+        self.table = TableCard()
 
         self.children = [self.figure, self.table]
 
@@ -26,7 +26,7 @@ class Figure_Table(v.Layout):
             tag.checkbox_item.v_model = all_value
 
     def create(self, train_df, validation_df, units=None):
-        Table_Item().reset()
+        TableItem().reset()
         self.table.table_header.checkbox_header.v_model = False
 
         if not units:
@@ -40,7 +40,7 @@ class Figure_Table(v.Layout):
         # create table
         items_list = []
         for name in train_df.columns:
-            temp_item = Table_Item(name=name, unit=units[name])
+            temp_item = TableItem(name=name, unit=units[name])
             temp_item.checkbox_item.observe(self.update_visibility, names=['v_model'])
             temp_item.style_item.on_event('change', self.update_line_style)
             items_list += [temp_item]

@@ -3,10 +3,10 @@ from copy import deepcopy
 import ipyvuetify as v
 from pandas import DataFrame
 
-from seeq_sysid._backend import push_formula, push_signal
+from ._backend import push_formula, push_signal
 
-from seeq_sysid.gui.figure_table import Figure_Table
-from seeq_sysid.gui.panels import Left_Panel, ARX_Panel, SS_Panel, NN_Panel
+from .figure_table import FigureTable
+from .panels import LeftPanel, ARXPanel, SSPanel, NNPanel
 
 from seeq_sysid.model.base import Model
 from seeq_sysid.model.arx import ARX
@@ -14,9 +14,9 @@ from seeq_sysid.model.ss import Subspace
 from seeq_sysid.model.nn import NN
 
 
-class App_Sheet(v.Card):
+class AppSheet(v.Card):
     def __init__(self,
-                 panel: Left_Panel,
+                 panel: LeftPanel,
                  workbook_id='',
                  *args, **kwargs):
         class_ = 'd-flex justify-space-between ma-2 pa-2 pt-2 mt-0'
@@ -28,14 +28,14 @@ class App_Sheet(v.Card):
                          color=color,
                          flat=flat,
                          elevation=0,
-                         *args, **kwargs)
+                         **kwargs)
 
         self.train_results = None
         self.validation_results = None
         self.all_results = None
 
         self.panel = panel
-        self.canvas = Figure_Table()
+        self.canvas = FigureTable()
 
         self.model_name = panel.model_name
         self.model = Model()
@@ -179,10 +179,10 @@ class App_Sheet(v.Card):
         pass
 
 
-class ARX_app_sheet(App_Sheet):
+class ARXAppSheet(AppSheet):
     def __init__(self,
                  *args, **kwargs):
-        panel = ARX_Panel()
+        panel = ARXPanel()
         super().__init__(panel=panel,
                          *args, **kwargs)
         self.model = ARX()
@@ -212,10 +212,10 @@ class ARX_app_sheet(App_Sheet):
         self.model.model_struct = self.model_struct.v_model
 
 
-class SS_app_sheet(App_Sheet):
+class SSAppSheet(AppSheet):
     def __init__(self,
                  *args, **kwargs):
-        panel = SS_Panel()
+        panel = SSPanel()
         super().__init__(panel=panel,
                          *args, **kwargs)
         self.model = Subspace()
@@ -237,10 +237,10 @@ class SS_app_sheet(App_Sheet):
         self.model.om_max = int(self.multiplier_max.v_model)
 
 
-class NN_app_sheet(App_Sheet):
+class NNAppSheet(AppSheet):
     def __init__(self,
                  *args, **kwargs):
-        panel = NN_Panel()
+        panel = NNPanel()
         super().__init__(panel=panel,
                          *args, **kwargs)
         self.model = NN()
