@@ -1,21 +1,27 @@
 import ipyvuetify as v
 import ipywidgets as widgets
 from pathlib import Path
-from seeq_sysid.utils import add_tooltip
+from .utils import add_tooltip
 
 
 class HamburgerMenu(v.Menu):
+    """
+    Create a Hamburger Menu in the right corner of App Bar
+    """
+
     def __init__(self, **kwargs):
+        # Create menu icon button
         self.hamburger_button = v.AppBarNavIcon(v_on='menuData.on', class_='align-center ma-2 mt-3')
+        # Feedback option
         self.feedback_button = v.ListItem(value='help',
                                           ripple=True,
-                                          href='mailto: support@company.com?subject=MyAddOn Feedback',
+                                          href='https://github.com/BYU-PRISM/Seeq/issues',
                                           children=[v.ListItemAction(class_='mr-2 ml-0',
                                                                      children=[v.Icon(color='#212529',
                                                                                       children=['fa-life-ring'])]),
                                                     v.ListItemActionText(children=[f'Send Support Request'])
                                                     ])
-
+        # GitHub page
         self.user_guide_button = v.ListItem(value='tutorial',
                                             ripple=True,
                                             href='https://github.com/BYU-PRISM/Seeq',
@@ -35,27 +41,40 @@ class HamburgerMenu(v.Menu):
                          v_slots=[{
                              'name': 'activator',
                              'variable': 'menuData',
-                             'children': self.hamburger_button,
-                         }]
-                         ,
+                             'children': self.hamburger_button
+                         }],
                          children=[
                              v.List(children=self.items)
-                         ]
-                         , **kwargs)
+                         ],
+                         **kwargs)
 
 
-class App_Bar(v.Card):
-    def __init__(self, tabs: list = [], items: list = [], logo_name=Path(__file__).parent / 'data/seeq_logo.png',
-                 *args, **kwargs):
+class AppBar(v.Card):
+    """
+    Create app bar for the Add-on. This app bar includes icon, tabs, load worksheet button and, hamburger menu.
+    """
+
+    def __init__(self, tabs=None, items=None, logo_name=Path(__file__).parent / '../data/seeq_logo.png', *args,
+                 **kwargs):
+        """
+        Args:
+            tabs : list of tabs
+            items : list of items (app sheet)
+            logo_name : App icon directory
+        """
         super().__init__(*args, **kwargs)
-        # add-on logo (.png)
+        if items is None:
+            items = []
+        if tabs is None:
+            tabs = []
+        # read add-on logo (.png)
         file = open(logo_name, 'rb')
         image = file.read()
         self.image = widgets.Image(value=image, format='png', align='center')
         file.close()
 
         self.logo = [v.Img(children=[self.image], class_='align-center mt-2 pl-4')]
-
+        # load worksheet button
         self.load_worksheet = v.Btn(icon=True, children=[v.Icon(children=['mdi-folder-search-outline'])],
                                     class_='align-center ma-2 mt-3')
         self.load_worksheet.on_event('click', self.load_worksheet_action)
@@ -65,10 +84,11 @@ class App_Bar(v.Card):
 
         self.ok_url_dialog_btn = v.Btn(children=['OK'], color='#007960', text=True, loading=False)
         self.ok_url_dialog_btn.on_event('click', self.ok_url_action)
-
-        self.worksheet_url = v.TextField(v_model='', placeholder='Worksheet URL', class_='mx-4', color='#007960', clearable=True)
+        # Create a text field for the worksheet url
+        self.worksheet_url = v.TextField(v_model='', placeholder='Worksheet URL', class_='mx-4', color='#007960',
+                                         clearable=True)
         self.worksheet_url.on_event('paste.stop', lambda *args: None)
-        
+
         control_dialog_btn_layout = v.Layout(children=[v.Spacer(), self.close_url_dialog_btn, self.ok_url_dialog_btn])
 
         dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:']),
@@ -83,21 +103,17 @@ class App_Bar(v.Card):
                                    max_width='600px')
 
         self.url_dialog.on_event('keydown.stop', lambda *args: None)
-
+        # Create an instance of hamburger menu
         self.ham_menu = HamburgerMenu()
 
-        
         # Adding Tooltips (tt = with tooltip)
         self.load_worksheet_tt = add_tooltip(self.load_worksheet, 'Open Worksheet')
-        
-        
-        app = v.Tabs(children=self.logo +
-                              tabs + items +
-                              [v.Spacer(),
-                               self.url_dialog,
-                               self.load_worksheet_tt,
-                               v.Divider(vertical=True, inset=True),
-                               self.ham_menu],
+
+        app = v.Tabs(children=self.logo + tabs + items + [v.Spacer(),
+                                                          self.url_dialog,
+                                                          self.load_worksheet_tt,
+                                                          v.Divider(vertical=True, inset=True),
+                                                          self.ham_menu],
                      color='#1d376c',
                      class_='align-center pt-0',
                      slider_size='4',
@@ -108,6 +124,7 @@ class App_Bar(v.Card):
 
         self.children = [app]
 
+    # Load worksheet event functions
     def load_worksheet_action(self, *args):
         self.url_dialog.v_model = True
 

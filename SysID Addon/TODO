@@ -1,0 +1,14 @@
+# Transfer Function:
+- Add FOPDT model
+- Add SOPDT model
+- Create a tab for transfer function in the gui
+
+# Improvements
+- Add Auto Sysid
+- Train/Valid/Test Dataset
+
+
+.
+.
+.
+- Add status notifications

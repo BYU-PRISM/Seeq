@@ -1,8 +1,7 @@
 """
-This is a dummy file that contains some functions (it could be classes) to perform backend calculations
+This file contains some functions (it could be classes) to perform backend calculations
 """
 
-from re import split
 from urllib.parse import parse_qs, unquote, urlparse
 from IPython.display import clear_output
 
@@ -28,7 +27,7 @@ def pull_signals(url, grid='auto'):
                       status=spy.Status(quiet=True))
     if all_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
-    
+
     all_df.columns = all_df.query_df['Name']
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
@@ -39,7 +38,7 @@ def pull_signals(url, grid='auto'):
         return signal_df, DataFrame(), search_df
     signal_df.columns = signal_list
     capsule_df.columns = capsules_list
-    
+
     clear_output()
 
     return signal_df, capsule_df, search_df
@@ -71,23 +70,10 @@ def get_workbook_worksheet_workstep_ids(url):
     return workbook_id, worksheet_id, workstep_id
 
 
-def create_formula_variable_name(names):
-    formula_name = []
-    for item in names:
-        item = item.lower()
-        item = split("_| | ", item)
-        f_name = '$'
-        for i in item:
-            f_name += i
-        formula_name.append(f_name)
-
-    return formula_name
-
-
 def push_signal(df, workbook_id, worksheet_name):
     spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
 
 
-def push_formula(formula, workbook_id, worksheet_name):
-    spy.push(metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
+def push_formula(df, formula, workbook_id, worksheet_name):
+    spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
              quiet=True)

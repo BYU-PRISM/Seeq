@@ -110,6 +110,10 @@ ENV/
 env.bak/
 venv.bak/
 
+# PyCharm cache
+__pycache__/
+*.idea
+
 # Spyder project settings
 .spyderproject
 .spyproject
