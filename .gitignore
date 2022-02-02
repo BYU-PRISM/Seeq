@@ -69,7 +69,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-#docs/_build/
+docs/_build/
 
 # PyBuilder
 target/
@@ -134,7 +134,7 @@ dmypy.json
 
 
 Figures/
-*.eps
-*.gif
-*.jpg
-*.png
+#*.eps
+#*.gif
+#*.jpg
+#*.png
