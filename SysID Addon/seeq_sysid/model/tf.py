@@ -112,12 +112,3 @@ class TF(TransferItem):
                         model.tau_max = option_item.tau
             
             model.sim_time = 4 * model.tau_max
-        
-        
-        
-
-
-
-
-
-

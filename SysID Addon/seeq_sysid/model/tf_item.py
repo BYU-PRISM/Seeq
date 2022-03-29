@@ -262,11 +262,7 @@ class TransferItem(GEKKO):
         self.zeta = zeta
 
     def identify(self, df):
-        df = df.copy()
-        # if self.shift == 'initial':
-        #     df_ss = df[self.cv].iloc[0].to_numpy()
-        #     df -= df.iloc[0]
-        
+        df = df.copy()     
         
         t_df = pd.to_datetime(df.index)
         t = (t_df.values - t_df.values[0]) / 1e9
@@ -285,7 +281,7 @@ class TransferItem(GEKKO):
         self.t = t
         self.tt.value = t
         self.time = self.t
-        # self.options.MAX_ITER = 1e5
+
         for i in range(self.nu):
             option_item: TransferOption = self.option_dict[self.mv[i]]
 
@@ -309,10 +305,7 @@ class TransferItem(GEKKO):
         self.ym[0].value = y[0]
         # self.ym[0].fstatus = 1
         self.ym[0].status = 0
-        # yp = self.Param(value=y[0].T)
 
-        # self.Minimize((yp-self.ym[0]) ** 2)
-        # self.Solver = 2
         self.options.IMODE = 5
         self.solve(disp=False)
 
@@ -399,105 +392,8 @@ class TransferItem(GEKKO):
         self.tt.value = t
         self.ym[0].value = 0
         self.ym[0].status = 1
-        # self.ym[0].fstatus = 0
-        # self.Solver = 2
 
         self.options.IMODE = 5
         self.solve(disp=False)
 
         return self.ym.copy()
-
-
-# df = read_csv("../../signal_df.csv", index_col='Time')
-# df = read_csv("../../new.csv", index_col='Unnamed: 0')
-
-# df = df.iloc[50:]
-# # df = df - df.iloc[0]
-# # df = df.iloc[100:250]
-
-# # Import CSV data file
-# # Column 1 = time (t)
-# # Column 2 = input (u)
-# # Column 3 = output (y)
-# # url = 'http://apmonitor.com/pdc/uploads/Main/data_sopdt.txt'
-# # df = read_csv('data_sopdt.txt', index_col='Time')
-# df -= df.iloc[0]
-# # t = df.index.values
-# # u = df['u'].values
-# # y = df['y'].values
-
-
-
-
-# tf = TransferItem()
-
-# o1 = TransferOption()
-# o2 = TransferOption()
-
-# # o1.name = 'u1'
-# # o1.no_ramp = 1
-# # o1.no_gain = 0
-# # o1.order = 1
-# # # o1.is_zeta = 0
-# # o2.name = 'u2'
-# # o2.no_ramp = 1
-# # o2.no_gain = 0
-# # o2.order = 1
-# # tf.option_dict['u1'] = o1
-# # tf.option_dict['u2'] = o2
-
-# o1.name = 'F_cw'
-# o1.no_ramp = 1
-# o1.no_gain = 0
-# o1.order = 1
-# # o1.is_zeta = 0
-# o2.name = 'T1'
-# o2.no_ramp = 1
-# o2.no_gain = 0
-# o2.order = 1
-# tf.option_dict['F_cw'] = o1
-# tf.option_dict['T1'] = o2
-
-# tf.mv = ['F_cw', 'T1']
-# tf.cv = ['CA2']
-# tf.const_den = False
-# tf.build()
-# yp_ = tf.identify(df)
-
-# Time = arange(0, 1000, 10)
-# u = zeros((2, 100))
-# u[0][int(100 / 10):] = 1
-
-# u_df = DataFrame(u.T, columns=tf.mv)
-# u_df += 0
-
-# u_df.set_index(Time, inplace=True)
-
-# y_i = tf.simulate(u_df=u_df)
-
-# plt.plot(y_i[0])
-# plt.show()
-
-
-
-
-
-
-# u0_df = df[tf.mv]
-# u_df = u0_df
-# # u = u_df.to_numpy().T
-# u_df_valid = u_df.iloc[10:]
-# yp = tf.simulate(u_df_valid)
-# yp = array(yp.tolist()).T
-# yp_df = DataFrame(yp, columns=tf.label, index=u_df_valid.index)
-
-# plt.plot(df['y2'],'k.-',lw=2,label='Process Data')
-# plt.plot(yp_df,'r--',lw=2,label='Optimized SOPDT')
-# plt.xticks(rotation=45)
-# plt.legend()
-# plt.show()
-
-# print('Kp: ', tf.gain[0].value[0])
-# print('taup: ',  tf.tau[0].value[0])
-# print('thetap: ', tf.theta[0].value[0])
-# print('zetap: ', tf.zeta[0].value[0])
