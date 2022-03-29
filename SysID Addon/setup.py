@@ -24,7 +24,7 @@ setup(
         'seeq',
         'tensorflow>=2.1',
         'keras-tuner==1.0.4',
-	  'mistune>=2.0.1"
+	  'mistune>=2.0.1'
     ],
     keywords='Seeq Prism System Identification ARX Subspace State-Space Neural-Network Addon Time-Series Transfer Function',
     include_package_data=True,
