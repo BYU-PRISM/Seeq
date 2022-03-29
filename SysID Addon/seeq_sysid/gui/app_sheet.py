@@ -226,6 +226,7 @@ class SSAppSheet(AppSheet):
         self.order = self.panel.order_box
         self.multiplier_min = self.panel.multiplier_min
         self.multiplier_max = self.panel.multiplier_max
+        self.shift_type = self.panel.shift_type
 
         self.push_model_btn.on_event('click', self.push_data)
 
@@ -235,6 +236,7 @@ class SSAppSheet(AppSheet):
         self.model.order = int(self.order.v_model)
         self.model.om_min = int(self.multiplier_min.v_model)
         self.model.om_max = int(self.multiplier_max.v_model)
+        self.model.shift_type = self.shift_type.v_model
 
 
 class NNAppSheet(AppSheet):

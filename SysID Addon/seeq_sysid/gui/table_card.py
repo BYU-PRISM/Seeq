@@ -115,18 +115,19 @@ class TableItem(v.Card):
 class TableCard(v.Card):
     def __init__(self, *args, **kwargs):
         TableItem().reset()
-        width = '60%'
+        width = '100%'
         flat = False
         elevation = 5
         class_ = 'pa-4 ma-4'
-        style_ = 'border-radius:12px; overflow:hidden auto; height:30%'
-        super().__init__(width=width,
-                         flat=flat,
-                         class_=class_,
-                         style_=style_,
-                         elevation=elevation,
-                         *args, **kwargs)
-
+        style_ = 'border-radius:12px; overflow:hidden auto; height:32%'
+        super().__init__(
+            width=width,
+            flat=flat,
+            class_=class_,
+            style_=style_,
+            elevation=elevation,
+            *args, **kwargs)
+    
         self.table_header = TableHeader()
         self.items_list = []
         self.empty_table = v.Row(children=['No Data Available'], class_='d-flex justify-center pa-1 pt-3')

@@ -14,6 +14,9 @@ class Subspace(Model):
         # Order Multiplier
         self.om_min = None
         self.om_max = None
+        
+        # Shift Type
+        self.shift_type = 'Initial'
 
     def identify(self,
                  df: DataFrame = None):
@@ -21,8 +24,12 @@ class Subspace(Model):
         u_df = df[self.mv]
         y_df = df[self.cv]
 
-        self.u_ss = u_df.head(1).to_numpy()
-        self.y_ss = y_df.head(1).to_numpy()
+        if self.shift_type == 'Initial':
+            self.u_ss = u_df.head(1).to_numpy()
+            self.y_ss = y_df.head(1).to_numpy()
+        elif self.shift_type == 'Mean':
+            self.u_ss = u_df.mean().to_numpy()
+            self.y_ss = y_df.mean().to_numpy()
 
         u_df -= self.u_ss
         y_df -= self.y_ss

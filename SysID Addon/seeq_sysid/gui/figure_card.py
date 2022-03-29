@@ -9,23 +9,24 @@ from pandas import DataFrame
 # Figures Tabs (Train+Validation) Class
 class FigureCard(v.Card):
     def __init__(self,
-                 width='60%',
-                 height='auto',
-                 elevation=10,
+                 width='100%',
+                 height='100%',
+                 elevation=5,
                  shaped=True,
                  outlined=False,
                  color='white',
-                 class_='ma-4 pa-4',
+                 class_='mt-4 pa-4',
                  **kwargs):
 
-        super().__init__(width=width,
-                         height=height,
-                         elevation=elevation,
-                         shaped=shaped,
-                         outlined=outlined,
-                         color=color,
-                         class_=class_,
-                         **kwargs)
+        super().__init__(
+            width=width,
+            # height=height,
+            elevation=elevation,
+            shaped=shaped,
+            outlined=outlined,
+            color=color,
+            class_=class_,
+            **kwargs)
 
         fig = go.FigureWidget()
 
@@ -34,7 +35,7 @@ class FigureCard(v.Card):
         fig['layout']['xaxis']['title'] = 'Time'
         fig['layout']['margin']['t'] = 30
         fig['layout']['margin']['b'] = 40
-        fig['layout']['margin']['r'] = 50
+        fig['layout']['margin']['r'] = 0
         fig['layout']['yaxis']['title'] = 'Value'
         fig['layout']['yaxis']['fixedrange'] = False
 
