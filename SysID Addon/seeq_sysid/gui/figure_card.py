@@ -64,14 +64,14 @@ class FigureCard(v.Card):
 
         tag_id = 0
         for tag in train_df.columns:
-            self.train_fig.add_trace(go.Scatter(x=train_df.index, y=train_df[tag], name=tag, visible=False,
+            self.train_fig.add_trace(go.Scatter(x=train_df[tag].dropna().index, y=train_df[tag].dropna(), name=tag, visible=False,
                                                 line=dict(color=self.colors[tag_id % 10])))
             tag_id += 1
 
         tag_id = 0
         for tag in validation_df.columns:
             self.validation_fig.add_trace(
-                go.Scatter(x=validation_df.index, y=validation_df[tag], name=tag, visible=False,
+                go.Scatter(x=validation_df[tag].dropna().index, y=validation_df[tag].dropna(), name=tag, visible=False,
                            line=dict(color=self.colors[tag_id % 10])))
             tag_id += 1
 

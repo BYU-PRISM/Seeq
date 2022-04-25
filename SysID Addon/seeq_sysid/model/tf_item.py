@@ -264,10 +264,20 @@ class TransferItem(GEKKO):
     def identify(self, df):
         df = df.copy()     
         
-        t_df = pd.to_datetime(df.index)
-        t = (t_df.values - t_df.values[0]) / 1e9
-        self.dt = float(t[1]-t[0])
+        # t_df = pd.to_datetime(df.index)
+        # t = (t_df.values - t_df.values[0]) / 1e9
         
+        if (df.index.dtype == 'float64') or (df.index.dtype =='int64'):
+            t = df.index.values
+        elif df.index.dtype == 'O':
+            t_df = pd.to_datetime(df.index)
+            t = (t_df.values - t_df.values[0]) / 1e9
+        else:
+            t_df = pd.to_datetime(df.index)
+            t = (t_df.values - t_df.values[0]) / 1e9
+        
+        self.dt = float(t[1]-t[0])
+
         u_df = df[self.mv]
         y_df = df[self.cv]
 
@@ -333,11 +343,12 @@ class TransferItem(GEKKO):
 
     def simulate(self, u_df):
         u_df = u_df.copy()
+        
         self._connections = []
         self._objects = []
         self.clear_data()
 
-        if u_df.index.dtype == 'float64' or 'int64':
+        if (u_df.index.dtype == 'float64') or (u_df.index.dtype =='int64'):
             t = u_df.index.values
         elif u_df.index.dtype == 'O':
             t_df = pd.to_datetime(u_df.index)

@@ -124,27 +124,35 @@ class AppBar(v.Card):
         self.image = widgets.Image(value=image, format='png', align='center')
         file.close()
 
-        self.logo = [v.Img(children=[self.image], class_='align-center mt-2 pl-4')]
+        self.logo = [v.Img(children=[self.image], class_='align-center pl-4')]
         
         self.title = v.Text(children=[''], style_='font-size:18pt ; font-weight:bold', class_='d-flex justify-end align-center')
         
         self.ham_menu = HamburgerMenu()
         
         self.next_btn = v.Btn(children=['Next >'], 
-                  class_='ma-2 white--text',
+                  class_='ma-2 mt-3 mr-3 white--text',
                   bold=True,
                   color='#1D376C',
                   style_='font-weight:bold; width:80px; text-transform:none',
                   dark=False)
 
         self.back_btn = v.Btn(children=['< Back'], 
-                  class_='ma-2',
+                  class_='ma-2 mt-3 ml-3',
                   bold=True,
                   color='#1D376C',
                   style_='font-weight:bold; width:80px; text-transform:none; background-color:none',
                   outlined=True,
                   dark=True,
                   disabled=False)
+        
+        self.push_btn = v.Btn(children=['Push'],
+                              class_='ma-2 mt-3 mr-3 white--text',
+                              bold=True,
+                              color='#1D376C',
+                              style_='font-weight:bold; width:80px; text-transform:none',
+                              dark=False)
+        
         self.nav_btn = v.Layout(children=[self.back_btn, self.next_btn], class_='d-flex justify-end align-center ma-2')
 
         if items is None:
@@ -157,7 +165,7 @@ class AppBar(v.Card):
         else:
             self.title_list = title_list
     
-        app = v.Tabs(children=[self.ham_menu] + self.logo + tabs + [self.title] + items + [self.nav_btn],
+        self.tabs = v.Tabs(children=[self.ham_menu] + self.logo + tabs + [self.title] + items + [self.nav_btn],
                      color='#1d376c',
                      class_='align-center pt-0',
                      slider_size='4',
@@ -166,5 +174,5 @@ class AppBar(v.Card):
                      height=60,
                      style_='width:100%; border-radius:12px')
 
-        self.children = [app]
+        self.children = [self.tabs]
 

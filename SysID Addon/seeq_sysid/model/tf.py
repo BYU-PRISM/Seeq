@@ -32,23 +32,30 @@ class TF(TransferItem):
         yp_df[cv_name+"_tf"] = array(y_i[0])
         
         yp_df += self.y_ss[cv_name].to_numpy()
+        
+        yp_df = yp_df.set_index(df.index)
             
         return yp_df
 
 
-    def predict(self, u_df: DataFrame = None):
+    def predict(self, u_df, cv_name):
         u_df = u_df.copy()
-        self.y_ss = u_df.iloc[0].to_numpy()
+        
+        self.y_ss[cv_name] = u_df[[cv_name]].iloc[0].to_numpy()
+        
         u_df -= u_df.iloc[0]
+        
         yp_df = DataFrame()
 
-        for cv_i in self.cv:
-            model: TransferItem = self.models[cv_i]
-            # u_df -= model.u_ss
-            y_i = model.simulate(u_df=u_df)
-            yp_df[model.cv[0]+"_tf"] = array(y_i[0])
+        # for cv_i in self.cv:
+        model: TransferItem = self.models[cv_name]
+        # u_df -= model.u_ss
+        y_i = model.simulate(u_df=u_df[model.mv])
+        yp_df[cv_name+"_tf"] = array(y_i[0])
             
-        yp_df += self.y_ss
+        yp_df += self.y_ss[cv_name].to_numpy()
+        
+        yp_df = yp_df.set_index(u_df.index)
         
         return yp_df
     

@@ -377,12 +377,12 @@ class TransferChip(v.Card):
     """ Result Functions """
     def update_info(self): 
         # Create model prop
-        self.gain_text.children = [v.Text(children=['Gain(K)'], style_='font-weight:bold'), v.Text(children=[' {:.4} '.format(self.gain_gui)] )]
-        self.tau_text.children = [v.Text(children=['Time Constant(tau)'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.tau_gui)] )]
-        self.theta_text.children = [v.Text(children=['Time Delay(theta)'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.theta_gui)] )]
+        self.gain_text.children = [v.Text(children=['Gain(K)'], style_='font-weight:bold'), v.Text(children=[' {:.4} '.format(self.gain_gui)] )] if self.gain_gui else []
+        self.tau_text.children = [v.Text(children=['Time Constant(tau)'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.tau_gui)] )] if self.tau_gui else []
+        self.theta_text.children = [v.Text(children=['Time Delay(theta)'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.theta_gui)] )] if self.theta_gui else []
         
         if self.order == 2:
-            self.zeta_text.children = [v.Text(children=['Relative Damping:'], style_='font-weight:bold'), v.Text(children=[' {:.3} '.format(self.zeta_gui)])]
+            self.zeta_text.children = [v.Text(children=['Relative Damping:'], style_='font-weight:bold'), v.Text(children=[' {:.3} '.format(self.zeta_gui)])] if self.tau_gui else []
             
         self.result_dialog.model_prop_item.children = [self.gain_text, self.tau_text, self.theta_text, self.zeta_text]
               

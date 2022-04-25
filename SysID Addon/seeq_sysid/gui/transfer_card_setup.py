@@ -74,7 +74,7 @@ class TransferCardSetup(v.Card):
         # checkboxes
         self.ramp_checkbox = v.Checkbox(label='Ramp', color='blue darken-4', class_='ma-auto pa-0 ml-0', dense=True, ripple=False, v_model=False, height='9px')
         self.gain_checkbox = v.Checkbox(label='Gain', color='blue darken-4', class_='ma-auto pa-0 ml-0', dense=True, ripple=False, v_model=True, height='9px')
-        self.deadtime_checkbox = v.Checkbox(label='Deadtime', color='blue darken-4', class_='ma-auto pa-0 ml-0', dense=True, ripple=False, v_model=True, height='9px')
+        self.deadtime_checkbox = v.Checkbox(label='Deadtime', color='blue darken-4', class_='ma-auto pa-0 ml-0', dense=True, ripple=False, v_model=False, height='9px')
         
         self.options_group = v.Card(children=[self.gain_checkbox, self.deadtime_checkbox, self.ramp_checkbox],
                          no_gutters=True,
