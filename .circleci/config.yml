@@ -1,10 +1,11 @@
 version: 2.1
-# orbs:
+orbs: 
+  python: circleci/python@2.0.3
 #   snyk: snyk/snyk@0.0.8
 jobs:
   build_test:
     docker:
-      - image: cimg/python:3.10.4
+      - image: circleci/python:3.8.10
     steps:
       - checkout
       - run:
