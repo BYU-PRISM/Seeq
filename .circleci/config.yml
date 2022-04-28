@@ -1,6 +1,6 @@
 version: 2.1
-orbs:
-  snyk: snyk/snyk@0.0.8
+# orbs:
+#   snyk: snyk/snyk@0.0.8
 jobs:
   build_test:
     docker:
@@ -12,4 +12,4 @@ jobs:
           command: |
             echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
             pip install --user -r requirements.txt
-      - snyk/scan
+#       - snyk/scan
