@@ -1,14 +1,15 @@
 version: 2.1
 orbs:
-  snyk: snyk/snyk@0.0.11
-  python: circleci/python@1.5.0
+  snyk: snyk/snyk@0.0.8
 jobs:
-  vulnerability_scan:
-    docker:
-      - image: cimg/python:3.10.1
-    steps:
-      - snyk/scan
-workflows:
   build_test:
-    jobs:
-      - vulnerability_scan
+    docker:
+      - image: circleci/python:3.7.4
+    steps:
+      - checkout
+      - run:
+          name: Install Python Dependencies
+          command: |
+            echo 'export PATH=~$PATH:~/.local/bin' >> $BASH_ENV && source $BASH_ENV
+            pip install --user -r requirements.txt
+      - snyk/scan
