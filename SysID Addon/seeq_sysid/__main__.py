@@ -77,6 +77,43 @@ def install_nbextensions():
         subprocess.run(f'jupyter nbextension enable --user --py {extension}', cwd=os.path.expanduser('~'), shell=True,
                        check=True)
 
+def logging_attempts(_user):
+    """
+    Allows user to re-enter credentials multiple times in the event of
+    authentication failure
+    Parameters
+    ----------
+    _user: str
+        Seeq username that needs to be authenticated
+    Returns
+    -------
+    -: None
+    """
+    count = 0
+    allowed_attempts = 20
+    while count <= allowed_attempts:
+        try:
+            if _user is None or count >= 1:
+                _user = input("\nAccess Key or Username: ")
+
+            passwd = getpass("Access Key Password: ")
+            spy.login(username=_user, password=passwd, ignore_ssl_errors=True)
+            break
+        except (SPyRuntimeError, SPyValueError):
+            count += 1
+            try_again = "-"
+            while try_again != 'yes' and try_again != 'no':
+                try_again = input("\nTry again (yes/no)? [yes] ")
+                if try_again == '' or try_again.lower() == 'y':
+                    try_again = 'yes'
+                if try_again.lower() == 'n':
+                    try_again = 'no'
+            print("-" * 60)
+            if try_again.lower() == 'no':
+                raise
+            if count > allowed_attempts:
+                raise RuntimeError("Number of login attempts exceeded")
+
 
 def cli_interface():
     """ Command line utility to install the SysID Add-on Tool """
@@ -109,9 +146,7 @@ if __name__ == '__main__':
     user = args.username
     if user is None:
         user = input("\nAccess Key or Username: ")
-
-    passwd = getpass("Access Key Password: ")
-    spy.login(username=user, password=passwd, ignore_ssl_errors=True)
+    logging_attempts(user)
 
     seeq_url = args.seeq_url
     if seeq_url is None:
