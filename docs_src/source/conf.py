@@ -63,5 +63,5 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_favicon = '_static/seeq-favicon.ico'
+html_favicon = '_static/prism-icon.ico'
 html_logo = '_static/Seeq_logo_darkBlue_sm.png'
