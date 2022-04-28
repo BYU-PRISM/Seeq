@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build_test:
     docker:
-      - image: circleci/python:3.7.4
+      - image: cimg/python:3.10.4
     steps:
       - checkout
       - run:
