@@ -105,8 +105,14 @@ if __name__ == '__main__':
         print("\n\nInstalling and enabling nbextensions")
         install_nbextensions()
         sys.exit(0)
+
     user = args.username
-    logging_attempts(user)
+    if user is None:
+        user = input("\nAccess Key or Username: ")
+
+    passwd = getpass("Access Key Password: ")
+    spy.login(username=user, password=passwd, ignore_ssl_errors=True)
+
     seeq_url = args.seeq_url
     if seeq_url is None:
         seeq_url = input(f"\n Seeq base URL [{spy.client.host.split('/api')[0]}]: ")
@@ -135,8 +141,6 @@ if __name__ == '__main__':
         if choice == '':
             print("\n\nInstalling and enabling nbextensions")
             install_nbextensions()
-            if not args.skip_formula_package:
-                create_udfs(spy.client, permissions_groups=args.groups, permissions_users=args.users)
             install_app(sdl_url_sanitized, permissions_group=args.groups, permissions_users=args.users)
         elif choice == 'quit':
             print("\nExited installation")
