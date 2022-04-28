@@ -8,7 +8,7 @@ from seeq import sdk, spy
 
 from seeq.spy import _url
 from ._copy import copy
-from . import seeq
+import seeq
 
 NB_EXTENSIONS = ['widgetsnbextension', 'plotlywidget', 'ipyvuetify', 'ipyvue']
 DEPLOYMENT_FOLDER = 'deployment'
