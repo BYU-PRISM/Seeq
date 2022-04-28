@@ -5,9 +5,7 @@ import subprocess
 from getpass import getpass
 from urllib.parse import urlparse
 from seeq import sdk, spy
-# noinspection PyProtectedMember
-from seeq.spy._errors import *
-# noinspection PyProtectedMember
+
 from seeq.spy import _url
 from ._copy import copy
 from . import seeq
