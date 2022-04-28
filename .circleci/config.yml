@@ -1,10 +1,11 @@
 version: 2.1
 orbs:
   snyk: snyk/snyk@0.0.11
+  python: circleci/python@1.5.0
 jobs:
   vulnerability_scan:
     docker:
-      - image: circleci/node:12
+      - image: cimg/python:3.10.1
     steps:
       - snyk/scan
 workflows:
