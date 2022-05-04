@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Seeq-SysID'
+project = 'seeq-sysid'
 copyright = '2022, Mohammad Reza Babaei, Junho Park'
 author = 'Mohammad Reza Babaei, Junho Park'
 

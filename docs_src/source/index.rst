@@ -6,13 +6,6 @@
 Seeq SysID Add-on
 =========================================
 
-.. image:: https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true
-  :width: 700
-  :align: center
-
-Overview
---------
-
 `Seeq-System Identification <https://github.com/BYU-PRISM/Seeq>`_ is a Seeq Add-on built in python to identify
 input and output relationship for the system to create **digital twin** models
 for various analytics and machine learning tasks. System dynamics are
@@ -24,6 +17,12 @@ investigations as well as streaming predictions.
 The system identification framework can be used for a variety of tasks
 including simulation, digital twin construction, advanced process control,
 real time optimization, etc.    
+
+.. image:: https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/github_cover.png?raw=true
+  :width: 700
+  :align: center
+ 
+|
 
 .. note::
 
@@ -37,7 +36,6 @@ Contents
 
    What does Seeq-SysID do? <pages/introduction.md>
    System Identification <pages/system_identification.md>
-   Models <pages/models.md>
    Installation <pages/installation.md>
    User Guide <pages/user_guide.md>
    Examples <pages/examples.md>

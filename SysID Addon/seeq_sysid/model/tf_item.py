@@ -316,6 +316,7 @@ class TransferItem(GEKKO):
         # self.ym[0].fstatus = 1
         self.ym[0].status = 0
 
+        self.options.Solver = 3
         self.options.IMODE = 5
         self.solve(disp=False)
 
