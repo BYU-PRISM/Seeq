@@ -8,4 +8,4 @@ jobs:
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python-3.8@master
         env:
-          SNYK_TOKEN: 474be172-2c20-4b57-9f10-359d55edfd58
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
