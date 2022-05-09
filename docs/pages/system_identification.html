@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>System Identification &mdash; Seeq-SysID  documentation</title>
+  <title>System Identification &mdash; seeq-sysid  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/prism-icon.ico"/>
@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Models" href="models.html" />
+    <link rel="next" title="Installation" href="installation.html" />
     <link rel="prev" title="What does Seeq-SysID do?" href="introduction.html" /> 
 </head>
 
@@ -28,7 +28,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: #15A9D1" >
-            <a href="../index.html" class="icon icon-home"> Seeq-SysID
+            <a href="../index.html" class="icon icon-home"> seeq-sysid
             <img src="../_static/Seeq_logo_darkBlue_sm.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -41,8 +41,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">What does Seeq-SysID do?</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">System Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">System Identification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arx-model">ARX model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state-space-model">State Space model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-function">Transfer Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neural-network-model">Neural Network model</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -58,7 +63,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #15A9D1" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">Seeq-SysID</a>
+          <a href="../index.html">seeq-sysid</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -78,7 +83,80 @@
              
   <section id="system-identification">
 <h1>System Identification<a class="headerlink" href="#system-identification" title="Permalink to this headline"></a></h1>
-<p>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</p>
+<p>System Identification is a set of methods to build a mathematical model based on the system’s input/output data.
+<br />
+One of the common techniques in identifying Time-Series is data-driven modeling. In this approach, The goal is to identify a reduced model that indicates mathematical relations between data without going into details. Different models can be used based on:</p>
+<ul class="simple">
+<li><p>System complexity</p></li>
+<li><p>Amount of available data</p></li>
+<li><p>Model application</p></li>
+<li><p>Quality of the data</p></li>
+</ul>
+<p>Following sections will describe some of well-knowns models in this field.</p>
+<section id="arx-model">
+<h2>ARX model<a class="headerlink" href="#arx-model" title="Permalink to this headline"></a></h2>
+<p>ARX model is a system identification model that uses the linear correlation between previous and future values. ARX model consists of previous output terms (y) and previous input (u) terms multiplied by the linear coefficients (a, b). The linear combination of past input and output value computes the one-step-ahead prediction of output value(y<sub>k+1</sub>).
+Multiple iterations of the one-step-ahead prediction return the multi-step prediction (from y<sub>k+1</sub> to y<sub>k+n</sub>). The time window of the past input and output terms is shifted toward next segment for every iteration for multi-step prediction.
+Here is an example formular with <img src="https://render.githubusercontent.com/render/math?math=\large n_a=3"> and <img src="https://render.githubusercontent.com/render/math?math=\large n_b=2"> for the single input and single output system,</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{0} y_{k} %2B a_{1} y_{k-1} %2B a_{2} y_{k-2} %2B b_{0} u_{k} %2B b_{1} u_{k-1}" >
+</p>
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Onestep-ahead.png?raw=true" align="center" width="300" height="100">
+</p>
+<p><img src="https://render.githubusercontent.com/render/math?math=\large ARX">: Auto-Regressive with eXogenous input
+(“Auto” indicates the past ‘y’ values, and “Exogenous” indicates the past ‘u’ values serving as model inputs)<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large a">: ARX coefficient for the past output value<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large b">: ARX coefficient for the past input value<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large n_a">: Number of terms for the past output value<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large n_b">: Number of terms for the past input value<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large n_c">: Delay between input and output<br />
+<img src="https://render.githubusercontent.com/render/math?math=\large k">: present time step</p>
+<p>Here is another example formular with <strong>delay</strong>  <img src="https://render.githubusercontent.com/render/math?math=\small (n_a=3, n_b=2, n_c=2)">,</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{1} y_{k} %2B a_{2} y_{k-1} %2B a_{3} y_{k-2} %2B b_{1} u_{k-2-2} %2B b_{2} u_{k-1-2}" >
+</p>
+<p>Although the ARX model can be more detailed by increasing the number of terms <img src="https://render.githubusercontent.com/render/math?math=\normalsize (n_a, n_b)">, it could result in an overfit. Thus, it could be an essential step to compare the training and validation set, ensuring the prediction for the validation set is as good as the training set. The model fitting can be quantified using different statistical methods such as <strong>MSE</strong> (Mean Squared Error) or <strong>SSE</strong> (Sum of Squared Error). <a class="reference external" href="https://apmonitor.com/wiki/index.php/Apps/ARXTimeSeries">Read more</a> about ARX models.</p>
+</section>
+<section id="state-space-model">
+<h2>State Space model<a class="headerlink" href="#state-space-model" title="Permalink to this headline"></a></h2>
+<p>The <a class="reference external" href="https://apmonitor.com/pdc/index.php/Main/StateSpaceModel"><strong>State Space</strong></a> model is one of the linear representations of dynamic systems. Converting a model to a State Space structure is routine for process control and optimization applications. These models can be used for both continuous and discrete forms.</p>
+<table border="0" align="center">
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large \dot{x} = Ax %2B Bu" >
+</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large y = Cx %2B Du" >
+</p>
+ <tr>
+    <td>Figure 2. Continuous State Space model structure.</td>
+ </tr>
+</table>
+<br>
+<p>Which <img src="https://render.githubusercontent.com/render/math?math=\large x" > is the array of states, <img src="https://render.githubusercontent.com/render/math?math=\large u" > is the array of inputs, and <img src="https://render.githubusercontent.com/render/math?math=\large y" > is the array of outputs. <img src="https://render.githubusercontent.com/render/math?math=\large A" > is the transition matrix, <img src="https://render.githubusercontent.com/render/math?math=\large B"> is the input matrix, <img src="https://render.githubusercontent.com/render/math?math=\large C"> is the output matrix, and <img src="https://render.githubusercontent.com/render/math?math=\large D" > is the direct transition matrix or feedthrough matrix.
+Considering <strong>n</strong> states, <strong>m</strong> inputs, and <strong>p</strong> outputs:</p>
+<table border="0" align="center">
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large A\in \mathbb{R}^{n \times n}" >
+</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large B\in \mathbb{R}^{n \times m}" >
+</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large C\in \mathbb{R}^{p \times n}" >
+</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large D\in \mathbb{R}^{p \times m}" >
+</p>
+</table>
+<p>that <img src="https://render.githubusercontent.com/render/math?math=\large \mathbb{R}" > indicates set of real numbers. <a class="reference external" href="http://apmonitor.com/wiki/index.php/Apps/LinearStateSpace">Read more</a> about State Space models.</p>
+</section>
+<section id="transfer-function">
+<h2>Transfer Function<a class="headerlink" href="#transfer-function" title="Permalink to this headline"></a></h2>
+</section>
+<section id="neural-network-model">
+<h2>Neural Network model<a class="headerlink" href="#neural-network-model" title="Permalink to this headline"></a></h2>
+</section>
 </section>
 
 
@@ -86,7 +164,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="What does Seeq-SysID do?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seeq SysID Add-on &mdash; Seeq-SysID  documentation</title>
+  <title>Seeq SysID Add-on &mdash; seeq-sysid  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/prism-icon.ico"/>
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: #15A9D1" >
-            <a href="#" class="icon icon-home"> Seeq-SysID
+            <a href="#" class="icon icon-home"> seeq-sysid
             <img src="_static/Seeq_logo_darkBlue_sm.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -41,7 +41,6 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="pages/introduction.html">What does Seeq-SysID do?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/system_identification.html">System Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pages/models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/user_guide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pages/examples.html">Examples</a></li>
@@ -57,7 +56,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #15A9D1" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Seeq-SysID</a>
+          <a href="#">seeq-sysid</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -77,9 +76,6 @@
              
   <section id="seeq-sysid-add-on">
 <h1>Seeq SysID Add-on<a class="headerlink" href="#seeq-sysid-add-on" title="Permalink to this headline"></a></h1>
-<a class="reference internal image-reference" href="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true"><img alt="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true" class="align-center" src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/digital_twin.svg?raw=true" style="width: 700px;" /></a>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="https://github.com/BYU-PRISM/Seeq">Seeq-System Identification</a> is a Seeq Add-on built in python to identify
 input and output relationship for the system to create <strong>digital twin</strong> models
 for various analytics and machine learning tasks. System dynamics are
@@ -91,23 +87,24 @@ investigations as well as streaming predictions.
 The system identification framework can be used for a variety of tasks
 including simulation, digital twin construction, advanced process control,
 real time optimization, etc.</p>
+<a class="reference internal image-reference" href="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/github_cover.png?raw=true"><img alt="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/github_cover.png?raw=true" class="align-center" src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/github_cover.png?raw=true" style="width: 700px;" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This documentation is under active development.</p>
 </div>
-</section>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pages/introduction.html">What does Seeq-SysID do?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pages/system_identification.html">System Identification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pages/models.html">Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pages/models.html#arx">ARX</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pages/models.html#fir">FIR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pages/models.html#subspace">SubSpace</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pages/models.html#neural-network">Neural Network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pages/models.html#transfer-function">Transfer Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/system_identification.html">System Identification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pages/system_identification.html#arx-model">ARX model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/system_identification.html#state-space-model">State Space model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/system_identification.html#transfer-function">Transfer Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pages/system_identification.html#neural-network-model">Neural Network model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pages/installation.html">Installation</a><ul>
@@ -117,7 +114,10 @@ real time optimization, etc.</p>
 <li class="toctree-l2"><a class="reference internal" href="pages/installation.html#developer-installation">Developer Installation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pages/user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pages/user_guide.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pages/user_guide.html#overview">Overview</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pages/examples.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pages/examples.html#example-1">Example 1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pages/examples.html#example-2">Example 2</a></li>
