@@ -388,9 +388,9 @@ class TransferChip(v.Card):
               
 
         # Create step info
-        self.ts_text.children = [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.ts)] )]
-        self.tr_text.children = [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.tr)] )]
-        self.os_text.children = [v.Text(children=['Overshoot:'], style_='font-weight:bold'), v.Text(children=[' {:.3} %'.format(self.os)] )]
+        self.ts_text.children = [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.ts)] )] if self.ts else [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
+        self.tr_text.children = [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.tr)] )] if self.tr else [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
+        self.os_text.children = [v.Text(children=['Overshoot:'], style_='font-weight:bold'), v.Text(children=[' {:.3} %'.format(float(self.os))] )]
         if self.order == 2:
             if (0.999 <= self.zeta_gui <= 1.001): 
                 self.zeta_cat = v.Text(children=['Critically Damped'])

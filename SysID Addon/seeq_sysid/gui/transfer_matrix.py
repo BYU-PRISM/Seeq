@@ -167,6 +167,7 @@ class TransferMatrix(v.Card):
         self.train_df = DataFrame()
         
         for cv_i in self.model.cv:
+            # try:
             capsules = self.cv_label_dict[cv_i].select_train_capsules.v_model
             train_df = self.create_dataset(capsules)
             y_train_df = self.model.identify(train_df, cv_i)
@@ -174,7 +175,9 @@ class TransferMatrix(v.Card):
             self.train_df = concat([self.train_df, y_train_df], axis=1)
             self.to_step_response(cv_i)
 
-            self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)             
+            self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
+            # except:
+                # pass
         
             
             
@@ -183,16 +186,16 @@ class TransferMatrix(v.Card):
             chip = self.matrix_dic[cv_name][mv_i]
         
             if chip.tf_card_btn.value:
-                try:
-                    ys_df = self.model.step_response(mv_name=mv_i, cv_name=cv_name)
-                    self.temp_df = ys_df
-                    chip.order, chip.gain_gui, chip.tau_gui, chip.theta_gui, chip.zeta_gui = self.model.get_model_info(mv_name=mv_i, cv_name=cv_name)
-                    chip.ts, chip.tr, chip.os = self.model.get_step_info(mv_name=mv_i, cv_name=cv_name)
-                    chip.update_result_dialog(df=ys_df)     
-                    chip.switch_chip()
-                except:
-                    chip.switch_chip()
-                    chip.children = [chip.no_solution_card]
+                # try:
+                ys_df = self.model.step_response(mv_name=mv_i, cv_name=cv_name)
+                self.temp_df = ys_df
+                chip.order, chip.gain_gui, chip.tau_gui, chip.theta_gui, chip.zeta_gui = self.model.get_model_info(mv_name=mv_i, cv_name=cv_name)
+                chip.ts, chip.tr, chip.os = self.model.get_step_info(mv_name=mv_i, cv_name=cv_name)
+                chip.update_result_dialog(df=ys_df)     
+                chip.switch_chip()
+                # except:
+                # chip.switch_chip()
+                # chip.children = [chip.no_solution_card]
             
             else:
                 chip.disabled = True

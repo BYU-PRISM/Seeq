@@ -56,8 +56,10 @@ class TransferOption:
         yout = abs(yout)
         
         if self.order == 1:
-            self.ts = 4*self.tau
-            self.tr = 2.2*self.tau
+            if self.tau:
+                self.ts = 4*self.tau
+                self.tr = 2.2*self.tau
+
             self.os = 0.0
         elif self.order == 2:
             if self.zeta == 0:

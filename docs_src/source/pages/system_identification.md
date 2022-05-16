@@ -89,4 +89,17 @@ that <img src="https://render.githubusercontent.com/render/math?math=\large \mat
 
 ## Transfer Function
 
+Transfer functions are the linearized representations of dynamic systems. The first step to create a transfer function is to calculate the Laplace transform of a differential equation. After applying Laplace transform differential equation converts to an algebraic equation. These algebraic equations can be transformed back into the time domain.
+
+In the industry, transfer functions are base of many prediction and control tuning applications. 
+For the sake of simplicity first, order and second-order transfer functions are more common than others:
+
+### First Order Plus Deadtime (FOPDT)
+
+The first order plus deadtime is the simplest form of the transfer function. The structure and unit step response of a FOPDT has shown below.
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large \tau_p \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{\tau_p \ s %2B 1}" > 
+</p>
+
 ## Neural Network model

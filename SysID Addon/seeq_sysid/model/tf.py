@@ -8,6 +8,7 @@ class TF(TransferItem):
         super().__init__()
         self.y_ss = DataFrame()
         self.models = {}
+        self.dummy = None
         
     def add_model(self, cv_name, model: TransferItem):
         self.models[cv_name] = model
@@ -69,7 +70,7 @@ class TF(TransferItem):
         
         tau = option_item.tau if option_item.tau else 1
         
-        tf = 25*tau
+        tf = max(25*tau, 10*model.dt)
         Time = arange(0, tf+1, model.dt)
         sim_ts = len(Time)
 
@@ -80,7 +81,7 @@ class TF(TransferItem):
         # u_df += model.u_ss
         
         u_df.set_index(Time, inplace=True)
-        
+        self.dummy = u_df.copy()
         y_i = model.simulate(u_df=u_df)
         
         yp_df = DataFrame()

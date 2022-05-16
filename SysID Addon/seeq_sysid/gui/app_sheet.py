@@ -312,8 +312,8 @@ class TFAppSheet(v.Card):
         self.matrix_window = v.WindowItem(children=[self.matrix_sheet], style_='width:100%', transition='none', reverse_transition='none')
         
         # Visualization Sheet
-        self.visual_sheet = FigureTable(style_ = 'width:100%; max-height:700px')
-        self.visual_window = v.WindowItem(children=[self.visual_sheet], style_='width:98%', transition='none', reverse_transition='none')
+        self.visual_sheet = FigureTable(style_ = 'width:100%; height:780px')
+        self.visual_window = v.WindowItem(children=[v.Card(children=[self.visual_sheet])], style_='width:99%', transition='none', reverse_transition='none')
     
         # Set Windows
         self.window.children = [self.import_window, self.matrix_window, self.matrix_window, self.visual_window]
@@ -413,7 +413,7 @@ class TFAppSheet(v.Card):
         item.loading = True
         
         self.matrix_sheet.to_validation()
-        self.visual_sheet = FigureTable()
+        self.visual_sheet = FigureTable(style_ = 'width:100%; height:780px')
         self.visual_sheet.create(self.matrix_sheet.train_df, self.matrix_sheet.validation_df)
 
         self.window.v_model = 3
