@@ -96,10 +96,25 @@ For the sake of simplicity first, order and second-order transfer functions are 
 
 ### First Order Plus Deadtime (FOPDT)
 
-The first order plus deadtime is the simplest form of the transfer function. The structure and unit step response of a FOPDT has shown below.
+The first order plus deadtime is the simplest form of the transfer function. The structure and unit step response of a FOPDT has shown below. in this equation <img src="https://render.githubusercontent.com/render/math?math=\large \tau_p"> is the process time constant, <img src="https://render.githubusercontent.com/render/math?math=\large K_p"> is the process gain, <img src="https://render.githubusercontent.com/render/math?math=\large \theta_p"> is the process deadtime, <img src="https://render.githubusercontent.com/render/math?math=\large y"> is the process output and <img src="https://render.githubusercontent.com/render/math?math=\large u"> is the process input.
 
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\large \tau_p \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{\tau_p \ s %2B 1}" > 
+</p>
+
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/fopdt.png?raw=true" align="center">
+</p>
+
+### Second Order Plus Deadtime (SOPDT)
+The step response of SOPDT is usually S-shaped. In the SOPDT equation <img src="https://render.githubusercontent.com/render/math?math=\large \zeta"> is the relative damping factor. Overshoot, Settling time and Rise time are other characterestics of SOPDT step response.
+
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large \tau_p^2 \frac{d^2y}{dt^2} %2B 2 \tau_p \zeta \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{(\tau_p \ s)^2 %2B 2\tau_p\zeta %2B   1}" > 
+</p>
+
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/sopdt.png?raw=true" align="center">
 </p>
 
 ## Neural Network model

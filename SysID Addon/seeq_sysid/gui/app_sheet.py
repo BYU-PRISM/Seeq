@@ -313,7 +313,7 @@ class TFAppSheet(v.Card):
         
         # Visualization Sheet
         self.visual_sheet = FigureTable(style_ = 'width:100%; height:780px')
-        self.visual_window = v.WindowItem(children=[v.Card(children=[self.visual_sheet])], style_='width:99%', transition='none', reverse_transition='none')
+        self.visual_window = v.WindowItem(children=[v.Card(children=[self.visual_sheet])], style_='width:98%', transition='none', reverse_transition='none')
     
         # Set Windows
         self.window.children = [self.import_window, self.matrix_window, self.matrix_window, self.visual_window]
