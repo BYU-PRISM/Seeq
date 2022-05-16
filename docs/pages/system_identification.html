@@ -44,7 +44,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">System Identification</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#arx-model">ARX model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#state-space-model">State Space model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transfer-function">Transfer Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transfer-function">Transfer Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#first-order-plus-deadtime-fopdt">First Order Plus Deadtime (FOPDT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#second-order-plus-deadtime-sopdt">Second Order Plus Deadtime (SOPDT)</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#neural-network-model">Neural Network model</a></li>
 </ul>
 </li>
@@ -153,6 +157,29 @@ Considering <strong>n</strong> states, <strong>m</strong> inputs, and <strong>p<
 </section>
 <section id="transfer-function">
 <h2>Transfer Function<a class="headerlink" href="#transfer-function" title="Permalink to this headline"></a></h2>
+<p>Transfer functions are the linearized representations of dynamic systems. The first step to create a transfer function is to calculate the Laplace transform of a differential equation. After applying Laplace transform differential equation converts to an algebraic equation. These algebraic equations can be transformed back into the time domain.</p>
+<p>In the industry, transfer functions are base of many prediction and control tuning applications.
+For the sake of simplicity first, order and second-order transfer functions are more common than others:</p>
+<section id="first-order-plus-deadtime-fopdt">
+<h3>First Order Plus Deadtime (FOPDT)<a class="headerlink" href="#first-order-plus-deadtime-fopdt" title="Permalink to this headline"></a></h3>
+<p>The first order plus deadtime is the simplest form of the transfer function. The structure and unit step response of a FOPDT has shown below. in this equation <img src="https://render.githubusercontent.com/render/math?math=\large \tau_p"> is the process time constant, <img src="https://render.githubusercontent.com/render/math?math=\large K_p"> is the process gain, <img src="https://render.githubusercontent.com/render/math?math=\large \theta_p"> is the process deadtime, <img src="https://render.githubusercontent.com/render/math?math=\large y"> is the process output and <img src="https://render.githubusercontent.com/render/math?math=\large u"> is the process input.</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large \tau_p \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{\tau_p \ s %2B 1}" > 
+</p>
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/fopdt.png?raw=true" align="center">
+</p>
+</section>
+<section id="second-order-plus-deadtime-sopdt">
+<h3>Second Order Plus Deadtime (SOPDT)<a class="headerlink" href="#second-order-plus-deadtime-sopdt" title="Permalink to this headline"></a></h3>
+<p>The step response of SOPDT is usually S-shaped. In the SOPDT equation <img src="https://render.githubusercontent.com/render/math?math=\large \zeta"> is the relative damping factor. Overshoot, Settling time and Rise time are other characterestics of SOPDT step response.</p>
+<p align="center">
+<img src="https://render.githubusercontent.com/render/math?math=\large \tau_p^2 \frac{d^2y}{dt^2} %2B 2 \tau_p \zeta \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{(\tau_p \ s)^2 %2B 2\tau_p\zeta %2B   1}" > 
+</p>
+<p align="center">
+<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/sopdt.png?raw=true" align="center">
+</p>
+</section>
 </section>
 <section id="neural-network-model">
 <h2>Neural Network model<a class="headerlink" href="#neural-network-model" title="Permalink to this headline"></a></h2>
