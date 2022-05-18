@@ -118,3 +118,12 @@ The step response of SOPDT is usually S-shaped. In the SOPDT equation <img src="
 </p>
 
 ## Neural Network model
+
+Neural networks are a set of neurons contacting each other using corresponding weight coefficients. There are many kinds of neural networks, according to their application. Multilayer Perceptron commonly used for control applications because of simplicity and fast response. This neural network made up three sections: the input layer, the hidden layer(s), and the output layer. An input layer, where the input data comes in. It is conventional to normalize data before calculations to avoid neuron saturation. Neuron saturation is a state that neuron gives a constant value for each entering data. The output layer receives the output data and denormalizes the results. The layers between the input layer and the output layer call the hidden layer(s) where. The number of these layers and their neurons can be vary depending on the complexity of the system. Increasing hidden layers and neurons require more data and time to train the network.
+
+<p align="center">
+<a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg">
+<img alt="simple_nn" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg?raw=true" width=90%></a>
+</p>
+
+Inputs of the network are input(s), delayed input(s), output(s), and delayed output(s) of the system. The number of delays given to the inputs and outputs of the system depends on its complexity. After specifying the network’s structure (number of hidden layers, number of neurons in each layer, inputs, and output of the network), weights and biases will be initialized randomly. Normalized data will be passed through the network, identification error will be calculated, the error backpropagates through the network, and weights and biases will be updated till the Mean of Square Error (MSE) meats the specified criteria then the training procedure will be terminated. Now the network is ready to mimic the system’s behavior and can be used as a model which correlates input(s) and output(s) of the system.
