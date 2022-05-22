@@ -409,21 +409,21 @@ This model requieres more knowledge about the system identification and data sel
    <figcaption>Figure 16. Transfer function identification: selecting training and validation conditions</figcaption>
 </figure>
 
-7. Click on 'Next' button to start the identificaiton process. Step response will be shown up after this process.
+6. Click on 'Next' button to start the identificaiton process. Step response will be shown up after this process.
 
 <figure class="image" align="center">
-   <a href="../_static/tf_matrix_step.png">
-   <img alt="tf_matrix_step" src="../_static/tf_matrix_step.png" width=100%></a>
-   <figcaption>Figure 8. Transfer function identification: step response</figcaption>
+   <a href="../_static/tf_matrix_step_ex2.png">
+   <img alt="tf_matrix_step_ex2" src="../_static/tf_matrix_step_ex2.png" width=60%></a>
+   <figcaption>Figure 17. Transfer function identification: step response</figcaption>
 </figure>
 
 <figure class="image" align="center">
-   <a href="../_static/tf_matrix_info.png">
-   <img alt="tf_matrix_info" src="../_static/tf_matrix_info.png" width=100%></a>
-   <figcaption>Figure 9. Transfer function identification: model information</figcaption>
+   <a href="../_static/tf_matrix_info_ex2.png">
+   <img alt="tf_matrix_info_ex2" src="../_static/tf_matrix_info_ex2.png" width=100%></a>
+   <figcaption>Figure 18. Transfer function identification: model information</figcaption>
 </figure>
 
-8. To plot training and validation results click on 'Next' button.
+7. To plot training and validation results click on 'Next' button.
 
 <figure class="image" align="center">
    <a href="../_static/tf_vis_col.png">
@@ -431,4 +431,4 @@ This model requieres more knowledge about the system identification and data sel
    <figcaption>Figure 10. Transfer function identification: visualization</figcaption>
 </figure>
 
-9. Click on "Push Model" to push the predicted data to the Seeq Workbench.
+8. Click on "Push Model" to push the predicted data to the Seeq Workbench.
