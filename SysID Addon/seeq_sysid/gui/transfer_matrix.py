@@ -206,6 +206,7 @@ class TransferMatrix(v.Card):
         for cv_i in self.model.cv:
             capsules = self.cv_label_dict[cv_i].select_validation_capsules.v_model
             validation_df = self.create_dataset(capsules)
+            self.temp_df = validation_df
             yp_valid_df = self.model.predict(validation_df, cv_i)
 
             self.validation_df = concat([self.validation_df, yp_valid_df], axis=1)

@@ -10,7 +10,7 @@ from pandas import DataFrame
 class FigureTable(v.Card):
     def __init__(self, 
                  class_ = 'd-flex flex-column justify-start align-center ml-1 mr-1',
-                 style_ = 'width:100%; height:100%',
+                 style_ = 'width:800px; height:100%',
                  *args, **kwargs):
 
         super().__init__(class_=class_,

@@ -97,8 +97,8 @@ class TransferCardSetup(v.Card):
                                 style_='font-size:11pt',
                                 elevation=0, flat=True)
         
-        self.deadtime_lb = v.TextField(label='lb', v_model='0', class_='ml-3 mt-0 pt-0', dense=True, style_='max-width:20%')
-        self.deadtime_ub = v.TextField(label='ub', v_model='', class_='ml-3 mt-0 pt-0', dense=True, style_='max-width:20%')
+        self.deadtime_lb = v.TextField(label='lb', v_model='0', class_='ml-3 mt-0 pt-0', dense=True, style_='max-width:20%', disabled=True)
+        self.deadtime_ub = v.TextField(label='ub', v_model='', class_='ml-3 mt-0 pt-0', dense=True, style_='max-width:20%', disabled=True)
         self.deadtime_limit = v.Card(children=['Deadtime:', v.Spacer(), self.deadtime_lb, self.deadtime_ub],
                                      class_='d-flex d-row justify-right align-center mr-3 mt-0 pt-0',
                                      style_='font-size:11pt', elevation=0, flat=True)

@@ -377,20 +377,20 @@ class TransferChip(v.Card):
     """ Result Functions """
     def update_info(self): 
         # Create model prop
-        self.gain_text.children = [v.Text(children=['Gain(K)'], style_='font-weight:bold'), v.Text(children=[' {:.4} '.format(self.gain_gui)] )] if self.gain_gui else []
-        self.tau_text.children = [v.Text(children=['Time Constant(tau)'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.tau_gui)] )] if self.tau_gui else []
-        self.theta_text.children = [v.Text(children=['Time Delay(theta)'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.theta_gui)] )] if self.theta_gui else []
+        self.gain_text.children = [v.Text(children=['Gain(K)'], style_='font-weight:bold'), v.Text(children=[' {:.5} '.format(self.gain_gui)] )] if self.gain_gui else []
+        self.tau_text.children = [v.Text(children=['Time Constant(tau)'], style_='font-weight:bold'), v.Text(children=[' {:.5} s'.format(self.tau_gui)] )] if self.tau_gui else []
+        self.theta_text.children = [v.Text(children=['Time Delay(theta)'], style_='font-weight:bold'), v.Text(children=[' {:.5} s'.format(self.theta_gui)] )] if self.theta_gui else []
         
         if self.order == 2:
-            self.zeta_text.children = [v.Text(children=['Relative Damping:'], style_='font-weight:bold'), v.Text(children=[' {:.3} '.format(self.zeta_gui)])] if self.tau_gui else []
+            self.zeta_text.children = [v.Text(children=['Relative Damping:'], style_='font-weight:bold'), v.Text(children=[' {:.5} '.format(self.zeta_gui)])] if self.tau_gui else []
             
         self.result_dialog.model_prop_item.children = [self.gain_text, self.tau_text, self.theta_text, self.zeta_text]
               
 
         # Create step info
-        self.ts_text.children = [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=[' {:.4} s'.format(self.ts)] )] if self.ts else [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
-        self.tr_text.children = [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=[' {:.3} s'.format(self.tr)] )] if self.tr else [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
-        self.os_text.children = [v.Text(children=['Overshoot:'], style_='font-weight:bold'), v.Text(children=[' {:.3} %'.format(float(self.os))] )]
+        self.ts_text.children = [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=[' {:.5} s'.format(self.ts)] )] if self.ts else [v.Text(children=['Settling Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
+        self.tr_text.children = [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=[' {:.5} s'.format(self.tr)] )] if self.tr else [v.Text(children=['Rise Time:'], style_='font-weight:bold'), v.Text(children=['NA'] )]
+        self.os_text.children = [v.Text(children=['Overshoot:'], style_='font-weight:bold'), v.Text(children=[' {:.4} %'.format(float(self.os))] )]
         if self.order == 2:
             if (0.999 <= self.zeta_gui <= 1.001): 
                 self.zeta_cat = v.Text(children=['Critically Damped'])
@@ -411,11 +411,11 @@ class TransferChip(v.Card):
 
         if self.order == 1:
             den_str = ''
-            den_str += '{0:.3} s+1'.format(float(self.tau_gui)) if self.tau_gui else 's'
+            den_str += '{0:.5} s+1'.format(float(self.tau_gui)) if self.tau_gui else 's'
 
         elif self.order == 2:
-            den_str = ' + {0:.4} s+1'.format(float(2*self.zeta_gui*self.tau_gui)) if (self.zeta_gui and self.tau_gui) else '+1'
-            den_str = ('{0:.4} s^2'.format(float(self.tau_gui**2))+den_str) if self.tau_gui else 's^2'
+            den_str = ' + {0:.5} s+1'.format(float(2*self.zeta_gui*self.tau_gui)) if (self.zeta_gui and self.tau_gui) else '+1'
+            den_str = ('{0:.5} s^2'.format(float(self.tau_gui**2))+den_str) if self.tau_gui else 's^2'
 
         elif self.order == None:
             numerator = ''
