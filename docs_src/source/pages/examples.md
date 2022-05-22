@@ -371,7 +371,64 @@ Insights:
 <figure class="image" align="center">
    <a href="../_static/figuretable_nn_ex2.png">
    <img alt="figuretable_nn_ex2" src="../_static/figuretable_nn_ex2.png" width=90%></a>
-   <figcaption>Figure 4. Neural Network results: Reflux Drum Level</figcaption>
+   <figcaption>Figure 14. Neural Network results: Example 2</figcaption>
 </figure>
 
 ### Transfer Function Model
+
+This model requieres more knowledge about the system identification and data selection. Otherwise it will end up with no solution for the problem or the identification process takes more time to run.
+
+1. Select MVs and CVs in the setup page.
+
+   - Manipulated variables:
+     - Cooling water flow rate
+
+   - Controlled variables:
+     - The reactor 1 Temperature
+     - The reactor 2 Temperature
+     - The concentration of component A in the reactor 1
+     - The concentration of component A in the reactor 2
+
+2. Select training and validation condition. (Optional) This setting can be set and override in the Matrix page by clicking on the CV buttons. Click on 'Next' button.
+
+<figure class="image" align="center">
+   <a href="../_static/tf_setup_ex2.png">
+   <img alt="tf_setup_ex2" src="../_static/tf_setup_ex2.png" width=65%></a>
+   <figcaption>Figure 15. Transfer function identification: Setup page</figcaption>
+</figure>
+
+3. Modify the identification matrix. Inactive unnecessary terms by right-clicking on them or switching them off in the setting menu.
+
+4. Select the model structure based on the system behavior.
+   
+5. Enter lower bounds and upper bounds for each available term in the equation. (Optional)
+
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_ex2.png">
+   <img alt="tf_matrix_ex2" src="../_static/tf_matrix_ex2.png" width=100%></a>
+   <figcaption>Figure 16. Transfer function identification: selecting training and validation conditions</figcaption>
+</figure>
+
+7. Click on 'Next' button to start the identificaiton process. Step response will be shown up after this process.
+
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_step.png">
+   <img alt="tf_matrix_step" src="../_static/tf_matrix_step.png" width=100%></a>
+   <figcaption>Figure 8. Transfer function identification: step response</figcaption>
+</figure>
+
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_info.png">
+   <img alt="tf_matrix_info" src="../_static/tf_matrix_info.png" width=100%></a>
+   <figcaption>Figure 9. Transfer function identification: model information</figcaption>
+</figure>
+
+8. To plot training and validation results click on 'Next' button.
+
+<figure class="image" align="center">
+   <a href="../_static/tf_vis_col.png">
+   <img alt="tf_vis_col" src="../_static/tf_vis_col.png" width=100%></a>
+   <figcaption>Figure 10. Transfer function identification: visualization</figcaption>
+</figure>
+
+9. Click on "Push Model" to push the predicted data to the Seeq Workbench.
