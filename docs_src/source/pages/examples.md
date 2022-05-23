@@ -1,7 +1,3 @@
-# Examples
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
 ## Example 1. Ethyl Benzene Process: Recycle Column
 
 In the Ethyl Benzene (EB) process there is a stage to separate Benzene (B) from the product stream using a distillation column. The flow of distillate (D stream) and bottom product (B stream) are manipulated variables to control the condenser and the sump levels. The pressure of the column is controlled by manipulating the heat duty of the condenser. The temperature of the 14th stage (starting from the top) affects the product quality. This variable is controlled by manipulating the reboiler heat duty.
@@ -376,9 +372,9 @@ Insights:
 
 ### Transfer Function Model
 
-This model requieres more knowledge about the system identification and data selection. Otherwise it will end up with no solution for the problem or the identification process takes more time to run.
+This model requires more knowledge about system identification and data selection. Otherwise, it will end up with no solution for the problem or the identification process takes more time to run.
 
-1. Select MVs and CVs in the setup page.
+1. Select MVs and CVs on the setup page.
 
    - Manipulated variables:
      - Cooling water flow rate
