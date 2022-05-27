@@ -172,7 +172,7 @@ class AppBar(v.Card):
                      background_color='grey lighten-4',
                      hide_slider=True,
                      height=60,
-                     style_='width:100%; border-radius:12px')
+                     style_='width:98%; border-radius:12px')
 
         self.children = [self.tabs]
 
