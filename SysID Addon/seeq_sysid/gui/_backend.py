@@ -27,8 +27,16 @@ def pull_signals(url, grid='auto'):
                       status=spy.Status(quiet=True))
     if all_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
+    
+    if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
+        all_df.columns = all_df.spy.query_df['Name']
+    elif hasattr(all_df, 'query_df'):
+        all_df.columns = all_df.query_df['Name']
+    else:
+        raise AttributeError(
+            "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
+            "required for `seeq.addons.correlation")
 
-    all_df.columns = all_df.query_df['Name']
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
     if signal_df.empty:
@@ -53,7 +61,6 @@ def get_worksheet_url(jupyter_notebook_url):
     parsed = parse_url(jupyter_notebook_url)
     params = parse_qs(parsed.query)
     return f"{parsed.scheme}://{parsed.netloc}/workbook/{params['workbookId'][0]}/worksheet/{params['worksheetId'][0]}"
-
 
 def get_workbook_worksheet_workstep_ids(url):
     parsed = parse_url(url)

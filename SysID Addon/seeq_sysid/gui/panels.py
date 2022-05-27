@@ -330,7 +330,7 @@ class SSPanel(LeftPanel):
         # Drop Downs
         self.method_select = v.Select(tag='Methods',
                                       v_model='Least Square',
-                                      #                                       items=['N4SID', 'DMDc'],
+                                      # items=['N4SID', 'DMDc'],
                                       items=['Least Square'],
                                       color=self.colors['seeq_primary'],
                                       item_color=self.colors['seeq_primary'],
@@ -386,6 +386,29 @@ class SSPanel(LeftPanel):
                                 align='center')
 
         self.method_box = self.multiplier
+        
+        self.shift_type = v.Select(tag='Measured Variables',
+                                  v_model=[],
+                                  items=[],
+                                  color=self.colors['seeq_primary'],
+                                  item_color=self.colors['seeq_primary'],
+                                  dense=True,
+                                  class_='ml-4 pl-4 pt-4 my-0 py-0',
+                                  style_='max-width:150px; font-size:10pt',
+                                  outlined=False,
+                                  filled=True,
+                                  background_color='white',
+                                  placeholder='Select',
+                                  multiple=False,
+                                  solo=True)
+        self.shift_type.items = ['Initial', 'Mean']
+        self.shift_type.v_model= self.shift_type.items[0]
+        self.shift_type_label = v.Text(children=['Shift'], class_='white--text', style_='font-weight:bold', dense=True)
+
+        self.shift_type_layout = v.Layout(children=[self.shift_type_label, self.shift_type], 
+                                     dense=True,
+                                     style_='width:280px; height:45px; overflow: hidden',
+                                     class_='d-flex flex-row justify-start align-center pt-3')
 
         self.orders_panel_obj = v.ExpansionPanel(
             children=[v.ExpansionPanelHeader(children=['Model Order'],
@@ -394,7 +417,7 @@ class SSPanel(LeftPanel):
                                              align='center',
                                              dark=True),
                       v.ExpansionPanelContent(
-                          children=[v.Col(children=[self.method_box],
+                          children=[v.Col(children=[self.method_box, self.shift_type_layout],
                                           style_='font-size:14px; font-weight:bold',
                                           dark=True,
                                           align='center',
@@ -532,7 +555,6 @@ class NNPanel(LeftPanel):
             {'text': 'Low', 'sortable': False, 'value': 'Low', 'align': 'center'},
             {'text': 'Normal', 'sortable': False, 'value': 'Normal', 'align': 'center'},
             {'text': 'High', 'sortable': False, 'value': 'High', 'align': 'center'},
-            #     {'text': 'Age', 'sortable': False, 'value': 'Age', 'align': 'right'}
         ]
         self.help_table = v.DataTable()
         self.help_table.headers = columns
@@ -543,18 +565,10 @@ class NNPanel(LeftPanel):
         self.slider_help_tip_btn = v.Btn(icon=True, children=[v.Icon(children=['mdi-help-circle-outline'])])
         self.slider_help_tip_btn.on_event('click', self.help_action)
 
-        #         self.slider_help_tip = v.Tooltip(bottom=True,
-        #                                          max_width='290px',
-        #                                          v_slots=[{'name': 'activator',
-        #                                                                 'variable': 'help_tooltip',
-        #                                                                 'children': self.slider_help_tip_btn
-        #                                                                }], children=['Higher computaional cost requires more time but the accuracy is higher.'])
-
         self.close_help_dialog_btn = v.Btn(children=['CLOSE'], color='#007960', text=True)
         self.close_help_dialog_btn.on_event('click', self.close_help_action)
 
         help_card_content = [
-            #                              v.CardTitle(children=['Please Enter a Worksheet URL:']),
             self.help_table,
             self.close_help_dialog_btn
         ]
@@ -651,10 +665,3 @@ class NNPanel(LeftPanel):
 
     def close_help_action(self, *args):
         self.help_dialog.v_model = None
-
-    # Try Widgets
-
-# panel_ss = SSPanel()
-# panel_arx = ARXPanel()
-# panel_arx
-# panel_ss

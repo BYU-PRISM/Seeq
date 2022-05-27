@@ -5,7 +5,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='0.1',
+    version='0.2',
     packages=find_packages(),
     url='https://github.com/BYU-PRISM/Seeq',
     license='MIT',
@@ -23,9 +23,10 @@ setup(
         'plotly',
         'seeq',
         'tensorflow>=2.1',
-        'keras-tuner==1.0.4'
+        'keras-tuner==1.0.4',
+	  'mistune>=2.0.1'
     ],
-    keywords='Seeq Prism System Identification ARX Subspace State-Space Neural-Network Addon Time-Series',
+    keywords='Seeq Prism System Identification ARX Subspace State-Space Neural-Network Addon Time-Series Transfer Function',
     include_package_data=True,
     package_data={'seeq_sysid': ['data/seeq_logo.png']},
     classifiers=[

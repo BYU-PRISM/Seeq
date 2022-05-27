@@ -3,14 +3,20 @@ import ipyvuetify as v
 from .table_card import TableCard, TableItem, TableHeader
 from .figure_card import FigureCard
 
+from pandas import DataFrame
+
 
 # Visualization Class (Figures+Table)
-class FigureTable(v.Layout):
-    def __init__(self, *args, **kwargs):
-        class_ = 'd-flex flex-column justify-right ml-1'
-        style_ = 'width:100%; height:100%'
+class FigureTable(v.Card):
+    def __init__(self, 
+                 class_ = 'd-flex flex-column justify-start align-center ml-1 mr-1',
+                 style_ = 'width:100%; height:100%',
+                 *args, **kwargs):
+
         super().__init__(class_=class_,
                          style_=style_,
+                         flat=True,
+                         *args,
                          **kwargs)
 
         self.figure = FigureCard()
@@ -25,7 +31,7 @@ class FigureTable(v.Layout):
         for tag in self.table.items_list:
             tag.checkbox_item.v_model = all_value
 
-    def create(self, train_df, validation_df, units=None):
+    def create(self, train_df=DataFrame(), validation_df=DataFrame(), units=None):
         TableItem().reset()
         self.table.table_header.checkbox_header.v_model = False
 

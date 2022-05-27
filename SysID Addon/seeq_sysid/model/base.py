@@ -11,6 +11,8 @@ class Model:
         self.formula = None
         self.mv = None
         self.cv = None
+        self.nu = None
+        self.ny = None
         self.yp = None
         self.error = None
         self.error_best = 1e9

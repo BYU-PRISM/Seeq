@@ -7,3 +7,4 @@ plotly
 seeq
 tensorflow>=2.1
 keras-tuner==1.0.4
+mistune>=2.0.1 # not directly required

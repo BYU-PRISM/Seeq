@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; seeq-sysid  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/prism-icon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="User Guide" href="user_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #15A9D1" >
+            <a href="../index.html" class="icon icon-home"> seeq-sysid
+            <img src="../_static/Seeq_logo_darkBlue_sm.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What does Seeq-SysID do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_identification.html">System Identification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-ethyl-benzene-process-recycle-column">Example 1. Ethyl Benzene Process: Recycle Column</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arx-model">ARX Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sub-space-model">Sub Space Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neural-network-model">Neural Network Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transfer-function-model">Transfer Function Model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-two-series-reactors">Example 2. Two Series Reactors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">ARX Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Sub Space Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Neural Network Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Transfer Function Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viewongithub.html">View on Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #15A9D1" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">seeq-sysid</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/pages/examples.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
+<section id="example-1-ethyl-benzene-process-recycle-column">
+<h2>Example 1. Ethyl Benzene Process: Recycle Column<a class="headerlink" href="#example-1-ethyl-benzene-process-recycle-column" title="Permalink to this headline"></a></h2>
+<p>In the Ethyl Benzene (EB) process there is a stage to separate Benzene (B) from the product stream using a distillation column. The flow of distillate (D stream) and bottom product (B stream) are manipulated variables to control the condenser and the sump levels. The pressure of the column is controlled by manipulating the heat duty of the condenser. The temperature of the 14th stage (starting from the top) affects the product quality. This variable is controlled by manipulating the reboiler heat duty.</p>
+<figure class="image" align="center">
+   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/Column.png">
+   <img alt="Column" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/Column.png" width=90%></a>
+   <figcaption>Figure 1. Distillation Column</figcaption>
+</figure>
+<p>The process information is shown in Table 1.</p>
+<center>
+<table>
+<tr>
+<td colspan=1>
+     Table 1. Process informations
+</td>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Property</p></th>
+<th class="text-left head"><p>Description</p></th>
+<th class="text-center head"><p>Unit</p></th>
+<th class="text-center head"><p>Stream F</p></th>
+<th class="text-center head"><p>Stream D</p></th>
+<th class="text-center head"><p>Stream B</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mole fraction</p></td>
+<td class="text-left"><p>E</p></td>
+<td class="text-center"><p>%</p></td>
+<td class="text-center"><p>0.0001</p></td>
+<td class="text-center"><p>0.0001</p></td>
+<td class="text-center"><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-left"><p>B</p></td>
+<td class="text-center"><p>%</p></td>
+<td class="text-center"><p>0.5146</p></td>
+<td class="text-center"><p>0.9989</p></td>
+<td class="text-center"><p>0.0003</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td class="text-left"><p>EB</p></td>
+<td class="text-center"><p>%</p></td>
+<td class="text-center"><p>0.3354</p></td>
+<td class="text-center"><p>0.0010</p></td>
+<td class="text-center"><p>0.6905</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td class="text-left"><p>DEB</p></td>
+<td class="text-center"><p>%</p></td>
+<td class="text-center"><p>0.1500</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>0.3092</p></td>
+</tr>
+<tr class="row-even"><td><p>Temperature</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-center"><p>K</p></td>
+<td class="text-center"><p>432</p></td>
+<td class="text-center"><p>314</p></td>
+<td class="text-center"><p>390</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pressure</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-center"><p>atm</p></td>
+<td class="text-center"><p>0.39</p></td>
+<td class="text-center"><p>0.3</p></td>
+<td class="text-center"><p>0.5</p></td>
+</tr>
+<tr class="row-even"><td><p>Volume flow</p></td>
+<td class="text-left"><p></p></td>
+<td class="text-center"><p>m3/hr</p></td>
+<td class="text-center"><p>250</p></td>
+<td class="text-center"><p>88.5</p></td>
+<td class="text-center"><p>135.5</p></td>
+</tr>
+</tbody>
+</table>
+</tr>
+</center>
+<p>Insights:</p>
+<ul class="simple">
+<li><p>The distillate and the bottom product are highly inversely correlated with the reflux drum level and the sump level signals.</p></li>
+<li><p>The condenser and reboiler duties have a strong positive correlation with the stage 1 pressure and stage 20 temperature signals.</p></li>
+<li><p>The level has a ramp response while the temperature and pressure have first-order responses.</p></li>
+</ul>
+<p>We assume reflux drum level, sump level, Stage 1 pressure and last stage temperature as Controlled variables (CV) and the distillate flow, bottom product flow, condenser duty and reboiler duty as manipulated variables (MV).
+In the following sections, the distillation column is identified using different available models in SysID Add-on.</p>
+<section id="arx-model">
+<h3>ARX Model<a class="headerlink" href="#arx-model" title="Permalink to this headline"></a></h3>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <img alt="..." class="pull-right" src="../_static/leftpanel_arx.png" width=45%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div> 
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Distillate flow</p></li>
+<li><p>Bottom product flow</p></li>
+<li><p>Condenser duty</p></li>
+<li><p>Reboiler duty</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>Reflux drum level</p></li>
+<li><p>Sump level</p></li>
+<li><p>Stage 1 pressure</p></li>
+<li><p>Stage 20 temperature</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select minimum and maximum range for the model order and the input delay.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process. The hyperparameter optimizer obtains the best model order and delays to minimize the prediction error.</p></li>
+<li><p>Click on “Push Model” to push the Seeq Formula to the Seeq Workbench.</p></li>
+</ol>
+<p>To avoid overfitting and capturing the noise of the signals, select lower maximum order for the ARX model.</p>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_arx.png">
+   <img alt="ss_results" src="../_static/figuretable_arx.png" width=90%></a>
+   <figcaption>Figure 2. ARX result: Condenser Pressure</figcaption>
+</figure>
+</section>
+<section id="sub-space-model">
+<h3>Sub Space Model<a class="headerlink" href="#sub-space-model" title="Permalink to this headline"></a></h3>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <img alt="..." class="pull-right" src="../_static/leftpanel_ss.png" width=45%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div>
+</div>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Distillate flow</p></li>
+<li><p>Bottom product flow</p></li>
+<li><p>Condenser duty</p></li>
+<li><p>Reboiler duty</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>Reflux drum level</p></li>
+<li><p>Sump level</p></li>
+<li><p>Stage 1 pressure</p></li>
+<li><p>Stage 20 temperature</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select minimum and maximum range for the order multiplier. A lower multiplier leads to lower-order models.</p></li>
+<li><p>Select shift method.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process.</p></li>
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_ss.png">
+   <img alt="figuretable_ss" src="../_static/figuretable_ss.png" width=90%></a>
+   <figcaption>Figure 3. SubSpace results: Stage 20 Temperature</figcaption>
+</figure>
+</section>
+<section id="neural-network-model">
+<h3>Neural Network Model<a class="headerlink" href="#neural-network-model" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p></li>
+</ol>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <img alt="..." class="pull-right" src="../_static/nn_help.png" width=70%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Distillate flow</p></li>
+<li><p>Bottom product flow</p></li>
+<li><p>Condenser duty</p></li>
+<li><p>Reboiler duty</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>Reflux drum level</p></li>
+<li><p>Sump level</p></li>
+<li><p>Stage 1 pressure</p></li>
+<li><p>Stage 20 temperature</p></li>
+</ul>
+</li>
+</ul>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <img alt="..." class="pull-right" src="../_static/nn_mode.png" width=35%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div>
+<ol class="arabic simple" start="2">
+<li><p>Select the computation mode.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process.</p></li>
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_arx.png">
+   <img alt="figuretable_nn" src="../_static/figuretable_nn.png" width=90%></a>
+   <figcaption>Figure 4. Neural Network results: Reflux Drum Level</figcaption>
+</figure>
+</section>
+<section id="transfer-function-model">
+<h3>Transfer Function Model<a class="headerlink" href="#transfer-function-model" title="Permalink to this headline"></a></h3>
+<p>This model requieres more knowledge about the system identification and data selection. Otherwise it will end up with no solution for the problem or the identification process takes more time to run.</p>
+<figure class="image" align="center">
+   <a href="../_static/tf_note.png">
+   <img alt="figuretable_nn" src="../_static/tf_note.png" width=90%></a>
+   <figcaption>Figure 5. Ramp response of Reflux Drum Level</figcaption>
+</figure>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs in the setup page.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Distillate flow</p></li>
+<li><p>Bottom product flow</p></li>
+<li><p>Condenser duty</p></li>
+<li><p>Reboiler duty</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>Reflux drum level</p></li>
+<li><p>Sump level</p></li>
+<li><p>Stage 1 pressure</p></li>
+<li><p>Stage 20 temperature</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select training and validation condition. (Optional) This setting can be set and override in the Matrix page by clicking on the CV buttons. Click on ‘Next’ button.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_setup_col.png">
+   <img alt="tf_setup_col" src="../_static/tf_setup_col.png" width=65%></a>
+   <figcaption>Figure 6. Transfer function identification: Setup page</figcaption>
+</figure>
+<ol class="arabic simple" start="3">
+<li><p>Modify the identification matrix. Inactive unnecessary terms by right-clicking on them or switching them off in the setting menu.</p></li>
+<li><p>Select the model structure based on the system behavior.</p></li>
+<li><p>Enter lower bounds and upper bounds for each available term in the equation. (Optional)</p></li>
+<li><p>Modify and override training and validation conditions by clicking on the CV labels.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_conditions.png">
+   <img alt="tf_matrix_conditions" src="../_static/tf_matrix_conditions.png" width=100%></a>
+   <figcaption>Figure 7. Transfer function identification: selecting training and validation conditions</figcaption>
+</figure>
+<ol class="arabic simple" start="7">
+<li><p>Click on ‘Next’ button to start the identificaiton process. Step response will be shown up after this process.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_step.png">
+   <img alt="tf_matrix_step" src="../_static/tf_matrix_step.png" width=100%></a>
+   <figcaption>Figure 8. Transfer function identification: step response</figcaption>
+</figure>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_info.png">
+   <img alt="tf_matrix_info" src="../_static/tf_matrix_info.png" width=100%></a>
+   <figcaption>Figure 9. Transfer function identification: model information</figcaption>
+</figure>
+<ol class="arabic simple" start="8">
+<li><p>To plot training and validation results click on ‘Next’ button.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_vis_col.png">
+   <img alt="tf_vis_col" src="../_static/tf_vis_col.png" width=100%></a>
+   <figcaption>Figure 10. Transfer function identification: visualization</figcaption>
+</figure>
+<ol class="arabic simple" start="9">
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+</section>
+</section>
+<section id="example-2-two-series-reactors">
+<h2>Example 2. Two Series Reactors<a class="headerlink" href="#example-2-two-series-reactors" title="Permalink to this headline"></a></h2>
+<p>In this example an exothermic reaction occurs in two series reactors. Component A is the limiting reagent. The reaction conversion rate is calculated based on the concentration of component A <img src="https://render.githubusercontent.com/render/math?math=(C_A)">. The temperatures of both reactors <img src="https://render.githubusercontent.com/render/math?math=(T_1, T_2)"> are controlled by manipulating the cooling water flow rate.</p>
+<p align="center">
+ <img src="https://render.githubusercontent.com/render/math?math=\large A %2B B \rightarrow C">
+</p>
+<figure class="image" align="center">
+   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/S_Reactors.png">
+   <img alt="S_Reactors" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/S_Reactors.png" width=90%></a>
+   <figcaption>Figure 11. Two series reactors</figcaption>
+</figure>
+<p>Insights:</p>
+<ul class="simple">
+<li><p>The reactor’s temperatures are highly inversely correlated with the cooling water flow rate signal.</p></li>
+<li><p>The concentrations of component A have a strong positive correlation with the cooling water flow rate signal.</p></li>
+</ul>
+<section id="id1">
+<h3>ARX Model<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <a href="../_static/leftpanel_arx_ex2.png">
+    <img alt="leftpanel_arx_ex2" class="pull-right" src="../_static/leftpanel_arx_ex2.png" width=45%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div> 
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Cooling water flow rate</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>The reactor 1 Temperature</p></li>
+<li><p>The reactor 2 Temperature</p></li>
+<li><p>The concentration of component A in the reactor 1</p></li>
+<li><p>The concentration of component A in the reactor 2</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select minimum and maximum range for the model order and the input delay.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process. The hyperparameter optimizer obtains the best model order and delays to minimize the prediction error.</p></li>
+<li><p>Click on “Push Model” to push the Seeq Formula to the Seeq Workbench.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_arx_ex2.png">
+   <img alt="ss_results" src="../_static/figuretable_arx_ex2.png" width=90%></a>
+   <figcaption>Figure 12. ARX result: Example 2</figcaption>
+</figure>
+</section>
+<section id="id2">
+<h3>Sub Space Model<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <a href="../_static/leftpanel_ss_ex2.png">
+    <img alt="leftpanel_ss_ex2" class="pull-right" src="../_static/leftpanel_ss_ex2.png" width=45%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div>
+</div>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Cooling water flow rate</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>The reactor 1 Temperature</p></li>
+<li><p>The reactor 2 Temperature</p></li>
+<li><p>The concentration of component A in the reactor 1</p></li>
+<li><p>The concentration of component A in the reactor 2</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select minimum and maximum range for the order multiplier. A lower multiplier leads to lower-order models.</p></li>
+<li><p>Select shift method.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process.</p></li>
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_ss_ex2.png">
+   <img alt="figuretable_ss_ex2" src="../_static/figuretable_ss_ex2.png" width=90%></a>
+   <figcaption>Figure 13. SubSpace results: Example 2</figcaption>
+</figure>
+</section>
+<section id="id3">
+<h3>Neural Network Model<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="item active">
+  <div class="col-md-8 col-sm-8 col-xs-8">
+    <img alt="..." class="pull-right" src="../_static/leftpanel_nn_ex2.png" width=40%></a>
+  </div>
+   <div class="col-md-4 col-sm-4 col-xs-4">
+   <span class="pull-right">
+   </div>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs from the left panel.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Cooling water flow rate</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>The reactor 1 Temperature</p></li>
+<li><p>The reactor 2 Temperature</p></li>
+<li><p>The concentration of component A in the reactor 1</p></li>
+<li><p>The concentration of component A in the reactor 2</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select the computation mode.</p></li>
+<li><p>Select training and validation conditions.</p></li>
+<li><p>Click on ‘Identify’ to start the identification process.</p></li>
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/figuretable_nn_ex2.png">
+   <img alt="figuretable_nn_ex2" src="../_static/figuretable_nn_ex2.png" width=90%></a>
+   <figcaption>Figure 14. Neural Network results: Example 2</figcaption>
+</figure>
+</section>
+<section id="id4">
+<h3>Transfer Function Model<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p>This model requires more knowledge about system identification and data selection. Otherwise, it will end up with no solution for the problem or the identification process takes more time to run.</p>
+<ol class="arabic simple">
+<li><p>Select MVs and CVs on the setup page.</p>
+<ul class="simple">
+<li><p>Manipulated variables:</p>
+<ul>
+<li><p>Cooling water flow rate</p></li>
+</ul>
+</li>
+<li><p>Controlled variables:</p>
+<ul>
+<li><p>The reactor 1 Temperature</p></li>
+<li><p>The reactor 2 Temperature</p></li>
+<li><p>The concentration of component A in the reactor 1</p></li>
+<li><p>The concentration of component A in the reactor 2</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Select training and validation condition. (Optional) This setting can be set and override in the Matrix page by clicking on the CV buttons. Click on ‘Next’ button.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_setup_ex2.png">
+   <img alt="tf_setup_ex2" src="../_static/tf_setup_ex2.png" width=65%></a>
+   <figcaption>Figure 15. Transfer function identification: Setup page</figcaption>
+</figure>
+<ol class="arabic simple" start="3">
+<li><p>Modify the identification matrix. Inactive unnecessary terms by right-clicking on them or switching them off in the setting menu.</p></li>
+<li><p>Select the model structure based on the system behavior.</p></li>
+<li><p>Enter lower bounds and upper bounds for each available term in the equation. (Optional)</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_ex2.png">
+   <img alt="tf_matrix_ex2" src="../_static/tf_matrix_ex2.png" width=100%></a>
+   <figcaption>Figure 16. Transfer function identification: selecting training and validation conditions</figcaption>
+</figure>
+<ol class="arabic simple" start="6">
+<li><p>Click on ‘Next’ button to start the identificaiton process. Step response will be shown up after this process.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_step_ex2.png">
+   <img alt="tf_matrix_step_ex2" src="../_static/tf_matrix_step_ex2.png" width=60%></a>
+   <figcaption>Figure 17. Transfer function identification: step response</figcaption>
+</figure>
+<figure class="image" align="center">
+   <a href="../_static/tf_matrix_info_ex2.png">
+   <img alt="tf_matrix_info_ex2" src="../_static/tf_matrix_info_ex2.png" width=100%></a>
+   <figcaption>Figure 18. Transfer function identification: model information</figcaption>
+</figure>
+<ol class="arabic simple" start="7">
+<li><p>To plot training and validation results click on ‘Next’ button.</p></li>
+</ol>
+<figure class="image" align="center">
+   <a href="../_static/tf_vis_col.png">
+   <img alt="tf_vis_col" src="../_static/tf_vis_col.png" width=100%></a>
+   <figcaption>Figure 10. Transfer function identification: visualization</figcaption>
+</figure>
+<ol class="arabic simple" start="8">
+<li><p>Click on “Push Model” to push the predicted data to the Seeq Workbench.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="user_guide.html" class="btn btn-neutral float-left" title="User Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Mohammad Reza Babaei, Junho Park.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
