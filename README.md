@@ -1,3 +1,7 @@
+<!-- workflow badges -->
+[![CodeQL](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml)
+[![pages-build-deployment](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment)
+
 <p align="left">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png?raw=true" width="400" height="100"></p>
 

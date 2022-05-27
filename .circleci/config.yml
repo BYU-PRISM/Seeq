@@ -18,3 +18,4 @@ workflows:
   test_my_app:
     jobs:
       - build_test
+
