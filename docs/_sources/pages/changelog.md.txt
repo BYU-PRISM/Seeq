@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2
+
+- Transfer Function
+- Documentation added
+- Shift method added to SubSpace.
+- Installation made easier.
+- Open Worksheet moved to the Hamburger Menu.
+
 ## v0.1
 
 - Minor improvements
