@@ -28,6 +28,8 @@ If you want to install **seeq-sysid** as a Seeq Add-on Tool, you will need:
 
 ## User Installation (Seeq Data Lab)
 
+https://github.com/BYU-PRISM/Seeq/blob/a587646abcbbf23d3be6ec2b148007ae32937c27/docs_src/source/_static/videos/Installation.mp4
+
 1. Create a **new** Seeq Data Lab project and open the **Terminal** window
 2. Run `pip install seeq-sysid`
 3. Run `python -m seeq_sysid [--users <users_list> --groups <groups_list>]`
