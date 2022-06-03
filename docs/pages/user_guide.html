@@ -45,19 +45,6 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-use">How to Use</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interface">Interface</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#app-bar">App Bar</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#model-tab">Model Tab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#hamburger-menu">Hamburger Menu</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#left-panel">Left Panel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#figure">Figure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#table">Table</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -121,55 +108,6 @@
 <img alt="image" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/sysid-arx.png?raw=true" width=23%></a>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
-<p>Seeq System Identification (Seeq-SysID) is an add-on to create a model from available signals on the Seeq Workbench to predict the system behavior based on the input data. The prediction results can be pushed back to Seeq Workbench.</p>
-</section>
-<section id="how-to-use">
-<h2>How to Use<a class="headerlink" href="#how-to-use" title="Permalink to this headline"></a></h2>
-<p>SysID is launched from within Seeq Workbench after creating a worksheet and adding the signals to the worksheet. System identification is performed on a single worksheet and includes all of the available signals and manual conditions.</p>
-</section>
-<section id="workflow">
-<h2>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline"></a></h2>
-<ol class="arabic simple">
-<li><p>Add all relevant dataset signals to the trend view. Set the time range as desired. The data range should be long enough to capture significant variation in the signal. In the other words, selected data should be rich that represent all of the dynamics of the system. Also, selecting a long range of data may slow down the identification and simulation process.</p></li>
-<li><p>To improve the model quality and response time, select the training and validation conditions. (Optional)</p></li>
-</ol>
-<p align='center'>
-<a href="../_static/create_condition.gif">
-<img alt="image" src="../_static/create_condition.gif" width=80%></a>
-</p>
-<ol class="arabic simple" start="3">
-<li><p>From the Tools tab in Workbench, select Add-ons. Then click on System Identification.</p></li>
-<li><p>Modify the model setup and click on ‘Identify’.</p></li>
-<li><p>Validate the model and push the results to Workbench.</p></li>
-</ol>
-</section>
-<section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this headline"></a></h2>
-<p><a class="reference download internal" download="" href="../_downloads/fd729fe55c670e80322940548b6ca971/interface.gif"><span class="xref download myst"><img alt="User Interface" src="../_images/interface.gif" /></span></a></p>
-<section id="app-bar">
-<h3>App Bar<a class="headerlink" href="#app-bar" title="Permalink to this headline"></a></h3>
-<p>Contains Model Tabs, Seeq Logo and Hamburger Menu (App Menu)</p>
-<section id="model-tab">
-<h4>Model Tab<a class="headerlink" href="#model-tab" title="Permalink to this headline"></a></h4>
-<p>Switch between different types of model that is available in Seeq SysID add-on.</p>
-</section>
-<section id="hamburger-menu">
-<h4>Hamburger Menu<a class="headerlink" href="#hamburger-menu" title="Permalink to this headline"></a></h4>
-<p>Contains a list of options like Load Worksheet, User Guide and Support.</p>
-</section>
-</section>
-<section id="left-panel">
-<h3>Left Panel<a class="headerlink" href="#left-panel" title="Permalink to this headline"></a></h3>
-<p>The user can set up the model based on input/output signals and model complexity in this panel. The training and validation conditions can be selected in this section.</p>
-</section>
-<section id="figure">
-<h3>Figure<a class="headerlink" href="#figure" title="Permalink to this headline"></a></h3>
-<p>The prediction results for both training and validation conditions are shown in this panel.</p>
-</section>
-<section id="table">
-<h3>Table<a class="headerlink" href="#table" title="Permalink to this headline"></a></h3>
-<p>In this section, The user can show/hide each available signal. Also, there are options to change the style of each line.</p>
-</section>
 </section>
 </section>
 
