@@ -6,6 +6,8 @@
 Seeq SysID Add-on
 =========================================
 
+
+
 `Seeq-System Identification <https://github.com/BYU-PRISM/Seeq>`_ is a Seeq Add-on built in python to identify
 input and output relationship for the system to create **digital twin** models
 for various analytics and machine learning tasks. System dynamics are
@@ -21,12 +23,18 @@ real time optimization, etc.
 .. image:: https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/github_cover.png?raw=true
   :width: 700
   :align: center
- 
+
 |
 
-.. note::
+.. raw:: html
 
-   This documentation is under active development.
+    <div style="position: relative; padding-bottom: 5%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+      <iframe width="100%" height="400" src="https://www.youtube.com/embed/glWIzPPJRnQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+.. .. note::
+
+..    This documentation is under active development.
 
 Contents
 --------
@@ -43,14 +51,6 @@ Contents
    License <pages/license.md>
    Citation <pages/citation.md>
    View on Github <pages/viewongithub.md>
-
-
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 5%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-      <iframe width="100%" height="400" src="https://www.youtube.com/embed/glWIzPPJRnQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-
 
 .. Indices and tables
 .. ------------------
