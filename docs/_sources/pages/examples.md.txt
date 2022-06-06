@@ -174,6 +174,13 @@ To avoid overfitting and capturing the noise of the signals, select lower maximu
 
 ### Transfer Function Model
 
+<p>
+<video width="100%" height="100%" controls>
+  <source src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/a587646abcbbf23d3be6ec2b148007ae32937c27/docs_src/source/_static/videos/Tf%20Ex1.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</p>
+
 This model requieres more knowledge about the system identification and data selection. Otherwise it will end up with no solution for the problem or the identification process takes more time to run.
 
 <figure class="image" align="center">
@@ -264,6 +271,13 @@ Insights:
 
 ### ARX Model
 
+<p>
+<video width="100%" height="100%" controls>
+  <source src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/a587646abcbbf23d3be6ec2b148007ae32937c27/docs_src/source/_static/videos/Arx%20Ex2.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</p>
+
 <div class="item active">
   <div class="col-md-8 col-sm-8 col-xs-8">
     <a href="../_static/leftpanel_arx_ex2.png">
@@ -299,6 +313,13 @@ Insights:
 </figure>
 
 ### Sub Space Model
+
+<p>
+<video width="100%" height="100%" controls>
+  <source src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/a587646abcbbf23d3be6ec2b148007ae32937c27/docs_src/source/_static/videos/Ss%20Ex2.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</p>
 
 <div class="item active">
   <div class="col-md-8 col-sm-8 col-xs-8">
@@ -338,6 +359,13 @@ Insights:
 </figure>
 
 ### Neural Network Model
+
+<p>
+<video width="100%" height="100%" controls>
+  <source src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/a587646abcbbf23d3be6ec2b148007ae32937c27/docs_src/source/_static/videos/Nn%20Ex2.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</p>
 
 <div class="item active">
   <div class="col-md-8 col-sm-8 col-xs-8">
