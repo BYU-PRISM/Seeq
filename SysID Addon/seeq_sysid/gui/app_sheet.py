@@ -148,6 +148,8 @@ class AppSheet(v.Card):
         self.validate_model_btn.loading = False
 
     def push_model(self, *_):
+        self.push_model_btn.loading = True
+
         if self.general_validation():
             return None
 
@@ -155,16 +157,19 @@ class AppSheet(v.Card):
         # Measured Data
         signal_df = self.signal_df[self.model.cv]
         push_formula(signal_df, self.model.formula, self.workbook_id, self.addon_worksheet)
+        self.push_model_btn.loading = False
 
     def push_data(self, *_):
+        self.push_model_btn.loading = True
         signal_df = self.create_dataset()
         self.all_results = self.model.forecast(signal_df)
         self.all_results.set_index(signal_df.index, inplace=True)
         # self.all_results[self.model.cv] = signal_df[self.model.cv]
-        for cv_i in self.model.cv:    
+        for cv_i in self.model.cv:
             self.all_results[cv_i + ' original'] = signal_df[cv_i]
 
         push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
+        self.push_model_btn.loading = False
 
     def general_validation(self):
         return 0
@@ -265,112 +270,103 @@ class NNAppSheet(AppSheet):
         self.model.Min = self.signal_df[self.model.mv + self.model.cv].min()
         self.model.Max = self.signal_df[self.model.mv + self.model.cv].max()
 
-        
-        
 
-        
-        
 class TFAppSheet(v.Card):
     def __init__(self):
-        class_="d-flex justify-center flex-column mx-auto"
-        style_='width:100%; height:850px; border-radius:12px'
+        class_ = "d-flex justify-center flex-column mx-auto"
+        style_ = 'width:100%; height:850px; border-radius:12px'
         super().__init__(class_=class_,
                          style_=style_,
                          flat=True,
                          elevation=0)
-        
-        
+
         self.worksheet_url = ''
-    
+
         # Server Mode
         self.addon_worksheet = 'From TF AddOn'
         self.workbook_id = None
         self.worksheet_url = None
         
-        try:
-            sdl_notebook_url = jupyter_notebook_url
-            self.workbook_id, self.worksheet_id, self.workstep_id = get_workbook_worksheet_workstep_ids(sdl_notebook_url)
-            self.worksheet_url = get_worksheet_url(sdl_notebook_url)
-            self.signal_df, self.capsule_df, self.tags_df = pull_signals(self.worksheet_url)
+        self.signal_df = None
+        self.capsule_df = None
+        self.tags_df = None
 
-        except:
-            self.signal_df = DataFrame()
-            self.capsule_df = DataFrame()
-            self.tags_df = DataFrame()
-                
         self.all_results = None
-                
+
         self.window = v.Window(v_model=0, class_='mt-3', style_='height:100%')
-        
+
         # Import Sheet
         self.import_sheet = Setup()
-        self.import_sheet.set_data(self.signal_df.columns.to_list(), self.capsule_df.columns.to_list())
-        self.import_window = v.WindowItem(children=[self.import_sheet], style_='width:100%', transition='none', reverse_transition='none')
-        
+        # self.import_sheet.set_data(self.signal_df.columns.to_list(), self.capsule_df.columns.to_list())
+        self.import_window = v.WindowItem(children=[self.import_sheet], style_='width:100%', transition='none',
+                                          reverse_transition='none')
+
         # Matrix Sheet x2
         self.matrix_sheet = TransferMatrix()
-        self.matrix_window = v.WindowItem(children=[self.matrix_sheet], style_='width:100%', transition='none', reverse_transition='none')
-        
+        self.matrix_window = v.WindowItem(children=[self.matrix_sheet], style_='width:100%', transition='none',
+                                          reverse_transition='none')
+
         # Visualization Sheet
-        self.visual_sheet = FigureTable(style_ = 'width:100%; height:780px')
-        self.visual_window = v.WindowItem(children=[v.Card(children=[self.visual_sheet])], style_='width:98%', transition='none', reverse_transition='none')
-    
+        self.visual_sheet = FigureTable(style_='width:100%; height:780px')
+        self.visual_window = v.WindowItem(children=[v.Card(children=[self.visual_sheet])], style_='width:98%',
+                                          transition='none', reverse_transition='none')
+
         # Set Windows
         self.window.children = [self.import_window, self.matrix_window, self.matrix_window, self.visual_window]
-        
-        
+
         self.app_bar = AppBar(title_list=['Import Data', 'Model Setup', 'Step Response', 'Visualization'])
 
         self.app_bar.title.children = [self.app_bar.title_list[self.window.v_model]]
-                
-        self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(), self.app_bar.next_btn]
-       
-        
+
+        self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(),
+                                      self.app_bar.next_btn]
+
         self.worksheet_url_box = self.app_bar.ham_menu.worksheet_url
         self.ok_url_dialog_btn = self.app_bar.ham_menu.ok_url_dialog_btn
         self.close_url_dialog_btn = self.app_bar.ham_menu.close_url_dialog_btn
-        
-        self.ok_url_dialog_btn.on_event('click',self.ok_url_action)
-        self.close_url_dialog_btn.on_event('click',self.close_url_action)
-        
-        
+
+        self.ok_url_dialog_btn.on_event('click', self.ok_url_action)
+        self.close_url_dialog_btn.on_event('click', self.close_url_action)
+
         self.children = [self.window, self.app_bar]
-        
+
         # Actions
         self.import_sheet.mv_select.on_event('change', self.update_panel)
         self.import_sheet.cv_select.on_event('change', self.update_panel)
         self.app_bar.back_btn.on_event('click', self.back_button_action)
-        self.app_bar.push_btn.on_event('click', self.push_data)
-        
+        self.app_bar.push_btn.on_event('click', self.push_model)
+
         self.update_nav()
         self.update_panel()
-        
-    
+
     def update_nav(self):
         page_num = self.window.v_model
-        
+
         self.app_bar.title.children = [self.app_bar.title_list[self.window.v_model]]
-        
+
         if page_num == 0:
             self.app_bar.back_btn.disabled = True
             self.app_bar.next_btn.on_event('click', self.import_sheet_next_action)
             self.app_bar.next_btn.children = ['Next >']
-            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(), self.app_bar.next_btn]
-            
-        elif page_num == len(self.app_bar.title_list)-1:
-            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(), self.app_bar.push_btn]
-            
+            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(),
+                                          self.app_bar.next_btn]
+
+        elif page_num == len(self.app_bar.title_list) - 1:
+            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(),
+                                          self.app_bar.push_btn]
+
         elif page_num == 2:
             self.app_bar.back_btn.disabled = False
-            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(), self.app_bar.next_btn]
+            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(),
+                                          self.app_bar.next_btn]
             self.app_bar.next_btn.on_event('click', self.step_sheet_next_action)
-            
+
         elif page_num == 1:
             self.app_bar.back_btn.disabled = False
             self.app_bar.next_btn.on_event('click', self.matrix_sheet_next_action)
-            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(), self.app_bar.next_btn]
-            
-            
+            self.app_bar.tabs.children = [self.app_bar.back_btn, v.Spacer(), self.app_bar.title, v.Spacer(),
+                                          self.app_bar.next_btn]
+
     def update_panel(self, *_):
         mv_select = self.import_sheet.mv_select
         cv_select = self.import_sheet.cv_select
@@ -382,38 +378,38 @@ class TFAppSheet(v.Card):
             self.app_bar.next_btn.disabled = False
 
         else:
-            self.app_bar.next_btn.disabled = True  
-            
-    def import_sheet_next_action(self, item, *args):        
+            self.app_bar.next_btn.disabled = True
+
+    def import_sheet_next_action(self, item, *args):
         mv, cv = self.import_sheet.get_data()
-        
+
         item.loading = True
         self.matrix_sheet = TransferMatrix()
-        self.matrix_sheet.create_matrix(signal_df=self.signal_df[mv + cv], capsule_df=self.capsule_df, 
-                                        mv=mv, cv=cv, 
+        self.matrix_sheet.create_matrix(signal_df=self.signal_df[mv + cv], capsule_df=self.capsule_df,
+                                        mv=mv, cv=cv,
                                         train_capsules=self.import_sheet.train_condition_select.v_model,
                                         valid_capsules=self.import_sheet.valid_condition_select.v_model)
         self.matrix_window.children = [self.matrix_sheet]
         self.window.children = [self.import_window, self.matrix_window, self.matrix_window, self.visual_window]
-        
+
         item.loading = False
         self.window.v_model = 1
         self.update_nav()
-            
-    def matrix_sheet_next_action(self, item, *args):        
+
+    def matrix_sheet_next_action(self, item, *args):
         item.loading = True
 
         self.matrix_sheet.run()
-    
+
         item.loading = False
         self.window.v_model = 2
         self.update_nav()
-        
+
     def step_sheet_next_action(self, item, *args):
         item.loading = True
-        
+
         self.matrix_sheet.to_validation()
-        self.visual_sheet = FigureTable(style_ = 'width:100%; height:780px')
+        self.visual_sheet = FigureTable(style_='width:100%; height:780px')
         self.visual_sheet.create(self.matrix_sheet.train_df, self.matrix_sheet.validation_df)
 
         self.window.v_model = 3
@@ -422,16 +418,16 @@ class TFAppSheet(v.Card):
         self.visual_window.children = [self.visual_sheet]
 
         item.loading = False
-        
+
     def back_button_action(self, *args):
         self.window.v_model += -1
         self.update_nav()
-        
+
     def run(self):
         clear_output()
         display(HTML("""<style>.container {width:100% !important}</style>"""))
         return self
-    
+
     def close_url_action(self, *args):
         self.worksheet_url_box.v_model = self.worksheet_url
         self.app_bar.ham_menu.url_dialog.v_model = None
@@ -443,15 +439,19 @@ class TFAppSheet(v.Card):
         self.worksheet_url_box.v_model = self.worksheet_url
         self.ok_url_dialog_btn.loading = False
         self.app_bar.ham_menu.url_dialog.v_model = None
-        
+
     def push_data(self, *_):
+        self.app_bar.push_btn.loading = True
+
         self.all_results = self.matrix_sheet.validation_df.copy()
-        for cv_i in self.matrix_sheet.model.cv:    
+        for cv_i in self.matrix_sheet.model.cv:
             self.all_results.rename(columns={cv_i: cv_i + ' original'}, inplace=True)
-        
+
         self.all_results.index = to_datetime(self.all_results.index)
         push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
         
+        self.app_bar.push_btn.loading = False
+
     def set_data(self, signal_df: DataFrame = DataFrame(), capsule_df: DataFrame = DataFrame(), tags_df=DataFrame(),
                  workbook_id: str = ''):
 
@@ -459,15 +459,17 @@ class TFAppSheet(v.Card):
         self.capsule_df = capsule_df
         self.tags_df = tags_df
         self.workbook_id = workbook_id
-        
+
         # Set Imported Data
         self.import_sheet.set_data(self.signal_df.columns.to_list(), self.capsule_df.columns.to_list())
+        
+    def push_model(self, *_):
+        self.app_bar.push_btn.loading = True
 
-        
-        
-        
-        
-        
-        
-        
+        df = self.signal_df.copy()
+        self.matrix_sheet.model.create_formula(df, self.tags_df)
+        # Measured Data
+        signal_df = self.signal_df[self.matrix_sheet.model.cv]
+        self.app_bar.push_btn.loading = False
+        push_formula(signal_df, self.matrix_sheet.model.formula, self.workbook_id, self.addon_worksheet)
         

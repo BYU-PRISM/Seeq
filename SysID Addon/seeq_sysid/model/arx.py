@@ -212,11 +212,11 @@ class ARX(Model):
         for i in range(n_y):
             formula = ''
             for j in range(n_a):
-                formula += ' {}.move({}s)*({})\n+'.format(yf_name[i], (j + 1) * (-timestep), self.p['a'][j][i])
+                formula += ' {}.move({}s)*({})\n+'.format(yf_name[i], (j + 1) * timestep, self.p['a'][j][i])
 
             for k in range(n_u):
                 for j in range(n_bk):
-                    formula += ' {}.move({}s)*({})\n+'.format(uf_name[k], (j + 1) * (-timestep), self.p['b'][i][j][k])
+                    formula += ' {}.move({}s)*({})\n+'.format(uf_name[k], (j + 1) * timestep, self.p['b'][i][j][k])
 
             formula += str(self.p['c'][i])
 
