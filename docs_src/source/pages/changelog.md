@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3
+
+- Push formula added for Transfer Function
+- ARX Seeq formula fixed
+- Mistune package conflict resolved
+
 ## v0.2
 
 - Transfer Function

@@ -186,16 +186,16 @@ class TransferMatrix(v.Card):
             chip = self.matrix_dic[cv_name][mv_i]
         
             if chip.tf_card_btn.value:
-                # try:
-                ys_df = self.model.step_response(mv_name=mv_i, cv_name=cv_name)
-                self.temp_df = ys_df
-                chip.order, chip.gain_gui, chip.tau_gui, chip.theta_gui, chip.zeta_gui = self.model.get_model_info(mv_name=mv_i, cv_name=cv_name)
-                chip.ts, chip.tr, chip.os = self.model.get_step_info(mv_name=mv_i, cv_name=cv_name)
-                chip.update_result_dialog(df=ys_df)     
-                chip.switch_chip()
-                # except:
-                # chip.switch_chip()
-                # chip.children = [chip.no_solution_card]
+                try:
+                    ys_df = self.model.step_response(mv_name=mv_i, cv_name=cv_name)
+                    self.temp_df = ys_df
+                    chip.order, chip.gain_gui, chip.tau_gui, chip.theta_gui, chip.zeta_gui = self.model.get_model_info(mv_name=mv_i, cv_name=cv_name)
+                    chip.ts, chip.tr, chip.os = self.model.get_step_info(mv_name=mv_i, cv_name=cv_name)
+                    chip.update_result_dialog(df=ys_df)     
+                    chip.switch_chip()
+                except:
+                    chip.switch_chip()
+                    chip.children = [chip.no_solution_card]
             
             else:
                 chip.disabled = True

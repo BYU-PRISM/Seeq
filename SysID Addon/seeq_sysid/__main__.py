@@ -48,7 +48,7 @@ def install_app(sdl_url_, *, sort_key='a', permissions_group: list = None, permi
     add_on_details = {
         "Name": 'System Identification',
         "Description": "Build mathematical models of dynamic systems from observed input–output data",
-        "Icon": "fa fa-th",
+        "Icon": "fa fa-star-half-o",
         "Target URL": f'{sdl_url_}/apps/{DEPLOYMENT_FOLDER}/{SYSID_NOTEBOOK}',
         "Link Type": "window",
         "Window Details": "toolbar=0,location=0,left=800,top=400,height=1000,width=1400",

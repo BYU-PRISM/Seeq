@@ -1,6 +1,8 @@
 from .tf_item import TransferItem, TransferOption
 from numpy import empty, array, zeros, arange
 from pandas import DataFrame
+from scipy.signal import TransferFunction
+from .arx import create_formula_variable_name
 
 
 class TF(TransferItem):
@@ -9,6 +11,7 @@ class TF(TransferItem):
         self.y_ss = DataFrame()
         self.models = {}
         self.dummy = None
+        self.formula = None
         
     def add_model(self, cv_name, model: TransferItem):
         self.models[cv_name] = model
@@ -37,7 +40,6 @@ class TF(TransferItem):
         yp_df = yp_df.set_index(df.index)
             
         return yp_df
-
 
     def predict(self, u_df, cv_name):
         u_df = u_df.copy()
@@ -104,8 +106,6 @@ class TF(TransferItem):
         model = self.models[cv_name]
         option_item = model.option_dict[mv_name]
         return option_item.get_model_info()
-        
-
 
     def set_sim_time(self):
         # set max time constant for each output (CV)
@@ -120,3 +120,61 @@ class TF(TransferItem):
                         model.tau_max = option_item.tau
             
             model.sim_time = 4 * model.tau_max
+
+    def create_formula(self, df, tags):
+        y_name = self.cv
+
+        yf_name = create_formula_variable_name(y_name)
+
+        formula_dic = {}
+        for tag in range(len(yf_name)):
+            formula_dic[yf_name[tag]] = tags[tags['Name'] == y_name[tag]]
+
+        formula_list = []
+
+        for cv_i in range(len(self.cv)):
+            cv_name = y_name[cv_i]
+            y_ss = df[cv_name].iloc[0]
+            y_opt = self.models[cv_name]
+
+            u_name = y_opt.mv
+            uf_name = create_formula_variable_name(u_name)
+            formula = ''
+            for tag in range(len(uf_name)):
+                formula_dic[uf_name[tag]] = tags[tags['Name'] == u_name[tag]]
+
+            timestep = y_opt.dt
+
+            for mv_i in range(len(y_opt.mv)):
+                mv_name = y_opt.mv[mv_i]
+                u_opt = y_opt.option_dict[mv_name]
+                u_ss = df[mv_name].iloc[0]
+
+                tf_sys = TransferFunction(u_opt.num, u_opt.den)
+                tfd_sys = tf_sys.to_discrete(dt=timestep, method='zoh')
+                num = tfd_sys.num
+                den = tfd_sys.den
+
+                n_a = len(den)
+                n_b = len(num)
+
+                for i in range(1, n_a):
+                    formula += ' ({}.move({}s)-{})*({})\n+'.format(yf_name[cv_i], i * timestep, y_ss, -den[i])
+
+                for j in range(n_b):
+                    formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i], j * timestep + u_opt.theta, u_ss,
+                                                                   num[j])
+
+            formula += str(y_ss)
+
+            formula_list.append({
+                'Name': '{} tf'.format(y_name[cv_i]),
+                'Type': 'CalculatedSignal',
+                'Description': 'TF Model {} Formula '.format(y_name[cv_i]),
+                'Formula': formula,
+                'Formula Parameters': formula_dic
+            })
+
+        self.formula = DataFrame(formula_list)
+
+        return self.formula

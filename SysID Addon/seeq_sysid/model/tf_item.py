@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 class TransferOption:
     idx = 0
+
     def __init__(self, 
                  order=1,
                  no_gain=0,
@@ -51,6 +52,9 @@ class TransferOption:
         self.ts = None
         self.tr = None
         self.os = None
+
+        self.num = None
+        self.den = None
         
     def calc_step_info(self, t, yout):
         yout = abs(yout)
@@ -74,7 +78,7 @@ class TransferOption:
             elif self.zeta < 0:
                 self.os = nan
             else:
-                self.os= 100*exp(-pi*self.zeta/sqrt(1-self.zeta**2))
+                self.os = 100*exp(-pi*self.zeta/sqrt(1-self.zeta**2))
 
             # try:
             #     self.ts = t[next(len(yout)-i for i in range(2,len(yout)-1) if abs(yout[-i]/yout[-1])<1.02)]-t[0]
@@ -327,18 +331,43 @@ class TransferItem(GEKKO):
         # save optimal values
         for (i, mv_i) in enumerate(self.mv):
             option_item: TransferOption = self.option_dict[mv_i]
+            option_item.num = [1]
+            option_item.den = []
 
             if not option_item.no_gain:
                 option_item.gain = self.gain[i][-1]
+                option_item.num = [option_item.gain]
 
             if option_item.no_ramp:
                 option_item.tau = self.tau[i][-1]
+            else:
+                option_item.tau = 1.0
 
-            if option_item.is_dt:
-                option_item.theta = self.theta[i][-1]
             if option_item.order == 2:
                 if option_item.is_zeta:
                     option_item.zeta = self.zeta[i][-1]
+                    option_item.den.append(option_item.tau**2)
+                    option_item.den.append(2*option_item.tau*option_item.zeta)
+                else:
+                    option_item.den.append(option_item.tau ** 2)
+                    option_item.den.append(0)
+            elif option_item.order == 1:
+                option_item.den.append(option_item.tau)
+
+            if option_item.is_dt:
+                option_item.theta = self.theta[i][-1]
+            else:
+                option_item.theta = 0
+
+            if option_item.no_ramp:
+                option_item.tau = self.tau[i][-1]
+                option_item.den.append(1)
+            else:
+                if option_item.order == 1:
+                    option_item.den = [1, 0]
+                elif option_item.order == 2:
+                    option_item.den = [1, 0, 0]
+                option_item.tau = None
 
         self.status = True
 
