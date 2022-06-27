@@ -470,6 +470,5 @@ class TFAppSheet(v.Card):
         self.matrix_sheet.model.create_formula(df, self.tags_df)
         # Measured Data
         signal_df = self.signal_df[self.matrix_sheet.model.cv]
-        self.app_bar.push_btn.loading = False
         push_formula(signal_df, self.matrix_sheet.model.formula, self.workbook_id, self.addon_worksheet)
-        
+        self.app_bar.push_btn.loading = False
