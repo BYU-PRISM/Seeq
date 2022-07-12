@@ -1,19 +1,11 @@
-runtime: python
-env: flex
-runtime_config:
-  python_version: 3
-entrypoint: voila --port=$PORT --no-browser --template vuetify-default --enable_nbextensions=True sysid_notebook.ipynb
+channels:
+  - conda-forge
+  - defaults
 dependencies:
-  - python==3.8.10
-  - pip==21.0
-  - pip: 
-    - ipyvuetify
-    - ipywidgets
-    - gekko
-    - numpy
-    - pandas
-    - plotly
-    - seeq
-    - scipy
-    - voila
-    - voila-vuetify
+  - appmode
+  - ipyvuetify
+  - ipywidgets
+  - numpy
+  - pandas
+  - plotly
+  - scipy
