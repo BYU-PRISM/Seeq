@@ -2,6 +2,10 @@ import ipyvuetify as v
 import ipywidgets as widgets
 from pathlib import Path
 from .utils import add_tooltip
+from .data_editor import DataEditor
+
+import io
+from pandas import read_csv
 
 
 class HamburgerMenu(v.Menu):
@@ -9,7 +13,8 @@ class HamburgerMenu(v.Menu):
     Create a Hamburger Menu in the right corner of App Bar
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, server=True, **kwargs):
+        self.server = server
         # Create menu icon button
         self.hamburger_button = v.AppBarNavIcon(v_on='menuData.on', class_='align-center mb-2 mt-3 ml-3 mr-0')
         
@@ -20,6 +25,14 @@ class HamburgerMenu(v.Menu):
                                                                        children=[v.Icon(color='#212529',
                                                                                         children=['mdi-folder-search-outline'])]),
                                                       v.ListItemActionText(children=[f'Open Worksheet'])
+                                                      ])
+        
+        # load worksheet option
+        self.load_data_editor = v.ListItem(value='open',
+                                         children=[v.ListItemAction(class_='mr-2 ml-0',
+                                                                       children=[v.Icon(color='#212529',
+                                                                                        children=['mdi-folder-edit-outline'])]),
+                                                      v.ListItemActionText(children=[f'Data Editor'])
                                                       ])
         
 
@@ -47,6 +60,9 @@ class HamburgerMenu(v.Menu):
         
         # Open Worksheet Dialog & Events
         self.load_worksheet.on_event('click', self.load_worksheet_action)
+        
+        # Open Data Editor
+        self.load_data_editor.on_event('click', self.load_data_editor_action)
 
         self.close_url_dialog_btn = v.Btn(children=['CLOSE'], color='#007960', text=True)
         self.close_url_dialog_btn.on_event('click', self.close_url_action)
@@ -57,25 +73,45 @@ class HamburgerMenu(v.Menu):
         self.worksheet_url = v.TextField(v_model='', placeholder='Worksheet URL', class_='mx-4', color='#007960',
                                          clearable=True)
         self.worksheet_url.on_event('paste.stop', lambda *args: None)
+        
+        box_layout = widgets.Layout(display='flex',
+                flex_flow='column',
+                align_items='center',
+                width='100%')
+        self.upload_btn = widgets.FileUpload(layout=widgets.Layout(width='50%'), style={'button_color': '#007960'})
+        self.upload_btn.button_style = 'success'
+        self.upload_btn.observe(lambda _:self.upload_file(self.upload_btn), 'data')
+        self.upload_lay = widgets.HBox(children=[self.upload_btn], layout=box_layout)
+        
+        self.sl_switch = v.Switch(v_model=False, label='Local', inset=True, class_='ma-0 pa-0 mt-4 ml-2', dense=True, no_gutters=True, ripple=False, height='0px')
+        self.sl_switch.hide()
+        self.sl_switch.on_event('change', self.import_mode_switch)
+        
+        self.control_dialog_btn_layout = v.Layout(children=[v.Spacer(), self.close_url_dialog_btn, self.ok_url_dialog_btn])
 
-        control_dialog_btn_layout = v.Layout(children=[v.Spacer(), self.close_url_dialog_btn, self.ok_url_dialog_btn])
-
-        dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:']),
+        self.dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:', v.Spacer(), self.sl_switch]),
                                self.worksheet_url,
-                               control_dialog_btn_layout]
+                               self.control_dialog_btn_layout]
 
-        dialog_card = v.Card(children=dialog_card_content, class_='pa-2 ma-3 my-0', flat=True)
+        self.dialog_card = v.Card(children=self.dialog_card_content, class_='pa-2 ma-3 my-0', flat=True)
 
         self.url_dialog = v.Dialog(name='OpneWB',
-                                   children=[v.Card(children=[dialog_card])],
+                                   children=[v.Card(children=[self.dialog_card])],
                                    v_model=False,
                                    max_width='600px')
 
         self.url_dialog.on_event('keydown.stop', lambda *args: None)
         
+        self.data_editor = DataEditor()
+        self.data_editor_dialog = v.Dialog(name='OpneDE',
+                           children=[v.Card(children=[self.data_editor], shaped=True)],
+                           v_model=False,
+                           max_width='60%')
         
-        self.items = [self.load_worksheet, v.Divider(), self.feedback_button, v.Divider(), self.user_guide_button, self.url_dialog]
-
+        self.items = [self.load_worksheet, v.Divider(), self.load_data_editor, v.Divider(), self.feedback_button, v.Divider(), self.user_guide_button, self.url_dialog, self.data_editor_dialog]
+        
+        self.local_data = None
+        
         super().__init__(offset_y=True,
                          offset_x=False,
                          dense=True,
@@ -101,7 +137,29 @@ class HamburgerMenu(v.Menu):
 
     def ok_url_action(self, *args):
         self.url_dialog.v_model = None
+        
+    # DataEditor event functions
+    def load_data_editor_action(self, *args):
+        self.data_editor_dialog.v_model = True
+        
+    def import_mode_switch(self, item, *args):
+        if item.v_model:
+            self.dialog_card_content = [v.CardTitle(children=['Please Import CSV file:', v.Spacer(), self.sl_switch]),
+                                        self.upload_lay,
+                                        self.control_dialog_btn_layout]
+        else:
+            self.dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:', v.Spacer(), self.sl_switch]),
+                                        self.worksheet_url,
+                                        self.control_dialog_btn_layout]
 
+        self.dialog_card.children = self.dialog_card_content
+            
+    def upload_file(self, x):
+        try:
+            uploaded_file = x.data[0]
+            self.local_data = read_csv(io.BytesIO(uploaded_file), index_col='Time')
+        except:
+            print('csv read error! Make sure that DateTime data are in the "Time" column.')
 
 class AppBar(v.Card):
     """

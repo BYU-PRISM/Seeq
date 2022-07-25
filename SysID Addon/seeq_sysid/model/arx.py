@@ -43,6 +43,7 @@ class ARX(Model):
         super().__init__()
         self.model_struct = 'ARX'
 
+        self.best_model = None
         self.p = None
         # AR part order
         self.na_min = 0
@@ -69,18 +70,20 @@ class ARX(Model):
             for i_b in range(self.nb_min, self.nb_max + 1):
                 for i_k in range(self.nk_min, self.nk_max + 1):
                     model = GEKKO(remote=False)
-                    yp, p, _K = model.sysid(t=t, u=u_df, y=y_df, na=i_a, nb=i_b, nk=i_k, pred='meas', shift='calc')
+                    yp, p, K = model.sysid(t=t, u=u_df, y=y_df, na=i_a, nb=i_b, nk=i_k, pred='meas', shift='calc')
 
                     e = (y_df.to_numpy() - yp) ** 2
                     e = sum(sum(e)) / len(e)
 
                     if e < self.error_best:
+                        self.best_model = model
                         self.error_best = e
                         self.p = p
                         self.na = i_a
                         self.nb = i_b
                         self.nk = i_k
                         self.yp = yp
+                        self.K = K
 
         self.status = True
 

@@ -1,4 +1,4 @@
-ipyvuetify
+ipyvuetify>=1.2.2
 ipywidgets
 gekko
 numpy

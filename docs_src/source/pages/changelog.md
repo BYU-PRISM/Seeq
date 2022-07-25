@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4
+
+- Export ARX model (Gekko sysid outputs as a pickle)
+- Data Editor Added
+
 ## v0.3
 
 - Push formula added for Transfer Function
