@@ -2,6 +2,8 @@ from copy import deepcopy
 
 import ipyvuetify as v
 from pandas import DataFrame, to_datetime
+from pickle import dump
+import os
 
 from ._backend import push_formula, push_signal
 
@@ -56,6 +58,7 @@ class AppSheet(v.Card):
         self.push_model_btn = panel.push_model_btn
         self.identify_model_btn = panel.identify_model_btn
         self.validate_model_btn = panel.validate_model_btn
+        self.export_model_btn = panel.export_model_btn
 
         self.signal_df = DataFrame()
         self.capsule_df = DataFrame()
@@ -68,6 +71,7 @@ class AppSheet(v.Card):
         self.identify_model_btn.on_event('click', self.identify_system)
         self.validate_model_btn.on_event('click', self.validate_model)
         self.push_model_btn.on_event('click', self.push_model)
+        self.export_model_btn.on_event('click', self.export_model)
 
         self.children = [self.panel, self.canvas]
 
@@ -170,6 +174,9 @@ class AppSheet(v.Card):
 
         push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
         self.push_model_btn.loading = False
+        
+    def export_model(self):
+        pass
 
     def general_validation(self):
         return 0
@@ -209,6 +216,8 @@ class ARXAppSheet(AppSheet):
 
         self.nk_min = self.panel.nk_min
         self.nk_max = self.panel.nk_max
+        
+        self.n_export = 0
 
     def prepare_params_spec(self):
         self.model.na_min = int(self.na_min.v_model)
@@ -221,6 +230,14 @@ class ARXAppSheet(AppSheet):
         self.model.nk_max = int(self.nk_max.v_model)
 
         self.model.model_struct = self.model_struct.v_model
+          
+    def export_model(self, *args):
+        if not os.path.exists('export'):
+            os.makedirs('export')
+        self.n_export += 1
+        with open('export/ARX{}.pkl'.format(self.n_export), 'wb') as file:
+            dump([self.model.yp, self.model.p, self.model.K], file)
+            file.close()
 
 
 class SSAppSheet(AppSheet):
