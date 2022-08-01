@@ -1,4 +1,4 @@
-Time,Manual Condition 1,Manual Condition 2
+Time,Training Condition,Validation Condition
 2021-01-01 07:08:30+00:00,1,0
 2021-01-01 07:08:40+00:00,1,0
 2021-01-01 07:08:50+00:00,1,0

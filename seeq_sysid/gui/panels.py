@@ -5,7 +5,7 @@ import ipywidgets as widgets
 
 import plotly.express as px
 
-from .utils import create_eq
+from .utils import create_eq, add_tooltip
 
 
 class LeftPanel(v.Card):
@@ -163,12 +163,17 @@ class LeftPanel(v.Card):
         self.identify_push_card = v.Card(
             children=[self.identify_model_btn, self.validate_model_btn, self.push_model_btn],
             style_='background:none', flat=True, class_='d-flex justify-space-between')
+        
+        self.export_model_btn = v.Btn(children=[v.Icon(children=['mdi-export-variant'], color='white')], icon=True)
+        self.export_model_btn_tp = add_tooltip(self.export_model_btn, 'Export Model')
 
         # Title
-        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
+        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left align-center', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
-                                      "{} Settings".format(model_name)])
+                                      "{} Settings".format(model_name),
+                                      v.Spacer(),
+                                      self.export_model_btn])
 
         # Set Tooltips
 
@@ -288,10 +293,13 @@ class ARXPanel(LeftPanel):
         self.orders_layout = v.Layout(children=[self.orders_panel], class_='mb-6', dense=True, flat=False)
 
         # Arx
-        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
+        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left align-center', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
-                                      "{} Settings".format('ARX')])
+                                      "{} Settings".format('ARX'),
+                                      v.Spacer(),
+                                      self.export_model_btn_tp
+                                     ])
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
@@ -429,7 +437,7 @@ class SSPanel(LeftPanel):
         self.orders_layout = v.Layout(children=[self.orders_panel], class_='mb-6', dense=True, flat=False)
 
         # Sub-Space
-        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
+        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left align-center', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
                                       '{} Settings'.format(self.model_name)])
@@ -630,7 +638,7 @@ class NNPanel(LeftPanel):
                                   color='white', class_='px-3 py-1 mb-4 mt-0')
 
         # Neural Network
-        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left', style_='font-size:20px; background:none',
+        self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left align-center', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
                                       '{} Settings'.format('Neural Network')])
