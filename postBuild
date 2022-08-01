@@ -1,5 +1,6 @@
 #!/bin/bash
 
+pip install voila==0.3.0
 pip install gekko
 pip install seeq
 pip install keras-tuner==1.0.4
