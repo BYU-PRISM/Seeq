@@ -2,10 +2,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - appmode
+#   - appmode
   - ipyvuetify
   - ipywidgets
   - numpy
   - pandas
   - plotly
-  - scipy
+#   - scipy
