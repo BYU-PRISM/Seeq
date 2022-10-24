@@ -201,7 +201,7 @@ class ARXPanel(LeftPanel):
         # Expanding Panel
         # ARX ModelStructure
         self.model_struct_select = v.Select(v_model='ARX',
-                                            items=['ARX', 'FIR'],
+                                            items=['ARX', 'FIR', 'ARIMAX'],
                                             color=self.colors['seeq_primary'],
                                             item_color=self.colors['seeq_primary'],
                                             dense=True,
@@ -296,7 +296,7 @@ class ARXPanel(LeftPanel):
         self.title = v.Card(class_='pt-5 mb-7 mx-0 d-flex justify-left align-center', style_='font-size:20px; background:none',
                             dark=True, center=True, align='center', flat=True,
                             children=[title_icon, v.Divider(vertical=True, class_='mx-2'),
-                                      "{} Settings".format('ARX'),
+                                      "{} Settings".format('Time Series'),
                                       v.Spacer(),
                                       self.export_model_btn_tp
                                      ])

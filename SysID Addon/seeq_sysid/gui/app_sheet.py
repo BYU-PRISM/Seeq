@@ -156,10 +156,12 @@ class AppSheet(v.Card):
 
         if self.general_validation():
             return None
-
-        self.model.create_formula(self.tags_df)
+        
         # Measured Data
         signal_df = self.signal_df[self.model.cv]
+
+        self.model.create_formula(self.tags_df, signal_df, workbook_id=self.workbook_id, worksheet_name=self.addon_worksheet)
+
         push_formula(signal_df, self.model.formula, self.workbook_id, self.addon_worksheet)
         self.push_model_btn.loading = False
 
