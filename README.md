@@ -171,7 +171,7 @@ For more information about adding this addon to the seeq workbench
 You can get started by cloning the repository with the command:
 
 ```shell
-git clone https://github.com/BYU-PRISM/Seeq.git
+git clone https://github.com/BYU-PRISM/Seeq.git --branch develop
 ```
 
 ## Installation from source
@@ -186,6 +186,10 @@ Once your virtual environment is activated, you can install **seeq-sysid** from 
 Go to the setup.py directory (Seeq/'SysID Addon')
 ```shell
 python setup.py install --user
+```
+Additional step (only on Seeq server):
+```shell
+python -m seeq_sysid [--users <users_list> --groups <groups_list>]
 ```
 
 *Note:* Remember that the `seeq` module version in your local environment should match the Seeq server version
