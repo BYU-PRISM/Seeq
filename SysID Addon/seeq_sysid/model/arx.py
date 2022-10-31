@@ -355,7 +355,11 @@ class ARX(Model):
             
             for i in range(n_y):                
                 formula = ''
-                formula += '{} - {}'.format(yf_name[i], yf_name[i]+'am')
+                formula += '({} - {})'.format(yf_name[i], yf_name[i]+'am')
+                
+                # integration order
+                for j in range(self.nh):
+                    formula += '.runningDelta()'
             
                 formula_list.append({'Name': '{} arx error'.format(y_name[i]),
                                      'Type': 'CalculatedSignal',
@@ -371,7 +375,7 @@ class ARX(Model):
             n_v = self.nv
             
             for i in range(n_y):
-                formula_dic[yf_name[i]+'ae'] = tags[tags['Name'] == y_name[tag]+' arx error']
+                formula_dic[yf_name[i]+'ae'] = tags[tags['Name'] == y_name[i]+' arx error']
                 formula = ' {}\n+'.format(yf_name[i]+'am')
                 for j in range(n_v):
                     formula += ' {}.move({}s)*({})\n+'.format(yf_name[i]+'ae', (j+1) * timestep, self.p['d'][i][j][0])

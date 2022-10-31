@@ -5,7 +5,7 @@ from pandas import DataFrame, to_datetime
 from pickle import dump
 import os
 
-from ._backend import push_formula, push_signal
+from ._backend import push_formula, push_signal, hide_temp_formula
 
 from .figure_table import FigureTable
 from .panels import LeftPanel, ARXPanel, SSPanel, NNPanel
@@ -163,6 +163,10 @@ class AppSheet(v.Card):
         self.model.create_formula(self.tags_df, signal_df, workbook_id=self.workbook_id, worksheet_name=self.addon_worksheet)
 
         push_formula(signal_df, self.model.formula, self.workbook_id, self.addon_worksheet)
+        
+        if 'MA' in self.model.model_struct:
+            hide_temp_formula(self.workbook_id, self.addon_worksheet)
+        
         self.push_model_btn.loading = False
 
     def push_data(self, *_):
