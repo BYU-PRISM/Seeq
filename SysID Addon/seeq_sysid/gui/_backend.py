@@ -35,7 +35,7 @@ def pull_signals(url, grid='auto'):
     else:
         raise AttributeError(
             "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
-            "required for `seeq.addons.correlation")
+            "required for `seeq_sysid")
 
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
