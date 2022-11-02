@@ -134,8 +134,8 @@ Neural networks are a set of neurons contacting each other using corresponding w
 Inputs of the network are input(s), delayed input(s), output(s), and delayed output(s) of the system. The number of delays given to the inputs and outputs of the system depends on its complexity. After specifying the network’s structure (number of hidden layers, number of neurons in each layer, inputs, and output of the network), weights and biases will be initialized randomly. Normalized data will be passed through the network, identification error will be calculated, the error backpropagates through the network, and weights and biases will be updated till the Mean of Square Error (MSE) meats the specified criteria then the training procedure will be terminated. Now the network is ready to mimic the system’s behavior and can be used as a model which correlates the input(s) and output(s) of the system.
 
 <figure class="image" align="center">
-   <a href="../_static/nnid-flow.svg">
-   <img alt="neuralnetwork_flowchart" src="../_static/nnid-flow.svg" width=90%></a>
+   <a href="../_static/nnid-flow.jpg">
+   <img alt="neuralnetwork_flowchart" src="../_static/nnid-flow.jpg" width=90%></a>
    </p>
    <figcaption>Figure 4. Neural network identification flowchart</figcaption>
 </figure>
