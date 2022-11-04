@@ -223,6 +223,12 @@ class ARXAppSheet(AppSheet):
         self.nk_min = self.panel.nk_min
         self.nk_max = self.panel.nk_max
         
+        self.nv_min = self.panel.nv_min
+        self.nv_max = self.panel.nv_max
+        
+        self.nh_min = self.panel.nh_min
+        self.nh_max = self.panel.nh_max
+        
         self.n_export = 0
 
     def prepare_params_spec(self):
@@ -234,6 +240,12 @@ class ARXAppSheet(AppSheet):
 
         self.model.nk_min = int(self.nk_min.v_model)
         self.model.nk_max = int(self.nk_max.v_model)
+        
+        self.model.nv_min = int(self.nv_min.v_model)
+        self.model.nv_max = int(self.nv_max.v_model)
+        
+        self.model.nh_min = int(self.nh_min.v_model)
+        self.model.nh_max = int(self.nh_max.v_model)
 
         self.model.model_struct = self.model_struct.v_model
           

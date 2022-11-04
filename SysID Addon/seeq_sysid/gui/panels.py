@@ -207,7 +207,7 @@ class ARXPanel(LeftPanel):
                                             dense=True,
                                             outlined=False,
                                             class_='pl-3 my-0 py-0',
-                                            style_='width: 150px; font-size:14px',
+                                            style_='width: 150px; font-size:12px',
                                             filled=True,
                                             align='top',
                                             background_color='white',
@@ -220,7 +220,7 @@ class ARXPanel(LeftPanel):
         self.model_struct = v.Row(children=[v.Row(children=['Type: ', v.Spacer()],
                                                   dense=True,
                                                   align='top',
-                                                  class_='mt-2',
+                                                  class_='mt-2 py-0',
                                                   no_gutters=True,
                                                   style_='font-weight:bold; color:white; font-size:13px'),
                                             self.model_struct_select],
@@ -266,6 +266,30 @@ class ARXPanel(LeftPanel):
                         class_='d-flex justify-right',
                         dense=True,
                         style_='font-weight:bold; color:white; font-size:13px', align='center')
+        
+        # ARIMAX
+        
+        self.nv_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
+                                  style_='width:30px', align='top', disabled=True)
+        self.nv_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2 mr-1', color='white', dark=True,
+                                  style_='width:30px', align='top', disabled=True)
+        self.nv_text = v.Text(children=['Moving Average'])
+        self.nv = v.Row(children=[v.Row(children=[self.nv_text, create_eq('$(n_v):$', 'white', 2, top='0px')],
+                                        class_='mt-0', no_gutters=True), v.Spacer(), self.nv_min, self.nv_max],
+                        class_='d-flex justify-right',
+                        dense=True,
+                        style_='font-weight:bold; color:white; font-size:13px', align='center')
+        
+        
+        self.nh_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
+                                  style_='width:5px', align='top', disabled=True)
+        self.nh_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2 mr-1', color='white', dark=True,
+                                  style_='width:5px', align='top', disabled=True)
+        self.nh = v.Row(children=[v.Row(children=['Integral', create_eq('$(n_h):$', 'white', 2, top='0px')],
+                                        class_='mt-0', no_gutters=True), v.Spacer(), self.nh_min, self.nh_max],
+                        class_='d-flex justify-right',
+                        dense=True,
+                        style_='font-weight:bold; color:white; font-size:13px', align='center')
 
         self.orders_panel_obj = v.ExpansionPanel(children=[
             v.ExpansionPanelHeader(children=['Model Structure'],
@@ -278,14 +302,16 @@ class ARXPanel(LeftPanel):
             v.ExpansionPanelContent(
                 children=[v.Col(children=[
                     self.model_struct,
-                    self.na, self.nb, self.nk],
+                    self.na, self.nb, self.nk, self.nv, self.nh],
                     style_='font-size:14px; font-weight:bold',
                     dark=True,
                     align='center',
                     no_gutters=True,
                     class_='my-0 py-0 px-0 ml-0',
                     color='white',
-                    dense=True)])],
+                    dense=True)],
+               style_='max-height: 210px; overflow:auto',
+               class_='my-0 py-0')],
             style_='background-color:#007960')
 
         self.orders_panel = v.ExpansionPanels(children=[self.orders_panel_obj], dense=True, style_='width: 300px',
@@ -315,14 +341,44 @@ class ARXPanel(LeftPanel):
         if item.v_model == 'ARX':
             self.na_min.v_model = '2'
             self.na_max.v_model = '2'
+            self.nv_min.v_model = '0'
+            self.nv_max.v_model = '0'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '0'
+            self.nv_min.disabled = True
+            self.nv_max.disabled = True
+            self.nh_min.disabled = True
+            self.nh_max.disabled = True
             self.na_min.disabled = False
             self.na_max.disabled = False
-
+            
         if item.v_model == 'FIR':
             self.na_min.v_model = '0'
             self.na_max.v_model = '0'
+            self.nv_min.v_model = '0'
+            self.nv_max.v_model = '0'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '0'
             self.na_min.disabled = True
             self.na_max.disabled = True
+            self.nv_min.disabled = True
+            self.nv_max.disabled = True
+            self.nh_min.disabled = True
+            self.nh_max.disabled = True
+            
+        if item.v_model == 'ARIMAX':
+            self.na_min.v_model = '2'
+            self.na_max.v_model = '2'
+            self.nv_min.v_model = '1'
+            self.nv_max.v_model = '2'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '1'
+            self.nv_min.disabled = False
+            self.nv_max.disabled = False
+            self.nh_min.disabled = False
+            self.nh_max.disabled = False
+            self.na_min.disabled = False
+            self.na_max.disabled = False
 
 
 # State-Space Panel

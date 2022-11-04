@@ -209,6 +209,8 @@ class ARX(Model):
                 yp = vstack([yp, y_p])
                 
         if (self.model_struct == 'ARIMAX') or (self.model_struct == 'ARMAX'):
+            if nb == 0:
+                nu = 0
             for k in range(ni, lu - nb - nk):
                 y_p = zeros(ny)
                 for i in range(ny):
