@@ -23,19 +23,21 @@ def pull_signals(url, grid='auto'):
         return DataFrame(), DataFrame(), DataFrame()
     search_all_df = search_df[search_df['Type'].str.contains('al')]
 
-    all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='ID', quiet=True,
+    all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='Name', quiet=True,
                       status=spy.Status(quiet=True))
+    all_df = all_df[search_all_df['Name']]
+    
     if all_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
     
-    if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
-        all_df.columns = all_df.spy.query_df['Name']
-    elif hasattr(all_df, 'query_df'):
-        all_df.columns = all_df.query_df['Name']
-    else:
-        raise AttributeError(
-            "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
-            "required for `seeq_sysid")
+    # if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
+    #     all_df.columns = all_df.spy.query_df['Name']
+    # elif hasattr(all_df, 'query_df'):
+    #     all_df.columns = all_df.query_df['Name']
+    # else:
+    #     raise AttributeError(
+    #         "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
+    #         "required for `seeq_sysid")
 
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
