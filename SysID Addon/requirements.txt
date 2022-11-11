@@ -8,3 +8,4 @@ seeq
 tensorflow>=2.1
 keras-tuner==1.0.4
 scipy
+wheel>=0.38.0 # not directly required, pinned by Snyk to avoid a vulnerability
