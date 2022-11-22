@@ -103,7 +103,7 @@ The first order plus deadtime is the simplest form of the transfer function. The
 </p>
 
 <figure class="image" align="center">
-   <img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/fopdt.png?raw=true" align="center">
+   <img src="../_static/fopdt.png?raw=true" align="center">
    </p>
    <figcaption>Figure 1. FOPDT step response</figcaption>
 </figure>
@@ -116,7 +116,7 @@ The step response of SOPDT is usually S-shaped. In the SOPDT equation <img src="
 </p>
 
 <figure class="image" align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/sopdt.png?raw=true" align="center">
+<img src="../_static/sopdt.png?raw=true" align="center">
    </p>
    <figcaption>Figure 2. SOPDT step response</figcaption>
 </figure>
@@ -126,8 +126,8 @@ The step response of SOPDT is usually S-shaped. In the SOPDT equation <img src="
 Neural networks are a set of neurons contacting each other using corresponding weight coefficients. There are many kinds of neural networks, according to their application. Multilayer Perceptron is commonly used for control applications because of its simplicity and fast response. This neural network is made up of three sections: the input layer, the hidden layer(s), and the output layer. An input layer, where the input data comes in. It is conventional to normalize data before calculations to avoid neuron saturation. Neuron saturation is a state that which a neuron gives a constant value for each entering data. The output layer receives the output data and denormalizes the results. The layers between the input layer and the output layer call the hidden layer(s) where. The number of these layers and their neurons can vary depending on the complexity of the system. Increasing hidden layers and neurons require more data and time to train the network.
 
 <figure class="image" align="center">
-   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg">
-   <img alt="simple_nn" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg?raw=true" width=90%></a>
+   <a href="../_static/FF3.svg">
+   <img alt="simple_nn" src="../_static/FF3.svg?raw=true" width=90%></a>
    <figcaption>Figure 3. A simple neural network with one hidden layer</figcaption>
 </figure>
 

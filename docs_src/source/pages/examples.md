@@ -5,8 +5,8 @@
 In the Ethyl Benzene (EB) process there is a stage to separate Benzene (B) from the product stream using a distillation column. The flow of distillate (D stream) and bottom product (B stream) are manipulated variables to control the condenser and the sump levels. The pressure of the column is controlled by manipulating the heat duty of the condenser. The temperature of the 14th stage (starting from the top) affects the product quality. This variable is controlled by manipulating the reboiler heat duty.
 
 <figure class="image" align="center">
-   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/Column.png">
-   <img alt="Column" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/Column.png" width=90%></a>
+   <a href="../_static/Column.png">
+   <img alt="Column" src="../_static/Column.png" width=90%></a>
    <figcaption>Figure 1. Distillation Column</figcaption>
 </figure>
 
@@ -258,8 +258,8 @@ In this example an exothermic reaction occurs in two series reactors. Component 
 </p>
 
 <figure class="image" align="center">
-   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/S_Reactors.png">
-   <img alt="S_Reactors" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/S_Reactors.png" width=90%></a>
+   <a href="../_static/S_Reactors.png">
+   <img alt="S_Reactors" src="../_static/S_Reactors.png" width=90%></a>
    <figcaption>Figure 11. Two series reactors</figcaption>
 </figure>
 

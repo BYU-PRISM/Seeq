@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation" href="installation.html" />
-    <link rel="prev" title="What does Seeq-SysID do?" href="introduction.html" /> 
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,7 +40,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">What does Seeq-SysID do?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">System Identification</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#arx-model">ARX model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#state-space-model">State Space model</a></li>
@@ -167,7 +167,7 @@ For the sake of simplicity first, order and second-order transfer functions are 
 <img src="https://render.githubusercontent.com/render/math?math=\large \tau_p \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{\tau_p \ s %2B 1}" > 
 </p>
 <figure class="image" align="center">
-   <img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/fopdt.png?raw=true" align="center">
+   <img src="../_static/fopdt.png?raw=true" align="center">
    </p>
    <figcaption>Figure 1. FOPDT step response</figcaption>
 </figure>
@@ -179,7 +179,7 @@ For the sake of simplicity first, order and second-order transfer functions are 
 <img src="https://render.githubusercontent.com/render/math?math=\large \tau_p^2 \frac{d^2y}{dt^2} %2B 2 \tau_p \zeta \frac{dy(t)}{dt} = -y(t)%2B K_p u(t-\theta_p) \ \Large \xrightarrow[\hspace{1cm}]\mathscr{L} \ \frac{y(s)}{u(s)} = \frac{K_p e^{-\theta s}}{(\tau_p \ s)^2 %2B 2\tau_p\zeta %2B   1}" > 
 </p>
 <figure class="image" align="center">
-<img src="https://github.com/BYU-PRISM/Seeq/blob/TF/docs/images/sopdt.png?raw=true" align="center">
+<img src="../_static/sopdt.png?raw=true" align="center">
    </p>
    <figcaption>Figure 2. SOPDT step response</figcaption>
 </figure>
@@ -189,8 +189,8 @@ For the sake of simplicity first, order and second-order transfer functions are 
 <h2>Neural Network model<a class="headerlink" href="#neural-network-model" title="Permalink to this headline"></a></h2>
 <p>Neural networks are a set of neurons contacting each other using corresponding weight coefficients. There are many kinds of neural networks, according to their application. Multilayer Perceptron is commonly used for control applications because of its simplicity and fast response. This neural network is made up of three sections: the input layer, the hidden layer(s), and the output layer. An input layer, where the input data comes in. It is conventional to normalize data before calculations to avoid neuron saturation. Neuron saturation is a state that which a neuron gives a constant value for each entering data. The output layer receives the output data and denormalizes the results. The layers between the input layer and the output layer call the hidden layer(s) where. The number of these layers and their neurons can vary depending on the complexity of the system. Increasing hidden layers and neurons require more data and time to train the network.</p>
 <figure class="image" align="center">
-   <a href="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg">
-   <img alt="simple_nn" src="https://raw.githubusercontent.com/BYU-PRISM/Seeq/TF/docs/images/FF3.svg?raw=true" width=90%></a>
+   <a href="../_static/FF3.svg">
+   <img alt="simple_nn" src="../_static/FF3.svg?raw=true" width=90%></a>
    <figcaption>Figure 3. A simple neural network with one hidden layer</figcaption>
 </figure>
 <p>Inputs of the network are input(s), delayed input(s), output(s), and delayed output(s) of the system. The number of delays given to the inputs and outputs of the system depends on its complexity. After specifying the network’s structure (number of hidden layers, number of neurons in each layer, inputs, and output of the network), weights and biases will be initialized randomly. Normalized data will be passed through the network, identification error will be calculated, the error backpropagates through the network, and weights and biases will be updated till the Mean of Square Error (MSE) meats the specified criteria then the training procedure will be terminated. Now the network is ready to mimic the system’s behavior and can be used as a model which correlates the input(s) and output(s) of the system.</p>
@@ -206,7 +206,7 @@ For the sake of simplicity first, order and second-order transfer functions are 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="What does Seeq-SysID do?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

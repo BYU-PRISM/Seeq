@@ -14,8 +14,12 @@ def pull_signals(url, grid='auto'):
     start = worksheet.display_range['Start']
     end = worksheet.display_range['End']
 
-    search_df = spy.search(url, estimate_sample_period=worksheet.display_range, quiet=True,
-                           status=spy.Status(quiet=True))
+    try:
+        search_df = spy.search(url, estimate_sample_period=worksheet.display_range, quiet=True,
+                               status=spy.Status(quiet=True))
+    except:
+        search_df = spy.search(url, estimate_sample_period=worksheet.display_range, status=spy.Status(quiet=True))
+
     capsules_list = search_df[search_df['Type'].str.contains('CalculatedCondition')]['Name'].to_list()
     signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
 
@@ -23,19 +27,25 @@ def pull_signals(url, grid='auto'):
         return DataFrame(), DataFrame(), DataFrame()
     search_all_df = search_df[search_df['Type'].str.contains('al')]
 
-    all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='ID', quiet=True,
-                      status=spy.Status(quiet=True))
+    try:
+        all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='Name', quiet=True,
+                          status=spy.Status(quiet=True))
+    except:
+        all_df = spy.pull(search_all_df, start=start, end=end, grid=grid, header='Name', status=spy.Status(quiet=True))
+        
+    all_df = all_df[search_all_df['Name']]
+    
     if all_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
     
-    if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
-        all_df.columns = all_df.spy.query_df['Name']
-    elif hasattr(all_df, 'query_df'):
-        all_df.columns = all_df.query_df['Name']
-    else:
-        raise AttributeError(
-            "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
-            "required for `seeq_sysid")
+    # if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
+    #     all_df.columns = all_df.spy.query_df['Name']
+    # elif hasattr(all_df, 'query_df'):
+    #     all_df.columns = all_df.query_df['Name']
+    # else:
+    #     raise AttributeError(
+    #         "A call to `spy.pull` was successful but the response object does not contain the `spy.query_df` property "
+    #         "required for `seeq_sysid")
 
     all_df.dropna(inplace=True)
     signal_df = all_df[signal_list]
@@ -78,9 +88,33 @@ def get_workbook_worksheet_workstep_ids(url):
 
 
 def push_signal(df, workbook_id, worksheet_name):
-    spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
+    try:
+        spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True), quiet=True)
+    except:
+        spy.push(df, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True))
 
 
 def push_formula(df, formula, workbook_id, worksheet_name):
-    spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
-             quiet=True)
+    try:
+        spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
+                 quiet=True)
+    except:
+        spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True))
+
+def hide_temp_formula(workbook_id, worksheet_name):
+    try:
+        workbook_df = spy.workbooks.search({'ID':workbook_id}, quiet=True, status=spy.Status(quiet=True))
+        workbook = spy.workbooks.pull(workbooks_df=workbook_df, quiet=True, status=spy.Status(quiet=True))[0]
+    except:
+        workbook_df = spy.workbooks.search({'ID':workbook_id}, status=spy.Status(quiet=True))
+        workbook = spy.workbooks.pull(workbooks_df=workbook_df, status=spy.Status(quiet=True))[0]
+        
+    worksheet = workbook.worksheet(worksheet_name)
+    items = worksheet.display_items
+    
+    workbook.worksheet(worksheet_name).display_items = items[~items['Name'].str.contains('arx')]
+    
+    try:
+        spy.workbooks.push(workbooks=workbook, quiet=True, status=spy.Status(quiet=True))
+    except:
+        spy.workbooks.push(workbooks=workbook, status=spy.Status(quiet=True))

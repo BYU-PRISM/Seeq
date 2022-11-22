@@ -191,7 +191,7 @@ class LeftPanel(v.Card):
 # ARX Model Panel
 class ARXPanel(LeftPanel):
     def __init__(self, *args, **kwargs):
-        model_name = 'ARX'
+        model_name = 'TimeSeries'
         super().__init__(model_name=model_name,
                          *args, **kwargs)
 

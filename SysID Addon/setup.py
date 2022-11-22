@@ -5,7 +5,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='0.4',
+    version='0.4.1',
     packages=find_packages(),
     url='https://github.com/BYU-PRISM/Seeq',
     license='MIT',

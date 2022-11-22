@@ -347,8 +347,11 @@ class ARX(Model):
             })
             
         if 'MA' in self.model_struct:
-            tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
-                            quiet=True)
+            try:
+                tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+                                quiet=True)
+            except:
+                tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
             
             for tag in range(len(yf_name)):
                 formula_dic[yf_name[tag]+'am'] = tags[tags['Name'] == y_name[tag]+' arx model']
@@ -364,8 +367,11 @@ class ARX(Model):
                                      'Formula Parameters': formula_dic
                 })
                 
-            tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
-                            quiet=True)
+            try:
+                tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+                                quiet=True)
+            except:
+                tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
             
             # Moving Average Order
             n_v = self.nv

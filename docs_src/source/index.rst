@@ -42,7 +42,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   What does Seeq-SysID do? <pages/introduction.md>
+   Introduction <pages/introduction.md>
    System Identification <pages/system_identification.md>
    Installation <pages/installation.md>
    User Guide <pages/user_guide.md>

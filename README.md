@@ -201,6 +201,9 @@ run `developer_notebook.ipynb` notebook there.
 
 # Changelog
 
+## v0.4.1
+- Hotfix for R57+ (search, pull, push functions)
+
 ## v0.4
 
 - Export ARX model (Gekko sysid outputs as a pickle)
@@ -248,7 +251,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.4
+seeq-sysid v0.4.1
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```
