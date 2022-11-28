@@ -36,8 +36,8 @@ The System Identification Add-on supports the construction of a variety of dynam
 
 ## ARX model
 ARX model is a system identification model that uses the linear correlation between previous and future values. ARX model consists of previous output terms (y) and previous input (u) terms multiplied by the linear coefficients (a, b). The linear combination of past input and output value computes the one-step-ahead prediction of output value(y<sub>k+1</sub>).
-Multiple iterations of the one-step-ahead prediction return the multi-step prediction (from y<sub>k+1</sub> to y<sub>k+n</sub>). The time window of the past input and output terms is shifted toward next segment for every iteration for multi-step prediction.
-Here is an example formular with <img src="https://render.githubusercontent.com/render/math?math=\large n_a=3"> and <img src="https://render.githubusercontent.com/render/math?math=\large n_b=2"> for the single input and single output system,
+Multiple iterations of the one-step-ahead prediction return the multi-step prediction (from y<sub>k+1</sub> to y<sub>k+n</sub>). The time window of the past input and output terms is shifted toward the next segment for every iteration for multi-step prediction.
+Here is an example formula with <img src="https://render.githubusercontent.com/render/math?math=\large n_a=3"> and <img src="https://render.githubusercontent.com/render/math?math=\large n_b=2"> for the single input and single output system,
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{0} y_{k} %2B a_{1} y_{k-1} %2B a_{2} y_{k-2} %2B b_{0} u_{k} %2B b_{1} u_{k-1}" >
 </p>
@@ -55,7 +55,7 @@ Here is an example formular with <img src="https://render.githubusercontent.com/
 <img src="https://render.githubusercontent.com/render/math?math=\large n_c">: Delay between input and output  
 <img src="https://render.githubusercontent.com/render/math?math=\large k">: present time step  
 
-Here is another example formular with **delay**  <img src="https://render.githubusercontent.com/render/math?math=\small (n_a=3, n_b=2, n_c=2)">,  
+Here is another example formula with **delay**  <img src="https://render.githubusercontent.com/render/math?math=\small (n_a=3, n_b=2, n_c=2)">,  
 
 <p align="center">
 <img src="https://render.githubusercontent.com/render/math?math=\large y_{k %2B 1}=a_{1} y_{k} %2B a_{2} y_{k-1} %2B a_{3} y_{k-2} %2B b_{1} u_{k-2-2} %2B b_{2} u_{k-1-2}" >
@@ -143,7 +143,7 @@ If you want to install **seeq-sysid** as a Seeq Add-on Tool, you will need:
 
 - Enable Add-on Tools (or External Tools) in the Seeq server
 
-*Note:* For older versions of Seeq Data Lab you can find installation guide [`here`](https://user-images.githubusercontent.com/55245976/137494969-43d93065-1e23-4e7c-952f-2397993eb269.mp4).
+*Note:* For older versions of Seeq Data Lab you can find the installation guide `here``](https://user-images.githubusercontent.com/55245976/137494969-43d93065-1e23-4e7c-952f-2397993eb269.mp4).
 <!-- (>= R50.5.0, >=R51.1.0, or >=R52.1.0) -->
 
 
@@ -205,14 +205,20 @@ run `developer_notebook.ipynb` notebook there.
 
 # Changelog
 
-## v0.6
+## v0.5.0
 
 - ARIMAX model added
 - Minor improvements
 - GUI object moved to app.py
 - Display results after calculation (Default)
+- Unit compatibility error fixed
+- Workbook pull step bypassed
+- Push functions improved
 
-## v0.4
+## v0.4.1
+- Hotfix for R57+ (search, pull, push functions)
+
+## v0.4.0
 
 - Export ARX model (Gekko sysid outputs as a pickle)
 - Data Editor Added
@@ -259,7 +265,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.6
+seeq-sysid v0.5.0
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```

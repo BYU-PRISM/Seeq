@@ -191,7 +191,7 @@ class LeftPanel(v.Card):
 # ARX Model Panel
 class ARXPanel(LeftPanel):
     def __init__(self, *args, **kwargs):
-        model_name = 'ARX'
+        model_name = 'TimeSeries'
         super().__init__(model_name=model_name,
                          *args, **kwargs)
 
@@ -200,7 +200,7 @@ class ARXPanel(LeftPanel):
 
         # Expanding Panel
         # ARX ModelStructure
-        self.model_struct_select = v.Select(v_model='ARX',
+        self.model_struct_select = v.Select(v_model='ARIMAX',
                                             items=['ARX', 'FIR', 'ARIMAX'],
                                             color=self.colors['seeq_primary'],
                                             item_color=self.colors['seeq_primary'],
@@ -269,10 +269,10 @@ class ARXPanel(LeftPanel):
         
         # ARIMAX
         
-        self.nv_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:30px', align='top', disabled=True)
-        self.nv_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2 mr-1', color='white', dark=True,
-                                  style_='width:30px', align='top', disabled=True)
+        self.nv_min = v.TextField(label='min', v_model='1', dense=True, class_='pl-2', color='white', dark=True,
+                                  style_='width:30px', align='top', disabled=False)
+        self.nv_max = v.TextField(label='max', v_model='2', dense=True, class_='pl-2 mr-1', color='white', dark=True,
+                                  style_='width:30px', align='top', disabled=False)
         self.nv_text = v.Text(children=['Moving Average'])
         self.nv = v.Row(children=[v.Row(children=[self.nv_text, create_eq('$(n_v):$', 'white', 2, top='0px')],
                                         class_='mt-0', no_gutters=True), v.Spacer(), self.nv_min, self.nv_max],
@@ -282,9 +282,9 @@ class ARXPanel(LeftPanel):
         
         
         self.nh_min = v.TextField(label='min', v_model='0', dense=True, class_='pl-2', color='white', dark=True,
-                                  style_='width:5px', align='top', disabled=True)
-        self.nh_max = v.TextField(label='max', v_model='0', dense=True, class_='pl-2 mr-1', color='white', dark=True,
-                                  style_='width:5px', align='top', disabled=True)
+                                  style_='width:5px', align='top', disabled=False)
+        self.nh_max = v.TextField(label='max', v_model='1', dense=True, class_='pl-2 mr-1', color='white', dark=True,
+                                  style_='width:5px', align='top', disabled=False)
         self.nh = v.Row(children=[v.Row(children=['Integral', create_eq('$(n_h):$', 'white', 2, top='0px')],
                                         class_='mt-0', no_gutters=True), v.Spacer(), self.nh_min, self.nh_max],
                         class_='d-flex justify-right',

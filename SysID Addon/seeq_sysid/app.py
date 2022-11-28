@@ -42,7 +42,7 @@ class SYSID:
     v.theme.themes.light.success = '#007960'
     v.theme.themes.light.primary = '#007960'
     
-    def __init__(self):
+    def __init__(self, sdl_notebook_url=''):
         self.worksheet_url = ''
     
         # Server Mode
@@ -51,7 +51,7 @@ class SYSID:
         self.worksheet_url = None
         
         try:
-            sdl_notebook_url = jupyter_notebook_url
+            sdl_notebook_url = sdl_notebook_url
             self.workbook_id, self.worksheet_id, self.workstep_id = get_workbook_worksheet_workstep_ids(sdl_notebook_url)
             self.worksheet_url = get_worksheet_url(sdl_notebook_url)
             self.signal_df, self.capsule_df, self.tags_df = pull_signals(self.worksheet_url)
@@ -62,6 +62,9 @@ class SYSID:
             self.tags_df = DataFrame()
         
         # Local Mode
+        # self.signal_df = read_csv('data/TE_signal_lite.csv', index_col='Time')
+        # self.capsule_df = read_csv('data/TE_capsules_lite.csv', index_col='Time')
+        
         # self.signal_df = read_csv('data/DEB.csv', index_col='Time')
         # self.capsule_df = read_csv('data/DEB capsules.csv', index_col='Time')
         

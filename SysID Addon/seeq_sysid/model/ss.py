@@ -1,7 +1,9 @@
 from numpy import hstack, zeros, linalg
-from pandas import DataFrame
+from pandas import DataFrame, to_datetime
+from scipy.signal import StateSpace
 
 from .base import Model
+from .arx import create_formula_variable_name
 from .utils import test_train_split, shifter
 
 
@@ -17,9 +19,24 @@ class Subspace(Model):
         
         # Shift Type
         self.shift_type = 'Initial'
+        
+        self.dt = None
 
     def identify(self,
                  df: DataFrame = None):
+        
+        df = df.copy()
+        
+        if (df.index.dtype == 'float64') or (df.index.dtype =='int64'):
+            t = df.index.values
+        elif df.index.dtype == 'O':
+            t_df = to_datetime(df.index)
+            t = (t_df.values - t_df.values[0]) / 1e9
+        else:
+            t_df = to_datetime(df.index)
+            t = (t_df.values - t_df.values[0]) / 1e9
+        
+        self.dt = float(t[1]-t[0])
 
         u_df = df[self.mv]
         y_df = df[self.cv]
@@ -148,7 +165,23 @@ class Subspace(Model):
         self.yp = yp_df
 
         return yp_df
+    
+    def create_formula(self, tags_df, signal_df, **kwargs):
+        tags = tags_df.copy()
 
+        u_name = self.mv
+        y_name = self.cv
+        
+        yf_name = create_formula_variable_name(y_name)
+        uf_name = create_formula_variable_name(u_name)
+        
+        ss_sys = StateSpace(A=self.A, B=self.B, C=self.C, D=self.D, dt=self.dt)
+        ss_sys = StateSpace(ss.A, ss.B, ss.C, ss.D, dt=ss.dt)
+        dtf_sys = ss_sys.to_tf()
+        
+        # bug in converting mimo cases ...
+
+        
 # from pandas import read_csv
 # import matplotlib.pyplot as plt
 #

@@ -5,7 +5,7 @@ from pandas import DataFrame, to_datetime
 from pickle import dump
 import os
 
-from ._backend import push_formula, push_signal, hide_temp_formula
+from ._backend import push_formula, push_signal # , hide_temp_formula
 
 from .figure_table import FigureTable
 from .panels import LeftPanel, ARXPanel, SSPanel, NNPanel
@@ -164,8 +164,8 @@ class AppSheet(v.Card):
 
         push_formula(signal_df, self.model.formula, self.workbook_id, self.addon_worksheet)
         
-        if 'MA' in self.model.model_struct:
-            hide_temp_formula(self.workbook_id, self.addon_worksheet)
+        # if 'MA' in self.model.model_struct:
+        #     hide_temp_formula(self.workbook_id, self.addon_worksheet)
         
         self.push_model_btn.loading = False
 
@@ -318,7 +318,7 @@ class TFAppSheet(v.Card):
         self.worksheet_url = ''
 
         # Server Mode
-        self.addon_worksheet = 'From TF AddOn'
+        self.addon_worksheet = 'From TF Addon'
         self.workbook_id = None
         self.worksheet_url = None
         
@@ -501,8 +501,7 @@ class TFAppSheet(v.Card):
     def push_model(self, *_):
         self.app_bar.push_btn.loading = True
 
-        df = self.signal_df.copy()
-        self.matrix_sheet.model.create_formula(df, self.tags_df)
+        self.matrix_sheet.model.create_formula(tags_df=self.tags_df, signal_df=self.signal_df, workbook_id=self.workbook_id, worksheet_name=self.addon_worksheet)
         # Measured Data
         signal_df = self.signal_df[self.matrix_sheet.model.cv]
         push_formula(signal_df, self.matrix_sheet.model.formula, self.workbook_id, self.addon_worksheet)

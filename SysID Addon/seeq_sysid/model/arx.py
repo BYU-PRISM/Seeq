@@ -17,12 +17,15 @@ def create_formula_variable_name(names):
         f_name = '$'
         
         cnt = 0
-        for i in item:
-            if cnt > 0:
+        if len(item) > 1:
+            for i in item:
                 f_name += i[0]
+        else:
+            if len(item[0]) > 4:
+                f_name += item[0][0]
             else:
-                f_name += i
-            cnt += 1
+                f_name += item[0]
+
         formula_name.append(f_name)
 
     return formula_name
@@ -49,7 +52,7 @@ class ARX(Model):
     def __init__(self):
 
         super().__init__()
-        self.model_struct = 'ARX'
+        self.model_struct = 'ARIMAX'
 
         self.best_model = None
         self.p = None
@@ -75,9 +78,9 @@ class ARX(Model):
         self.nv_max = 2
 
     def identify(self, df: DataFrame = None):
-        self.error_best = 1e9
+        self.error_best = 1e900
 
-        self.df = df
+        self.df = df.copy()
         u_df = df[self.mv]
         y_df = df[self.cv]
         ly, ny = y_df.shape
@@ -140,7 +143,7 @@ class ARX(Model):
                         self.temp_x = x
                         self.temp_y = y
 
-                        ma_coe[y_i], res = lstsq(x, y, cond=None)[0:2]
+                        ma_coe[y_i], res = lstsq(x, y, cond=1e-6)[0:2]
 
                         if sum(res) <= self.res_best:
                             self.nv = nv
@@ -304,7 +307,9 @@ class ARX(Model):
         yp_df.fillna(method='bfill', inplace=True)
         return yp_df
 
-    def create_formula(self, tags, signal_df, **kwargs):
+    def create_formula(self, tags_df, signal_df, **kwargs):
+        tags = tags_df.copy()
+
         u_name = self.mv
         y_name = self.cv
 
@@ -315,13 +320,38 @@ class ARX(Model):
 
         yf_name = create_formula_variable_name(y_name)
         uf_name = create_formula_variable_name(u_name)
-
+        
         formula_dic = {}
+        
+        # Make signals dimensionless (forced)   
+        formula_list = []
+        for i in range(n_u):                
+            formula = ''
+            formula += "{}.setUnits('')".format(uf_name[i])
+            
+            formula_dic[uf_name[i]] = tags[tags['Name'] == u_name[i]]
+        
+            formula_list.append({'Name': '{} meas'.format(u_name[i]),
+                                 'Type': 'CalculatedSignal',
+                                 'Description': '{}'.format(u_name[i]),
+                                 'Formula': formula,
+                                 'Formula Parameters': formula_dic
+            })
+        
+        try:
+            tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+                            quiet=True)
+        except:
+            tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
+        
+        tags = tags.append(tags_new, ignore_index=True)
+        
+        
         for tag in range(len(yf_name)):
             formula_dic[yf_name[tag]] = tags[tags['Name'] == y_name[tag]]
 
         for tag in range(len(uf_name)):
-            formula_dic[uf_name[tag]] = tags[tags['Name'] == u_name[tag]]
+            formula_dic[uf_name[tag]+'m'] = tags[tags['Name'] == u_name[tag]+ ' meas']
 
         time_interval = self.df.index[1] - self.df.index[0]
 
@@ -336,7 +366,7 @@ class ARX(Model):
 
             for k in range(n_u):
                 for j in range(n_bk):
-                    formula += ' {}.move({}s)*({})\n+'.format(uf_name[k], (j + 1) * timestep, self.p['b'][i][j][k])
+                    formula += ' {}.move({}s)*({})\n+'.format(uf_name[k]+'m', (j + 1) * timestep, self.p['b'][i][j][k])
 
             formula += str(self.p['c'][i])
 
@@ -349,8 +379,16 @@ class ARX(Model):
             })
             
         if 'MA' in self.model_struct:
-            tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
-                            quiet=True)
+            try:
+                tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+                                quiet=True)
+            except:
+                tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
+                
+            tags = tags.append(tags_new, ignore_index=True)
+            
+    
+            formula_list = []
             
             for tag in range(len(yf_name)):
                 formula_dic[yf_name[tag]+'am'] = tags[tags['Name'] == y_name[tag]+' arx model']
@@ -369,11 +407,18 @@ class ARX(Model):
                                      'Formula': formula,
                                      'Formula Parameters': formula_dic
                 })
-                
-            tags = spy.push(data=signal_df, metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
-                            quiet=True)
+            
+            try:
+                tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+                                quiet=True)
+            except:
+                tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
+            
+            tags = tags.append(tags_new, ignore_index=True)
+
             
             # Moving Average Order
+            formula_list = []
             n_v = self.nv
             
             for i in range(n_y):
@@ -389,6 +434,16 @@ class ARX(Model):
                                      'Formula': formula,
                                      'Formula Parameters': formula_dic
                 })
+        
+        for i in range(n_y):
+            formula = yf_name[i]
+                
+            formula_list.append({'Name': '{} meas'.format(y_name[i]),
+                                 'Type': 'CalculatedSignal',
+                                 'Description': y_name[i],
+                                 'Formula': formula,
+                                 'Formula Parameters': formula_dic
+            })
             
 
         self.formula = DataFrame(formula_list)
