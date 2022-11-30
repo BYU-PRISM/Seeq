@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.1
+- Minor bugs fixed
+
 ## v0.5.0
 
 - ARIMAX model added

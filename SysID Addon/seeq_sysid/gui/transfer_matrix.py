@@ -167,17 +167,17 @@ class TransferMatrix(v.Card):
         self.train_df = DataFrame()
         
         for cv_i in self.model.cv:
-            # try:
-            capsules = self.cv_label_dict[cv_i].select_train_capsules.v_model
-            train_df = self.create_dataset(capsules)
-            y_train_df = self.model.identify(train_df, cv_i)
+            try:
+                capsules = self.cv_label_dict[cv_i].select_train_capsules.v_model
+                train_df = self.create_dataset(capsules)
+                y_train_df = self.model.identify(train_df, cv_i)
 
-            self.train_df = concat([self.train_df, y_train_df], axis=1)
-            self.to_step_response(cv_i)
+                self.train_df = concat([self.train_df, y_train_df], axis=1)
+                self.to_step_response(cv_i)
 
-            self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
-            # except:
-                # pass
+                self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
+            except:
+                pass
         
             
             
