@@ -218,6 +218,7 @@ class ARXAppSheet(AppSheet):
         super().__init__(panel=panel,
                          *args, **kwargs)
         self.model = ARX()
+        self.addon_worksheet = 'From TimeSeries Addon'
         self.blank_model = deepcopy(self.model)
 
         self.model_struct = self.panel.model_struct_select
@@ -434,6 +435,7 @@ class TFAppSheet(v.Card):
 
         # Server Mode
         self.addon_worksheet = 'From SysID Addon, TF'
+
         self.workbook_id = None
         self.worksheet_url = None
         

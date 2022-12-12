@@ -277,7 +277,7 @@ class ARX(Model):
                 yp[self.nv:, y_i] += array(y_ma[y_i]).T
                 
             yp[:self.nv] = y_df.iloc[:self.nv].to_numpy()
-            
+
 
         labels = []
         for label in y_df.columns:

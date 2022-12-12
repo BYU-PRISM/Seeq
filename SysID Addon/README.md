@@ -223,7 +223,6 @@ run `developer_notebook.ipynb` notebook there.
 - Hotfix for R57+ (search, pull, push functions)
 
 ## v0.4.0
-
 - Export ARX model (Gekko sysid outputs as a pickle)
 - Data Editor Added
 

@@ -224,6 +224,7 @@ run `developer_notebook.ipynb` notebook there.
 
 ## v0.4.0
 
+
 - Export ARX model (Gekko sysid outputs as a pickle)
 - Data Editor Added
 
