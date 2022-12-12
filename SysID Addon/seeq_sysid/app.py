@@ -46,7 +46,7 @@ class SYSID:
         self.worksheet_url = ''
     
         # Server Mode
-        self.addon_worksheet = 'From ARX AddOn'
+        self.addon_worksheet = 'From SysID AddOn'
         self.workbook_id = None
         self.worksheet_url = None
         
@@ -72,6 +72,7 @@ class SYSID:
         # self.capsule_df = read_csv('data/capsule_df.csv', index_col='Time')
         
         self.app = v.App(class_='ma-2')
+        
         
         self.arx_sheet = ARXAppSheet()
         self.arx_sheet.set_data(self.signal_df, self.capsule_df, self.tags_df, self.workbook_id)

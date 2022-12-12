@@ -1,6 +1,6 @@
 <!-- workflow badges -->
 [![CodeQL](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml)
-[![pages-build-deployment](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment)
+[![Documentation](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment/badge.svg)](https://byu-prism.github.io/Seeq/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BYU-PRISM/Seeq/binder?urlpath=apps%2Fsysid_notebook.ipynb)
 
 <p align="left">
@@ -201,6 +201,11 @@ run `developer_notebook.ipynb` notebook there.
 
 # Changelog
 
+## v0.6.0
+- MA model added
+- Units switch added
+- Version number added to the GUI
+
 ## v0.5.1
 - Minor bugs fixed
 
@@ -264,7 +269,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.5.1
+seeq-sysid v0.6.0
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```

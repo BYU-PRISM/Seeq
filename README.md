@@ -16,7 +16,7 @@
 A Seeq Add-on built-in python to identify input and output relationships for the system to create **digital twin**
 models for various analytics and machine learning tasks. System dynamics are identified thereby
 allowing users to get dynamic predictions quickly. The Add-on is fully integrated with
-Seeq Workbench. Cleaned and contextualized data from Seeq workbench can be used to identify dynamic models; the models can be pushed back into Seeq workbench. This framework supports both adhoc investigations as well as streaming predictions. The system identification framework can be used for a variety of tasks including simulation, digital twin construction, advanced process control, real-time optimization, etc.
+Seeq Workbench. Cleaned and contextualized data from Seeq workbench can be used to identify dynamic models; the models can be pushed back into Seeq workbench. This framework supports both ad-hoc investigations as well as streaming predictions. The system identification framework can be used for a variety of tasks including simulation, digital twin construction, advanced process control, real-time optimization, etc.
 
 <p align="center">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Digital_twin_inout.png?raw=true" align="center" width="650" height="150">
@@ -171,7 +171,7 @@ For more information about adding this addon to the seeq workbench
 You can get started by cloning the repository with the command:
 
 ```shell
-git clone https://github.com/BYU-PRISM/Seeq.git --branch develop
+git clone https://github.com/BYU-PRISM/Seeq.git
 ```
 
 ## Installation from source
@@ -187,10 +187,6 @@ Go to the setup.py directory (Seeq/'SysID Addon')
 ```shell
 python setup.py install --user
 ```
-Additional step (only on Seeq server):
-```shell
-python -m seeq_sysid [--users <users_list> --groups <groups_list>]
-```
 
 *Note:* Remember that the `seeq` module version in your local environment should match the Seeq server version
 
@@ -204,6 +200,11 @@ run `developer_notebook.ipynb` notebook there.
 
 
 # Changelog
+
+## v0.6.0
+- MA model added
+- Units switch added
+- Version number added to the GUI
 
 ## v0.5.1
 - Minor bugs fixed
@@ -268,7 +269,7 @@ Code related issues (e.g. bugs, feature requests) can be created in the
 Please cite this work as:
 
 ```shell
-seeq-sysid v0.5.1
+seeq-sysid v0.6.0
 BYU PRISM Group https://apm.byu.edu/prism/
 https://github.com/BYU-PRISM/Seeq
 ```

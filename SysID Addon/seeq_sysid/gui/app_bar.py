@@ -3,6 +3,7 @@ import ipywidgets as widgets
 from pathlib import Path
 from .utils import add_tooltip
 from .data_editor import DataEditor
+from seeq_sysid._version import __version__
 
 import io
 from pandas import read_csv
@@ -54,8 +55,7 @@ class HamburgerMenu(v.Menu):
                                                                        children=[v.Icon(color='#212529',
                                                                                         children=['mdi-help-box'])]),
                                                       v.ListItemActionText(children=[f'User Guide'])
-                                                      ])
-        
+                                                      ])      
         
         
         # Open Worksheet Dialog & Events
@@ -186,6 +186,8 @@ class AppBar(v.Card):
         
         self.title = v.Text(children=[''], style_='font-size:18pt ; font-weight:bold', class_='d-flex justify-end align-center')
         
+        self.__version__ = v.Text(children=['Version: ' + __version__], class_='d-flex align-center mr-4', style_='color:#BFBFBF')
+
         self.ham_menu = HamburgerMenu()
         
         self.next_btn = v.Btn(children=['Next >'], 
@@ -223,7 +225,7 @@ class AppBar(v.Card):
         else:
             self.title_list = title_list
     
-        self.tabs = v.Tabs(children=[self.ham_menu] + self.logo + tabs + [self.title] + items + [self.nav_btn],
+        self.tabs = v.Tabs(children=[self.ham_menu] + self.logo + tabs + [self.title] + items + [self.nav_btn] + [self.__version__],
                      color='#1d376c',
                      class_='align-center pt-0',
                      slider_size='4',

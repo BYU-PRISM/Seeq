@@ -33,7 +33,7 @@ class LeftPanel(v.Card):
 
     def __init__(self,
                  model_name='Sys-Ident',
-                 style_='width: 330px; min-height:94%; height:94%; max-height:98%; font-weight:bold; color:white;'
+                 style_='width: 330px; min-height:94%; height:97%; max-height:98%; font-weight:bold; color:white;'
                         ' font-size:16px; border-radius:12px',
                  class_='pa-4 ma-4 ml-0 pl-7 pr-7',
                  color='#007960',
@@ -79,7 +79,7 @@ class LeftPanel(v.Card):
                                   clearable=True,
                                   solo=True)
 
-        self.cv_select = v.Select(tag='Measured Variables',
+        self.cv_select = v.Select(tag='Controlled Variables',
                                   v_model=[],
                                   items=[],
                                   color=self.colors['seeq_primary'],
@@ -180,7 +180,7 @@ class LeftPanel(v.Card):
         # Set Panel Children
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
-                         'Measured Variables (CV)', self.cv_select,
+                         'Controlled Variables (CV)', self.cv_select,
                          #                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
                          'Validation Conditions', self.validation_condition,
@@ -201,7 +201,7 @@ class ARXPanel(LeftPanel):
         # Expanding Panel
         # ARX ModelStructure
         self.model_struct_select = v.Select(v_model='ARIMAX',
-                                            items=['ARX', 'FIR', 'ARIMAX'],
+                                            items=['ARX', 'FIR', 'ARIMAX', 'MA'],
                                             color=self.colors['seeq_primary'],
                                             item_color=self.colors['seeq_primary'],
                                             dense=True,
@@ -215,7 +215,6 @@ class ARXPanel(LeftPanel):
                                             multiple=False,
                                             clearable=False,
                                             solo=True)
-        self.model_struct_select.on_event('change', self.model_struct_action)
 
         self.model_struct = v.Row(children=[v.Row(children=['Type: ', v.Spacer()],
                                                   dense=True,
@@ -329,56 +328,13 @@ class ARXPanel(LeftPanel):
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
-                         'Measured Variables (CV)', self.cv_select,
+                         'Controlled Variables (CV)', self.cv_select,
                          self.orders_layout,
                          #                          v.Divider(class_='mb-4'),
                          'Training Conditions', self.train_condition,
                          'Validation Conditions', self.validation_condition,
                          #                          v.Divider(class_='mb-6'),
                          self.identify_push_card]
-
-    def model_struct_action(self, item, *_):
-        if item.v_model == 'ARX':
-            self.na_min.v_model = '2'
-            self.na_max.v_model = '2'
-            self.nv_min.v_model = '0'
-            self.nv_max.v_model = '0'
-            self.nh_min.v_model = '0'
-            self.nh_max.v_model = '0'
-            self.nv_min.disabled = True
-            self.nv_max.disabled = True
-            self.nh_min.disabled = True
-            self.nh_max.disabled = True
-            self.na_min.disabled = False
-            self.na_max.disabled = False
-            
-        if item.v_model == 'FIR':
-            self.na_min.v_model = '0'
-            self.na_max.v_model = '0'
-            self.nv_min.v_model = '0'
-            self.nv_max.v_model = '0'
-            self.nh_min.v_model = '0'
-            self.nh_max.v_model = '0'
-            self.na_min.disabled = True
-            self.na_max.disabled = True
-            self.nv_min.disabled = True
-            self.nv_max.disabled = True
-            self.nh_min.disabled = True
-            self.nh_max.disabled = True
-            
-        if item.v_model == 'ARIMAX':
-            self.na_min.v_model = '2'
-            self.na_max.v_model = '2'
-            self.nv_min.v_model = '1'
-            self.nv_max.v_model = '2'
-            self.nh_min.v_model = '0'
-            self.nh_max.v_model = '1'
-            self.nv_min.disabled = False
-            self.nv_max.disabled = False
-            self.nh_min.disabled = False
-            self.nh_max.disabled = False
-            self.na_min.disabled = False
-            self.na_max.disabled = False
 
 
 # State-Space Panel
@@ -451,7 +407,7 @@ class SSPanel(LeftPanel):
 
         self.method_box = self.multiplier
         
-        self.shift_type = v.Select(tag='Measured Variables',
+        self.shift_type = v.Select(tag='Controlled Variables',
                                   v_model=[],
                                   items=[],
                                   color=self.colors['seeq_primary'],
@@ -500,7 +456,7 @@ class SSPanel(LeftPanel):
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
-                         'Measured Variables (CV)', self.cv_select,
+                         'Controlled Variables (CV)', self.cv_select,
                          # 'Method', self.method_select,
                          self.orders_layout,
                          #                          v.Divider(class_='mb-4'),
@@ -531,7 +487,7 @@ class SSPanel(LeftPanel):
             self.orders_layout = v.Layout(children=[self.orders_panel], class_='mb-6', dense=True, flat=False)
             self.children = [self.title,
                              'Manipulated Variables (MV)', self.mv_select,
-                             'Measured Variables (CV)', self.cv_select,
+                             'Controlled Variables (CV)', self.cv_select,
                              # 'Method', self.method_select,
                              self.orders_layout,
                              v.Divider(class_='mb-4'),
@@ -561,7 +517,7 @@ class SSPanel(LeftPanel):
             self.orders_layout = v.Layout(children=[self.orders_panel], class_='mb-6', dense=True, flat=False)
             self.children = [self.title,
                              'Manipulated Variables (MV)', self.mv_select,
-                             'Measured Variables (CV)', self.cv_select,
+                             'Controlled Variables (CV)', self.cv_select,
                              # 'Method', self.method_select,
                              self.orders_layout,
                              #                              v.Divider(class_='mb-4'),
@@ -701,7 +657,7 @@ class NNPanel(LeftPanel):
 
         self.children = [self.title,
                          'Manipulated Variables (MV)', self.mv_select,
-                         'Measured Variables (CV)', self.cv_select,
+                         'Controlled Variables (CV)', self.cv_select,
                          v.Divider(class_='mb-4'),
                          self.switch_card,
                          self.custom_nn_dialog,

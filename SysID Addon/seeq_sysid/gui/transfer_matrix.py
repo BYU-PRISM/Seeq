@@ -165,6 +165,7 @@ class TransferMatrix(v.Card):
         self.create_model()
         
         self.train_df = DataFrame()
+        temp_cv_meas = DataFrame()
         
         for cv_i in self.model.cv:
             try:
@@ -174,11 +175,14 @@ class TransferMatrix(v.Card):
 
                 self.train_df = concat([self.train_df, y_train_df], axis=1)
                 self.to_step_response(cv_i)
+                
+                temp_cv_meas = concat([temp_cv_meas, train_df[cv_i]], axis=1)
 
-                self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
+                # self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
             except:
                 pass
         
+        self.train_df = concat([self.train_df, temp_cv_meas], axis=1)
             
             
     def to_step_response(self, cv_name):
@@ -210,7 +214,8 @@ class TransferMatrix(v.Card):
             yp_valid_df = self.model.predict(validation_df, cv_i)
 
             self.validation_df = concat([self.validation_df, yp_valid_df], axis=1)
-            self.validation_df = concat([self.validation_df, validation_df[cv_i]], axis=1)  
+            
+        self.validation_df = concat([self.validation_df, validation_df[self.model.cv]], axis=1)  
                     
 
 class CapsulesCard(v.Card):

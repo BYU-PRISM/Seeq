@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6.0
+- MA model added
+- Units switch added
+- Version number added to the GUI
+
 ## v0.5.1
 - Minor bugs fixed
 
