@@ -33,7 +33,7 @@ class FigureTable(v.Card):
 
     def create(self, train_df=DataFrame(), validation_df=DataFrame(), units=None):
         TableItem().reset()
-        self.table.table_header.checkbox_header.v_model = False
+        self.table.table_header.checkbox_header.v_model = True
 
         if not units:
             units = {}
@@ -47,6 +47,7 @@ class FigureTable(v.Card):
         items_list = []
         for name in train_df.columns:
             temp_item = TableItem(name=name, unit=units[name])
+            temp_item.checkbox_item.v_model = True
             temp_item.checkbox_item.observe(self.update_visibility, names=['v_model'])
             temp_item.style_item.on_event('change', self.update_line_style)
             items_list += [temp_item]

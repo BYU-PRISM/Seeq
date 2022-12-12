@@ -96,25 +96,27 @@ def push_signal(df, workbook_id, worksheet_name):
 
 def push_formula(df, formula, workbook_id, worksheet_name):
     try:
-        spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
+        spy.push(metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True),
                  quiet=True)
     except:
-        spy.push(data=df, metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True))
+        spy.push(metadata=formula, workbook=workbook_id, worksheet=worksheet_name, status=spy.Status(quiet=True))
 
-def hide_temp_formula(workbook_id, worksheet_name):
-    try:
-        workbook_df = spy.workbooks.search({'ID':workbook_id}, quiet=True, status=spy.Status(quiet=True))
-        workbook = spy.workbooks.pull(workbooks_df=workbook_df, quiet=True, status=spy.Status(quiet=True))[0]
-    except:
-        workbook_df = spy.workbooks.search({'ID':workbook_id}, status=spy.Status(quiet=True))
-        workbook = spy.workbooks.pull(workbooks_df=workbook_df, status=spy.Status(quiet=True))[0]
+# def hide_temp_formula(workbook_id, worksheet_name):
+#     try:
+#         workbook_df = spy.workbooks.search({'ID':workbook_id}, quiet=True, status=spy.Status(quiet=True))
+#         workbook = spy.workbooks.pull(workbooks_df=workbook_df, quiet=True, status=spy.Status(quiet=True))[0]
+#     except:
+#         workbook_df = spy.workbooks.search({'ID':workbook_id}, status=spy.Status(quiet=True))
+#         workbook = spy.workbooks.pull(workbooks_df=workbook_df, status=spy.Status(quiet=True))[0]
         
-    worksheet = workbook.worksheet(worksheet_name)
-    items = worksheet.display_items
+#     worksheet = workbook.worksheet(worksheet_name)
+#     items = worksheet.display_items
     
-    workbook.worksheet(worksheet_name).display_items = items[~items['Name'].str.contains('arx')]
+#     workbook.worksheet(worksheet_name).display_items = items[~items['Name'].str.contains('arx')]
     
-    try:
-        spy.workbooks.push(workbooks=workbook, quiet=True, status=spy.Status(quiet=True))
-    except:
-        spy.workbooks.push(workbooks=workbook, status=spy.Status(quiet=True))
+#     try:
+#         spy.workbooks.push(workbooks=workbook, quiet=True, status=spy.Status(quiet=True))
+#     except:
+#         spy.workbooks.push(workbooks=workbook, status=spy.Status(quiet=True))
+    
+

@@ -49,8 +49,8 @@ class Setup(v.Card):
                                   clearable=True,
                                   solo=True)
         
-        self.cv_title = v.Text(children=['Measured Variables (CV)'], style_='font-size:12pt; font-weight:bold')
-        self.cv_select = v.Select(tag='Measured Variables',
+        self.cv_title = v.Text(children=['Controlled Variables (CV)'], style_='font-size:12pt; font-weight:bold')
+        self.cv_select = v.Select(tag='Controlled Variables',
                           v_model=[],
                           items=[],
                           color=self.colors['seeq_primary'],

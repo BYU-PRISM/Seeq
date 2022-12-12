@@ -1,3 +1,5 @@
+from seeq import spy
+
 from .tf_item import TransferItem, TransferOption
 from numpy import empty, array, zeros, arange
 from pandas import DataFrame
@@ -121,18 +123,61 @@ class TF(TransferItem):
             
             model.sim_time = 4 * model.tau_max
 
-    def create_formula(self, df, tags):
+    def create_formula(self, tags_df, signal_df, **kwargs):
+        df = signal_df.copy()
+        tags = tags_df.copy()
+        
+        n_y = len(self.cv)
+        
         y_name = self.cv
 
+        
+        mv_list = []
+        for cv_i in range(n_y):
+            cv_name = y_name[cv_i]
+            y_opt = self.models[cv_name]
+            mvi_list = y_opt.mv
+            for mv_i in mvi_list:
+                mv_list.append(mv_i)
+        # unique mv list
+        u_name = list(set(mv_list))
+        n_u = len(u_name)
+        
         yf_name = create_formula_variable_name(y_name)
-
+        uf_name = create_formula_variable_name(u_name)
+        
         formula_dic = {}
+
+        # Make signals dimensionless (forced)   
+        formula_list = []
+        for i in range(n_u):                
+            formula = ''
+            formula += "{}.setUnits('')".format(uf_name[i])
+            
+            formula_dic[uf_name[i]] = tags[tags['Name'] == u_name[i]]
+        
+            formula_list.append({'Name': '{} meas'.format(u_name[i]),
+                                 'Type': 'CalculatedSignal',
+                                 'Description': '{}'.format(u_name[i]),
+                                 'Formula': formula,
+                                 'Formula Parameters': formula_dic
+            })
+        
+        # try:
+        #     tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True),
+        #                     quiet=True)
+        # except:
+        tags_new = spy.push(metadata=DataFrame(formula_list), workbook=kwargs['workbook_id'], worksheet=kwargs['worksheet_name'], status=spy.Status(quiet=True))
+        
+        tags = tags.append(tags_new, ignore_index=True)
+        
+        
         for tag in range(len(yf_name)):
             formula_dic[yf_name[tag]] = tags[tags['Name'] == y_name[tag]]
 
         formula_list = []
 
-        for cv_i in range(len(self.cv)):
+        for cv_i in range(n_y):
             cv_name = y_name[cv_i]
             y_ss = df[cv_name].iloc[0]
             y_opt = self.models[cv_name]
@@ -141,7 +186,7 @@ class TF(TransferItem):
             uf_name = create_formula_variable_name(u_name)
             formula = ''
             for tag in range(len(uf_name)):
-                formula_dic[uf_name[tag]] = tags[tags['Name'] == u_name[tag]]
+                formula_dic[uf_name[tag]+'m'] = tags[tags['Name'] == u_name[tag]+' meas']
 
             timestep = y_opt.dt
 
@@ -162,7 +207,7 @@ class TF(TransferItem):
                     formula += ' ({}.move({}s)-{})*({})\n+'.format(yf_name[cv_i], i * timestep, y_ss, -den[i])
 
                 for j in range(n_b):
-                    formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i], j * timestep + u_opt.theta, u_ss,
+                    formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i]+'m', j * timestep + u_opt.theta, u_ss,
                                                                    num[j])
 
             formula += str(y_ss)
@@ -174,7 +219,17 @@ class TF(TransferItem):
                 'Formula': formula,
                 'Formula Parameters': formula_dic
             })
-
+            
+        for i in range(n_y):
+            formula = yf_name[i]
+                
+            formula_list.append({'Name': '{} meas'.format(y_name[i]),
+                                 'Type': 'CalculatedSignal',
+                                 'Description': y_name[i],
+                                 'Formula': formula,
+                                 'Formula Parameters': formula_dic
+            })
+            
         self.formula = DataFrame(formula_list)
 
         return self.formula

@@ -2,10 +2,12 @@ from copy import deepcopy
 
 import ipyvuetify as v
 from pandas import DataFrame, to_datetime
+from numpy import array
 from pickle import dump
 import os
+from datetime import datetime
 
-from ._backend import push_formula, push_signal
+from ._backend import push_formula, push_signal # , hide_temp_formula
 
 from .figure_table import FigureTable
 from .panels import LeftPanel, ARXPanel, SSPanel, NNPanel
@@ -25,7 +27,7 @@ class AppSheet(v.Card):
                  panel: LeftPanel,
                  workbook_id='',
                  *args, **kwargs):
-        class_ = 'd-flex justify-space-between ma-2 pa-2 pt-2 mt-0'
+        class_ = 'd-flex justify-start ma-2 pa-2 pt-2 mt-0'
         style_ = 'height:900px; border-radius:12px'
         color = 'white'
         flat = True
@@ -46,7 +48,7 @@ class AppSheet(v.Card):
         self.model_name = panel.model_name
         self.model = Model()
         self.blank_model = deepcopy(self.model)
-        self.addon_worksheet = 'From ' + self.model_name + ' Addon'
+        self.addon_worksheet = 'From SysID Addon' + ', ' + self.model_name
 
         # General Widgets
         self.mv_select = panel.mv_select
@@ -95,7 +97,7 @@ class AppSheet(v.Card):
 
         if len(self.mv_select.v_model) > 0 and len(self.cv_select.v_model) > 0:
             self.identify_model_btn.disabled = False
-
+        
         else:
             self.identify_model_btn.disabled = True
             self.validate_model_btn.disabled = True
@@ -113,6 +115,8 @@ class AppSheet(v.Card):
 
         self.model.identify(train_dataset)
 
+        min_ = train_dataset[self.model.cv].min().to_list()
+        max_ = train_dataset[self.model.cv].max().to_list()
         self.train_results = self.model.forecast(train_dataset)
         self.train_results.set_index(train_dataset.index, inplace=True)
         self.train_results[self.model.cv] = train_dataset[self.model.cv]
@@ -121,7 +125,10 @@ class AppSheet(v.Card):
         self.validation_results.set_index(validation_dataset.index, inplace=True)
         self.validation_results[self.model.cv] = validation_dataset[self.model.cv]
 
+        self.canvas.figure.min_ = array(2*min_)
+        self.canvas.figure.max_ = array(2*max_)
         self.canvas.create(self.train_results, self.validation_results)
+
 
         if self.model.status:
             self.push_model_btn.disabled = False
@@ -159,10 +166,13 @@ class AppSheet(v.Card):
         
         # Measured Data
         signal_df = self.signal_df[self.model.cv]
+        
+        worksheet_name = self.addon_worksheet + ' ' + str(datetime.now()).split('.')[0]
 
-        self.model.create_formula(self.tags_df, signal_df, workbook_id=self.workbook_id, worksheet_name=self.addon_worksheet)
+        self.model.create_formula(self.tags_df, signal_df, workbook_id=self.workbook_id, worksheet_name=worksheet_name)
 
-        push_formula(signal_df, self.model.formula, self.workbook_id, self.addon_worksheet)
+        push_formula(signal_df, self.model.formula, self.workbook_id, worksheet_name)
+        
         self.push_model_btn.loading = False
 
     def push_data(self, *_):
@@ -174,7 +184,9 @@ class AppSheet(v.Card):
         for cv_i in self.model.cv:
             self.all_results[cv_i + ' original'] = signal_df[cv_i]
 
-        push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
+        worksheet_name = self.addon_worksheet + ' ' + str(datetime.now()).split('.')[0]
+        
+        push_signal(self.all_results, self.workbook_id, worksheet_name)
         self.push_model_btn.loading = False
         
     def export_model(self):
@@ -210,6 +222,7 @@ class ARXAppSheet(AppSheet):
         self.blank_model = deepcopy(self.model)
 
         self.model_struct = self.panel.model_struct_select
+        self.model_struct.on_event('change', self.model_struct_action)
 
         self.na_min = self.panel.na_min
         self.na_max = self.panel.na_max
@@ -219,6 +232,12 @@ class ARXAppSheet(AppSheet):
 
         self.nk_min = self.panel.nk_min
         self.nk_max = self.panel.nk_max
+        
+        self.nv_min = self.panel.nv_min
+        self.nv_max = self.panel.nv_max
+        
+        self.nh_min = self.panel.nh_min
+        self.nh_max = self.panel.nh_max
         
         self.n_export = 0
 
@@ -231,6 +250,12 @@ class ARXAppSheet(AppSheet):
 
         self.model.nk_min = int(self.nk_min.v_model)
         self.model.nk_max = int(self.nk_max.v_model)
+        
+        self.model.nv_min = int(self.nv_min.v_model)
+        self.model.nv_max = int(self.nv_max.v_model)
+        
+        self.model.nh_min = int(self.nh_min.v_model)
+        self.model.nh_max = int(self.nh_max.v_model)
 
         self.model.model_struct = self.model_struct.v_model
           
@@ -241,6 +266,112 @@ class ARXAppSheet(AppSheet):
         with open('export/ARX{}.pkl'.format(self.n_export), 'wb') as file:
             dump([self.model.yp, self.model.p, self.model.K], file)
             file.close()
+            
+    def update_panel(self, *_):
+        self.mv_select.items = [item for item in self.signal_df.columns if item not in self.cv_select.v_model]
+        self.cv_select.items = [item for item in self.signal_df.columns if item not in self.mv_select.v_model]
+
+        if len(self.mv_select.v_model) > 0 and len(self.cv_select.v_model) > 0:
+            self.identify_model_btn.disabled = False
+            
+        elif (len(self.cv_select.v_model) > 0) and self.model_struct.v_model == 'MA':
+            self.identify_model_btn.disabled = False
+        
+        else:
+            self.identify_model_btn.disabled = True
+            self.validate_model_btn.disabled = True
+            self.push_model_btn.disabled = True
+            
+    def model_struct_action(self, item, *_):
+        if item.v_model == 'ARX':
+            self.na_min.v_model = '2'
+            self.na_max.v_model = '2'
+            self.nb_min.v_model = '1'
+            self.nb_max.v_model = '1'
+            self.nv_min.v_model = '0'
+            self.nv_max.v_model = '0'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '0'
+            self.nv_min.disabled = True
+            self.nv_max.disabled = True
+            self.nh_min.disabled = True
+            self.nh_max.disabled = True
+            self.na_min.disabled = False
+            self.na_max.disabled = False
+            self.nb_min.disabled = False
+            self.nb_max.disabled = False
+            self.nk_min.disabled = False
+            self.nk_max.disabled = False
+            
+            self.mv_select.disabled = False
+            
+        if item.v_model == 'FIR':
+            self.na_min.v_model = '0'
+            self.na_max.v_model = '0'
+            self.nv_min.v_model = '0'
+            self.nv_max.v_model = '0'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '0'
+            self.na_min.disabled = True
+            self.na_max.disabled = True
+            self.nv_min.disabled = True
+            self.nv_max.disabled = True
+            self.nh_min.disabled = True
+            self.nh_max.disabled = True
+            self.nb_min.disabled = False
+            self.nb_max.disabled = False
+            self.nk_min.disabled = False
+            self.nk_max.disabled = False
+            
+            self.mv_select.disabled = False
+            
+        if item.v_model == 'ARIMAX':
+            self.na_min.v_model = '2'
+            self.na_max.v_model = '2'
+            self.nb_min.v_model = '1'
+            self.nb_max.v_model = '1'
+            self.nv_min.v_model = '1'
+            self.nv_max.v_model = '2'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '1'
+            self.nv_min.disabled = False
+            self.nv_max.disabled = False
+            self.nh_min.disabled = False
+            self.nh_max.disabled = False
+            self.na_min.disabled = False
+            self.na_max.disabled = False
+            self.nb_min.disabled = False
+            self.nb_max.disabled = False
+            self.nk_min.disabled = False
+            self.nk_max.disabled = False
+            
+            self.mv_select.disabled = False
+            
+        if item.v_model == 'MA':
+            self.na_min.v_model = '0'
+            self.na_max.v_model = '0'
+            self.nb_min.v_model = '0'
+            self.nb_max.v_model = '0'
+            self.nv_min.v_model = '1'
+            self.nv_max.v_model = '2'
+            self.nh_min.v_model = '0'
+            self.nh_max.v_model = '0'
+            self.nv_min.disabled = False
+            self.nv_max.disabled = False
+            self.nh_min.disabled = True
+            self.nh_max.disabled = True
+            self.na_min.disabled = True
+            self.na_max.disabled = True
+            self.nb_min.disabled = True
+            self.nb_max.disabled = True
+            self.nk_min.disabled = True
+            self.nk_max.disabled = True
+            
+            self.mv_select.v_model = []
+            self.mv_select.disabled = True
+        
+        self.update_panel()
+
 
 
 class SSAppSheet(AppSheet):
@@ -303,7 +434,8 @@ class TFAppSheet(v.Card):
         self.worksheet_url = ''
 
         # Server Mode
-        self.addon_worksheet = 'From TF Addon'
+        self.addon_worksheet = 'From SysID Addon, TF'
+
         self.workbook_id = None
         self.worksheet_url = None
         
@@ -334,7 +466,8 @@ class TFAppSheet(v.Card):
         # Set Windows
         self.window.children = [self.import_window, self.matrix_window, self.matrix_window, self.visual_window]
 
-        self.app_bar = AppBar(title_list=['Import Data', 'Model Setup', 'Step Response', 'Visualization'])
+        self.app_bar = AppBar(title_list=['Import Data', 'Model Setup', 'Step Response', 'Visualization'],
+                              style_='width:100%')
 
         self.app_bar.title.children = [self.app_bar.title_list[self.window.v_model]]
 
@@ -430,6 +563,12 @@ class TFAppSheet(v.Card):
 
         self.matrix_sheet.to_validation()
         self.visual_sheet = FigureTable(style_='width:100%; height:780px')
+        
+        _, cv = self.import_sheet.get_data()
+        min_ = self.signal_df[cv].min().to_list()
+        max_ = self.signal_df[cv].max().to_list()
+        self.visual_sheet.figure.min_ = array(2*min_)
+        self.visual_sheet.figure.max_ = array(2*max_)
         self.visual_sheet.create(self.matrix_sheet.train_df, self.matrix_sheet.validation_df)
 
         self.window.v_model = 3
@@ -468,7 +607,10 @@ class TFAppSheet(v.Card):
             self.all_results.rename(columns={cv_i: cv_i + ' original'}, inplace=True)
 
         self.all_results.index = to_datetime(self.all_results.index)
-        push_signal(self.all_results, self.workbook_id, self.addon_worksheet)
+        
+        worksheet_name = self.addon_worksheet + ' ' + str(datetime.now()).split('.')[0]
+        
+        push_signal(self.all_results, self.workbook_id, worksheet_name)
         
         self.app_bar.push_btn.loading = False
 
@@ -486,9 +628,11 @@ class TFAppSheet(v.Card):
     def push_model(self, *_):
         self.app_bar.push_btn.loading = True
 
-        df = self.signal_df.copy()
-        self.matrix_sheet.model.create_formula(df, self.tags_df)
+        worksheet_name = self.addon_worksheet + ' ' + str(datetime.now()).split('.')[0]
+        
+        self.matrix_sheet.model.create_formula(tags_df=self.tags_df, signal_df=self.signal_df, workbook_id=self.workbook_id, worksheet_name=worksheet_name)
         # Measured Data
         signal_df = self.signal_df[self.matrix_sheet.model.cv]
-        push_formula(signal_df, self.matrix_sheet.model.formula, self.workbook_id, self.addon_worksheet)
+        
+        push_formula(signal_df, self.matrix_sheet.model.formula, self.workbook_id, worksheet_name)
         self.app_bar.push_btn.loading = False

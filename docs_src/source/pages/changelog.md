@@ -1,6 +1,27 @@
 # Changelog
 
-## v0.4
+## v0.6.0
+- MA model added
+- Units switch added
+- Version number added to the GUI
+
+## v0.5.1
+- Minor bugs fixed
+
+## v0.5.0
+
+- ARIMAX model added
+- Minor improvements
+- GUI object moved to app.py
+- Display results after calculation (Default)
+- Unit compatibility error fixed
+- Workbook pull step bypassed
+- Push functions improved
+
+## v0.4.1
+- Hotfix for R57+ (search, pull, push functions)
+
+## v0.4.0
 
 - Export ARX model (Gekko sysid outputs as a pickle)
 - Data Editor Added
