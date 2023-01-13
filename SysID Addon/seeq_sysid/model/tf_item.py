@@ -5,8 +5,6 @@ from pandas import DataFrame, read_csv
 from gekko import GEKKO
 from gekko.gekko import EquationObj
 
-import matplotlib.pyplot as plt
-
 
 class TransferOption:
     idx = 0
