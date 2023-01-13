@@ -30,6 +30,7 @@ class SYSID:
 
     additional_styles = widgets.HTML("""
         <style>
+	   #appmode-leave {display: none;}
         .background_box { background-color:#007960 !important; } 
         .js-plotly-plot .plotly .modebar-btn[data-title="Produced with Plotly"] {display: none;}
         .vuetify-styles .theme--light.v-list-item .v-list-item__action-text, 
