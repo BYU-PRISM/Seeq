@@ -49,7 +49,7 @@ class TransferCardSetup(v.Card):
 
         # Figure
         fig = go.FigureWidget()
-        fig['layout']['showlegend'] = False
+        # fig['layout']['showlegend'] = False
         fig['layout']['margin']['t'] = 10
         fig['layout']['margin']['b'] = 10
         fig['layout']['margin']['r'] = 0
@@ -59,6 +59,15 @@ class TransferCardSetup(v.Card):
         fig['layout']['height'] = 240
 
         fig['layout']['yaxis']['fixedrange'] = False
+        
+        fig.update_layout(legend=dict(yanchor="top",
+                                      y=1.15,
+                                      xanchor="right",
+                                      x=1.0,
+                                      orientation="h",
+                                      bgcolor='rgba(0,0,0,0)',
+                                      font=dict(size=9))
+                          )
         
         self.fig = fig
         self.fig_item = v.Card(children=[self.fig], style_='width:10%', class_='ma-auto pa-auto pt-0', elevation=0)

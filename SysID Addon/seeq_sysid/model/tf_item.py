@@ -322,6 +322,7 @@ class TransferItem(GEKKO):
 
         self.options.Solver = 3
         self.options.IMODE = 5
+        self.options.MAX_TIME = 120
         self.solve(disp=False)
 
         self.label = [tag_label + '_tf' for tag_label in y_df.columns]
@@ -435,6 +436,7 @@ class TransferItem(GEKKO):
         self.ym[0].status = 1
 
         self.options.IMODE = 5
+        self.options.MAX_TIME = 120
         self.solve(disp=False)
 
         return self.ym.copy()

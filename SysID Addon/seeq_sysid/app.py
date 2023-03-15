@@ -30,7 +30,7 @@ class SYSID:
 
     additional_styles = widgets.HTML("""
         <style>
-	   #appmode-leave {display: none;}
+        #appmode-leave {display: none;}
         .background_box { background-color:#007960 !important; } 
         .js-plotly-plot .plotly .modebar-btn[data-title="Produced with Plotly"] {display: none;}
         .vuetify-styles .theme--light.v-list-item .v-list-item__action-text, 
@@ -70,7 +70,7 @@ class SYSID:
         # self.capsule_df = read_csv('data/DEB capsules.csv', index_col='Time')
         
         # self.signal_df = read_csv('data/signal_df.csv', index_col='Time')
-        # self.capsule_df = read_csv('data/capsule_df.csv', index_col='Time')
+        # self.capsule_df = read_csv('data/capsule_df_fake.csv', index_col='Time')
         
         self.app = v.App(class_='ma-2')
         
@@ -100,7 +100,7 @@ class SYSID:
         self.tf_tab = v.Tab(children=['Transfer Function'], 
                        style_='font-weight:bold; font-size:12pt')
 
-        self.tabs = [self.arx_tab, self.ss_tab, self.nn_tab, self.tf_tab]
+        self.tabs = [self.tf_tab, self.arx_tab, self.ss_tab, self.nn_tab]
         
 
         self.arx_tab_item = v.TabItem(children=[self.arx_sheet], 
@@ -123,7 +123,7 @@ class SYSID:
                         transition='none',
                         reverse_transition='none')
 
-        items = [self.arx_tab_item, self.ss_tab_items, self.nn_tab_items, self.tf_tab_items]
+        items = [self.tf_tab_items, self.arx_tab_item, self.ss_tab_items, self.nn_tab_items]
 
         self.app_bar = AppBar(self.tabs, items)
         
@@ -191,7 +191,7 @@ class SYSID:
                     transition='none',
                     reverse_transition='none')
 
-        items = [self.arx_tab_item, self.ss_tab_items, self.nn_tab_items, self.tf_tab_items]
+        items = [self.tf_tab_items, self.arx_tab_item, self.ss_tab_items, self.nn_tab_items]
 
         self.app_bar = AppBar(self.tabs, items)
 

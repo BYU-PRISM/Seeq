@@ -80,7 +80,7 @@ class HamburgerMenu(v.Menu):
                 width='100%')
         self.upload_btn = widgets.FileUpload(layout=widgets.Layout(width='50%'), style={'button_color': '#007960'})
         self.upload_btn.button_style = 'success'
-        self.upload_btn.observe(lambda _:self.upload_file(self.upload_btn), 'data')
+        self.upload_btn.observe(lambda _:self.upload_file(self.upload_btn), 'value')
         self.upload_lay = widgets.HBox(children=[self.upload_btn], layout=box_layout)
         
         self.sl_switch = v.Switch(v_model=False, label='Local', inset=True, class_='ma-0 pa-0 mt-4 ml-2', dense=True, no_gutters=True, ripple=False, height='0px')
@@ -147,19 +147,26 @@ class HamburgerMenu(v.Menu):
             self.dialog_card_content = [v.CardTitle(children=['Please Import CSV file:', v.Spacer(), self.sl_switch]),
                                         self.upload_lay,
                                         self.control_dialog_btn_layout]
+            if len(self.upload_btn.value):
+                self.ok_url_dialog_btn.disabled = False
+            else:
+                self.ok_url_dialog_btn.disabled = True
         else:
             self.dialog_card_content = [v.CardTitle(children=['Please Enter a Worksheet URL:', v.Spacer(), self.sl_switch]),
                                         self.worksheet_url,
                                         self.control_dialog_btn_layout]
+            self.ok_url_dialog_btn.disabled = False
 
         self.dialog_card.children = self.dialog_card_content
             
     def upload_file(self, x):
         try:
-            uploaded_file = x.data[0]
+            uploaded_file = x.value[0]['content']
             self.local_data = read_csv(io.BytesIO(uploaded_file), index_col='Time')
+            self.ok_url_dialog_btn.disabled = False
         except:
             print('csv read error! Make sure that DateTime data are in the "Time" column.')
+            self.ok_url_dialog_btn.disabled = True
 
 class AppBar(v.Card):
     """

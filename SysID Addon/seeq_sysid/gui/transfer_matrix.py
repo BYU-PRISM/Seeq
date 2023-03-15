@@ -33,6 +33,11 @@ class TransferMatrix(v.Card):
         self.signal_df = None
         self.capsules_df = None
         
+        self.id_loader_text = v.CardTitle(children=['Initializing'], class_='justify-center')
+        self.id_loader_progress = v.ProgressLinear(v_model=0, rounded=True, class_='my-4')
+        self.id_loader_card = v.Card(children=[self.id_loader_text, self.id_loader_progress], class_='pa-4', width='100%', elevation=2)
+        self.id_loader_dialog = v.Dialog(children=[self.id_loader_card], v_model=False, width='20%',persistent=True, overlay_opacity=0)
+        
         TransferChip.reset()
 
     def create_matrix(self, signal_df=DataFrame(), capsule_df=DataFrame(), mv=[], cv=[], train_capsules=[], valid_capsules=[]):
@@ -87,10 +92,28 @@ class TransferMatrix(v.Card):
             
             n_cv += 1
         
-        self.children = matrix_list
+        self.children = matrix_list + [self.id_loader_dialog]
     
     def run(self, *args):
+        data_min_ = 4
+        for cv_i in self.cv:
+            capsules = self.cv_label_dict[cv_i].select_train_capsules.v_model
+            
+            if self.capsule_df.empty:
+                if len(self.signal_df) - data_min_ <= 0:
+                    return 1
+            else:
+                # train condition
+                if len(self.signal_df[self.capsule_df[capsules].sum(axis=1) == True]) - data_min_ <= 0 and len(capsules):
+                    return 1
+                # validation condition
+                capsules = self.cv_label_dict[cv_i].select_validation_capsules.v_model
+                if len(self.signal_df[self.capsule_df[capsules].sum(axis=1) == True]) - data_min_ <= 0 and len(capsules):
+                    return 1
+            
         self.to_identify()
+        
+        return 0
         
     def compile_matrix(self):
         for cv_i in self.cv:
@@ -161,28 +184,46 @@ class TransferMatrix(v.Card):
     
     
     def to_identify(self):
+        
+        self.id_loader_progress.v_model = 0
+        self.id_loader_text.children = ['Initializing']
+        self.id_loader_dialog.v_model = True
+        delta_progress = 100/(len(self.cv)+1)
+        
         signal_df = self.signal_df.copy()
         self.create_model()
         
         self.train_df = DataFrame()
         temp_cv_meas = DataFrame()
         
+        self.id_loader_progress.v_model = delta_progress
+        
         for cv_i in self.model.cv:
+            self.id_loader_text.children = ['identifying '+cv_i]
             try:
                 capsules = self.cv_label_dict[cv_i].select_train_capsules.v_model
                 train_df = self.create_dataset(capsules)
                 y_train_df = self.model.identify(train_df, cv_i)
-
                 self.train_df = concat([self.train_df, y_train_df], axis=1)
                 self.to_step_response(cv_i)
-                
+
                 temp_cv_meas = concat([temp_cv_meas, train_df[cv_i]], axis=1)
 
-                # self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
+                ## self.train_df = concat([self.train_df, train_df[cv_i]], axis=1)
             except:
-                pass
+                chips = self.matrix_dic[cv_i]
+                for mv_i in self.mv:
+                    chips[mv_i].switch_chip()
+                    chips[mv_i].children = [chips[mv_i].no_solution_card]
+                self.model.models[cv_i].status = False
+
+            self.id_loader_progress.v_model += delta_progress
+                    
         
         self.train_df = concat([self.train_df, temp_cv_meas], axis=1)
+        self.train_df = self.train_df.shift(1).fillna(method='bfill')
+        
+        self.id_loader_dialog.v_model = False
             
             
     def to_step_response(self, cv_name):
@@ -200,22 +241,29 @@ class TransferMatrix(v.Card):
                 except:
                     chip.switch_chip()
                     chip.children = [chip.no_solution_card]
+                    self.model.models[cv_name].status = False
             
             else:
                 chip.disabled = True
                 
     def to_validation(self):
         self.validation_df = DataFrame()
+        validation_df_meas = DataFrame()
+        validation_df_pred = DataFrame()
 
         for cv_i in self.model.cv:
+            if not self.model.models[cv_i].status:
+                continue
+                
             capsules = self.cv_label_dict[cv_i].select_validation_capsules.v_model
             validation_df = self.create_dataset(capsules)
-            self.temp_df = validation_df
-            yp_valid_df = self.model.predict(validation_df, cv_i)
+            # self.temp_df = validation_df
+            yp_valid_df = self.model.predict_new(validation_df, cv_i)
 
-            self.validation_df = concat([self.validation_df, yp_valid_df], axis=1)
-            
-        self.validation_df = concat([self.validation_df, validation_df[self.model.cv]], axis=1)  
+            validation_df_pred = concat([validation_df_pred, yp_valid_df], axis=1)
+            validation_df_meas = concat([validation_df_meas, validation_df[cv_i]], axis=1)  
+                
+        self.validation_df = concat([validation_df_pred, validation_df_meas], axis=1)  
                     
 
 class CapsulesCard(v.Card):

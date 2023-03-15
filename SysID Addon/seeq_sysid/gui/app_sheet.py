@@ -61,6 +61,14 @@ class AppSheet(v.Card):
         self.identify_model_btn = panel.identify_model_btn
         self.validate_model_btn = panel.validate_model_btn
         self.export_model_btn = panel.export_model_btn
+        
+        self.low_data_warning = v.Snackbar(v_model=False, 
+                                           class_='ma-4 pa-4', 
+                                           children=['No Sufficient Data! Please Make Sure to Provide Enough Data \
+                                                      or Selectetd Conditions are Inside View Range.'],
+                                           color='rgba(255,30,0,0.7)', 
+                                           multi_line=True,
+                                           timeout=4000)
 
         self.signal_df = DataFrame()
         self.capsule_df = DataFrame()
@@ -75,7 +83,7 @@ class AppSheet(v.Card):
         self.push_model_btn.on_event('click', self.push_model)
         self.export_model_btn.on_event('click', self.export_model)
 
-        self.children = [self.panel, self.canvas]
+        self.children = [self.panel, self.canvas, self.low_data_warning]
 
     # Functions
     def set_data(self, signal_df: DataFrame = DataFrame(), capsule_df: DataFrame = DataFrame(), tags_df=DataFrame(),
@@ -103,7 +111,14 @@ class AppSheet(v.Card):
             self.validate_model_btn.disabled = True
             self.push_model_btn.disabled = True
 
+    def data_check(self):
+        pass
+            
     def identify_system(self, *_):
+        if self.data_check():
+            self.low_data_warning.v_model = True
+            return 0
+        
         self.identify_model_btn.loading = True
         self.prepare_params_general()
         self.prepare_params_spec()
@@ -258,6 +273,17 @@ class ARXAppSheet(AppSheet):
         self.model.nh_max = int(self.nh_max.v_model)
 
         self.model.model_struct = self.model_struct.v_model
+        
+    def data_check(self):
+        data_min_ = max(int(self.na_max.v_model), 
+                        int(self.nb_max.v_model)+int(self.nk_max.v_model),
+                        int(self.nv_max.v_model)+int(self.nh_max.v_model)) + 2
+        if len(self.create_dataset(self.train_condition.v_model)) - data_min_ <= 0:
+            return 1
+        elif len(self.create_dataset(self.validation_condition.v_model)) - data_min_ <= 0:
+            return 1
+        else:
+            return 0
           
     def export_model(self, *args):
         if not os.path.exists('export'):
@@ -399,6 +425,15 @@ class SSAppSheet(AppSheet):
         self.model.om_min = int(self.multiplier_min.v_model)
         self.model.om_max = int(self.multiplier_max.v_model)
         self.model.shift_type = self.shift_type.v_model
+        
+    def data_check(self):
+        data_min_ = int(self.multiplier_max.v_model) * len(self.panel.cv_select.v_model)
+        if len(self.create_dataset(self.train_condition.v_model)) - data_min_ <= 0:
+            return 1
+        elif len(self.create_dataset(self.validation_condition.v_model)) - data_min_ <= 0:
+            return 1
+        else:
+            return 0
 
 
 class NNAppSheet(AppSheet):
@@ -420,6 +455,15 @@ class NNAppSheet(AppSheet):
     def preprocess(self):
         self.model.Min = self.signal_df[self.model.mv + self.model.cv].min()
         self.model.Max = self.signal_df[self.model.mv + self.model.cv].max()
+        
+    def data_check(self):
+        data_min_ = 20
+        if len(self.create_dataset(self.train_condition.v_model)) - data_min_ <= 0:
+            return 1
+        elif len(self.create_dataset(self.validation_condition.v_model)) - data_min_ <= 0:
+            return 1
+        else:
+            return 0
 
 
 class TFAppSheet(v.Card):
@@ -444,6 +488,14 @@ class TFAppSheet(v.Card):
         self.tags_df = None
 
         self.all_results = None
+        
+        self.low_data_warning = v.Snackbar(v_model=False, 
+                                           class_='ma-4 pa-4', 
+                                           children=['No Sufficient Data! Please Make Sure to Provide Enough Data \
+                                                      or Selectetd Conditions are Inside View Range.'],
+                                           color='rgba(255,30,0,0.7)', 
+                                           multi_line=True,
+                                           timeout=4000)
 
         self.window = v.Window(v_model=0, class_='mt-3', style_='height:100%')
 
@@ -481,7 +533,7 @@ class TFAppSheet(v.Card):
         self.ok_url_dialog_btn.on_event('click', self.ok_url_action)
         self.close_url_dialog_btn.on_event('click', self.close_url_action)
 
-        self.children = [self.window, self.app_bar]
+        self.children = [self.window, self.app_bar, self.low_data_warning]
 
         # Actions
         self.import_sheet.mv_select.on_event('change', self.update_panel)
@@ -532,8 +584,28 @@ class TFAppSheet(v.Card):
 
         else:
             self.app_bar.next_btn.disabled = True
+            
+    def data_check(self):
+        data_min_ = 4
+
+        if self.capsule_df.empty:
+            if len(self.signal_df) - data_min_ <= 0:
+                return 1
+            else:
+                return 0
+        else:
+            if len(self.signal_df[self.capsule_df[self.import_sheet.train_condition_select.v_model].sum(axis=1) == True]) - data_min_ <= 0 and len(self.import_sheet.train_condition_select.v_model):
+                return 1
+            elif len(self.signal_df[self.capsule_df[self.import_sheet.valid_condition_select.v_model].sum(axis=1) == True]) - data_min_ <= 0 and len(self.import_sheet.valid_condition_select.v_model):
+                return 1
+            else:
+                return 0
+        
 
     def import_sheet_next_action(self, item, *args):
+        if self.data_check():
+            self.low_data_warning.v_model = True
+            return 0
         mv, cv = self.import_sheet.get_data()
 
         item.loading = True
@@ -552,9 +624,13 @@ class TFAppSheet(v.Card):
     def matrix_sheet_next_action(self, item, *args):
         item.loading = True
 
-        self.matrix_sheet.run()
-
+        run_status = self.matrix_sheet.run()
         item.loading = False
+        
+        if run_status:
+            self.low_data_warning.v_model = True
+            return 0
+
         self.window.v_model = 2
         self.update_nav()
 
@@ -564,7 +640,13 @@ class TFAppSheet(v.Card):
         self.matrix_sheet.to_validation()
         self.visual_sheet = FigureTable(style_='width:100%; height:780px')
         
-        _, cv = self.import_sheet.get_data()
+        _, cv_all = self.import_sheet.get_data()
+        
+        cv = []
+        for cv_i in cv_all:
+            if self.matrix_sheet.model.models[cv_i].status:
+                cv.append(cv_i)
+        
         min_ = self.signal_df[cv].min().to_list()
         max_ = self.signal_df[cv].max().to_list()
         self.visual_sheet.figure.min_ = array(2*min_)
