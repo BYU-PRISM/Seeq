@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7.0
+- Performance improvement in TF identification
+- Progress bar added to TF identification
+- Legends added to TF chipsets
+- Bugs fixed for normalized plots in TF identification
+
 ## v0.6.1
 - Minor bugs fixed
 

@@ -1,10 +1,11 @@
 ipyvuetify>=1.2.2
 ipywidgets==7.6.5
-gekko~=1.0.5
-numpy~=1.21.5
+gekko>=1.0.6
+numpy>=1.21.5
 pandas
 plotly==5.5.0
 seeq
+seeq-spy
 tensorflow~=2.5
 keras-tuner==1.0.4
 scipy

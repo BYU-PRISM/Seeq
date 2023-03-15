@@ -76,5 +76,6 @@ class TransferCardResult(v.Dialog):
         
         self.fig['layout']['yaxis']['showticklabels'] = True
         step_plot = go.Scatter(x=df.index, y=df, line={'dash': 'solid'}, mode='lines')
+
         data = [step_plot]
         self.fig.add_traces(data)

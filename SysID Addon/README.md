@@ -201,6 +201,12 @@ run `developer_notebook.ipynb` notebook there.
 
 # Changelog
 
+## v0.7.0
+- Performance improvement in TF identification
+- Progress bar added to TF identification
+- Legends added to TF chipsets
+- Bugs fixed for normalized plots in TF identification
+
 ## v0.6.1
 - Minor bugs fixed
 
@@ -223,9 +229,11 @@ run `developer_notebook.ipynb` notebook there.
 - Push functions improved
 
 ## v0.4.1
+
 - Hotfix for R57+ (search, pull, push functions)
 
 ## v0.4.0
+
 - Export ARX model (Gekko sysid outputs as a pickle)
 - Data Editor Added
 

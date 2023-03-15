@@ -1,7 +1,7 @@
 from seeq import spy
 
 from .tf_item import TransferItem, TransferOption
-from numpy import empty, array, zeros, arange
+from numpy import empty, array, zeros, arange, linspace, zeros_like, isnan
 from pandas import DataFrame
 from scipy.signal import TransferFunction
 from .arx import create_formula_variable_name
@@ -14,6 +14,7 @@ class TF(TransferItem):
         self.models = {}
         self.dummy = None
         self.formula = None
+        self.arx_gain = {}
         
     def add_model(self, cv_name, model: TransferItem):
         self.models[cv_name] = model
@@ -75,11 +76,13 @@ class TF(TransferItem):
         tau = option_item.tau if option_item.tau else 1
         
         tf = max(25*tau, 10*model.dt)
-        Time = arange(0, tf+1, model.dt)
+        # Time = arange(0, tf+1, model.dt)
+        sim_nt = min(int(tf/model.dt), 100)
+        Time = linspace(0, tf+1, sim_nt)
         sim_ts = len(Time)
 
         u = zeros((model.nu, sim_ts))
-        u[option_item.id][int(9*tau/model.dt):] = 1
+        u[option_item.id][int(tau/model.dt):] = 1
         
         u_df = DataFrame(u.T, columns=model.mv)
         # u_df += model.u_ss
@@ -157,6 +160,7 @@ class TF(TransferItem):
             formula_dic[uf_name[i]] = tags[tags['Name'] == u_name[i]]
         
             formula_list.append({'Name': '{} meas'.format(u_name[i]),
+            # formula_list.append({'Name': '{}'.format(u_name[i]),
                                  'Type': 'CalculatedSignal',
                                  'Description': '{}'.format(u_name[i]),
                                  'Formula': formula,
@@ -178,7 +182,11 @@ class TF(TransferItem):
         formula_list = []
 
         for cv_i in range(n_y):
+            
             cv_name = y_name[cv_i]
+            if not self.models[cv_name].status:
+                continue
+                
             y_ss = df[cv_name].iloc[0]
             y_opt = self.models[cv_name]
 
@@ -186,7 +194,9 @@ class TF(TransferItem):
             uf_name = create_formula_variable_name(u_name)
             formula = ''
             for tag in range(len(uf_name)):
+                # formula_dic[uf_name[tag]] = tags[tags['Name'] == u_name[tag]]
                 formula_dic[uf_name[tag]+'m'] = tags[tags['Name'] == u_name[tag]+' meas']
+
 
             timestep = y_opt.dt
 
@@ -208,8 +218,9 @@ class TF(TransferItem):
 
                 for j in range(n_b):
                     formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i]+'m', j * timestep + u_opt.theta, u_ss,
+                    # formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i], j * timestep + u_opt.theta, u_ss,
                                                                    num[j])
-
+            formula = '(' + formula[:-1] + ')*{}+'.format(self.arx_gain[cv_name])
             formula += str(y_ss)
 
             formula_list.append({
@@ -221,9 +232,14 @@ class TF(TransferItem):
             })
             
         for i in range(n_y):
+            cv_name = y_name[i]
+            if not self.models[cv_name].status:
+                continue
+                
             formula = yf_name[i]
                 
-            formula_list.append({'Name': '{} meas'.format(y_name[i]),
+            # formula_list.append({'Name': '{} meas'.format(y_name[i]),
+            formula_list.append({'Name': '{}'.format(y_name[i]),
                                  'Type': 'CalculatedSignal',
                                  'Description': y_name[i],
                                  'Formula': formula,
@@ -233,3 +249,61 @@ class TF(TransferItem):
         self.formula = DataFrame(formula_list)
 
         return self.formula
+
+    
+    
+    def predict_new(self, signal_df, cv_name, **kwargs):
+        df = signal_df.copy()
+        
+        n_y = len(self.cv)
+        
+        y_name = self.cv             
+
+        yp_df = DataFrame()
+
+        y_ss = df[cv_name].iloc[0]
+        y_opt = self.models[cv_name]
+        
+        timestep = y_opt.dt
+
+        y_meas = df[cv_name]
+        y_i = zeros_like(y_meas)
+        
+        for mv_i in range(len(y_opt.mv)):
+            mv_name = y_opt.mv[mv_i]
+            u_opt = y_opt.option_dict[mv_name]
+            u_ss = df[mv_name].iloc[0]
+
+            tf_sys = TransferFunction(u_opt.num, u_opt.den)
+            tfd_sys = tf_sys.to_discrete(dt=timestep, method='zoh')
+            num = tfd_sys.num
+            den = tfd_sys.den
+
+            n_a = len(den)
+            n_b = len(num)
+
+            u_meas = df[mv_name]
+            for i in range(1, n_a):
+                y_i += (y_meas.shift(i).fillna(method='bfill') - y_ss) * (-den[i])
+                # formula += ' ({}.move({}s)-{})*({})\n+'.format(yf_name[cv_i], i * timestep, y_ss, -den[i])
+
+            for j in range(n_b):
+                y_i += (u_meas.shift(j).fillna(method='bfill') - u_ss) * num[j]
+                # formula += ' ({}.move({}s)-{})*({})\n+'.format(uf_name[mv_i]+'m', j * timestep + u_opt.theta, u_ss,
+                #                                                num[j])
+
+                    
+        # yp_df[cv_name+"_tf"] = array(y_i[0])/abs(option_item.gain)
+        if len(y_opt.mv) > 1:
+            Km = (y_meas-y_ss).values/y_i.values
+            Km = Km[~isnan(Km)]
+            
+            self.arx_gain[cv_name] = Km.mean()
+        else:
+            self.arx_gain[cv_name] = 1
+
+        yp_df[cv_name+"_tf"] = y_i.to_numpy()*self.arx_gain[cv_name] + y_ss
+            
+        yp_df = yp_df.set_index(df.index)
+
+        return yp_df

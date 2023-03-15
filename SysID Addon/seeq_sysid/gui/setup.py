@@ -32,7 +32,7 @@ class Setup(v.Card):
 
         
         # Select MV and CV
-        self.mv_title = v.Text(children=['Manipulated Variables (MV)'], style_='font-size:12pt; font-weight:bold')
+        self.mv_title = v.Text(children=['Manipulated/Feedforward Variables (MV/FF)'], style_='font-size:12pt; font-weight:bold')
         self.mv_select = v.Select(tag='Manipulated Variables',
                                   v_model=[],
                                   items=[],
