@@ -1,17 +1,17 @@
-ipyvuetify>=1.2.2
-ipywidgets==7.6.5
-gekko>=1.0.6
-numpy>=1.21.5
+ipyvuetify
+ipywidgets
+gekko
+numpy
 pandas
 plotly==5.5.0
 seeq
 seeq-spy
-tensorflow~=2.5
+tensorflow
 keras-tuner==1.0.4
 scipy
-jupyterlab-pygments==0.1.2
-jupyterlab-widgets==1.0.2 
-jupyterlab==3.2.4
+jupyterlab-pygments
+jupyterlab-widgets
+jupyterlab
 voila~=0.3.0
-mistune>=2.0.3 # not directly required, pinned by Snyk to avoid a vulnerability
-setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+mistune>=2.0.3 
+setuptools>=65.5.1 
