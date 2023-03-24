@@ -24,6 +24,7 @@ setup(
 	  'tensorflow>=2.5',
 	  'keras-tuner==1.0.4',
 	  'scipy',
+	  'protobuf~=3.20',
     ],
     keywords='Seeq Prism System Identification ARX FIR ARIMAX Subspace State-Space Neural-Network Addon Time-Series Transfer Function',
     include_package_data=True,
