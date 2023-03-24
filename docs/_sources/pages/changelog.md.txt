@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.7.1
+- Hotfix: dependencies updated for R57>=
+
 ## v0.7.0
 - Performance improvement in TF identification
 - Progress bar added to TF identification
