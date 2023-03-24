@@ -202,7 +202,7 @@ run `developer_notebook.ipynb` notebook there.
 # Changelog
 
 ## v0.7.1
-- Hotfix: dependencies updated for R57>=
+- Hotfix: dependencies updated for R57 and below
 
 ## v0.7.0
 - Performance improvement in TF identification
