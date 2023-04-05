@@ -25,3 +25,39 @@ def shifter(df_o: DataFrame, dummy_state) -> DataFrame:
     df_n.fillna(method='bfill', inplace=True)
 
     return df_n
+
+
+class SPY:
+    def __init__(self):
+        pass
+    
+    class utils:
+        def get_analysis_worksheet_from_url(self, url=''):
+            pass
+        
+        def get_data_lab_project_url(self, url=''):
+            pass
+        
+        def get_workbook_id_from_url(self, worksheet_url=''):
+            pass
+        
+        def get_worksheet_id_from_url(self, worksheet_url=''):
+            pass
+        
+    def pull(self, df=None, start=None, end=None, grid='auto',
+             header='Name', quiet=True, status=None):
+        pass
+
+    def Status(self, quiet=True):
+        pass
+    
+    def push(df, metadata=None, workbook='', worksheet='', quiet=True,
+             status=None):
+        pass
+    
+    def search(url=None, estimate_sample_period=None, quiet=True, 
+               status=None):
+        pass
+    
+    
+    

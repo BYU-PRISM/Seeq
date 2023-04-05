@@ -6,8 +6,11 @@ from urllib.parse import parse_qs, unquote, urlparse
 from IPython.display import clear_output
 
 from pandas import DataFrame
-from seeq import spy
 
+try:
+    from seeq import spy
+except:
+    from seeq_sysid.model.utils import SPY as spy
 
 def pull_signals(url, grid='auto'):
     worksheet = spy.utils.get_analysis_worksheet_from_url(url)
@@ -19,9 +22,6 @@ def pull_signals(url, grid='auto'):
                                status=spy.Status(quiet=True))
     except:
         search_df = spy.search(url, estimate_sample_period=worksheet.display_range, status=spy.Status(quiet=True))
-
-    capsules_list = search_df[search_df['Type'].str.contains('CalculatedCondition')]['Name'].to_list()
-    signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
 
     if search_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
@@ -37,6 +37,9 @@ def pull_signals(url, grid='auto'):
     
     if all_df.empty:
         return DataFrame(), DataFrame(), DataFrame()
+    
+    signal_list = search_df[search_df['Type'].str.contains('Signal')]['Name'].to_list()
+    capsules_list = search_df[search_df['Type'].str.contains('CalculatedCondition')]['Name'].to_list()
     
     # if hasattr(all_df, 'spy') and hasattr(all_df.spy, 'query_df'):
     #     all_df.columns = all_df.spy.query_df['Name']

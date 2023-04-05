@@ -5,7 +5,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='0.7.0',
+    version='1.0.0',
     packages=find_packages(),
     url='https://github.com/BYU-PRISM/Seeq',
     license='MIT',
@@ -16,18 +16,15 @@ setup(
     long_description_content_type='text/markdown',
     install_requires=[
 	  'ipyvuetify>=1.5.1',
-	  'gekko~=1.0.6',
+	  'gekko>=1.0.6',
 	  'numpy',
 	  'pandas>=1.2.1',
 	  'plotly>=4.5.0',
         'python-dateutil>=2.8.1',
-	  'tensorflow~=2.5',
+	  'tensorflow>=2.5',
 	  'keras-tuner==1.0.4',
 	  'scipy',
-	  'seeq',
-        'seeq-spy',
-        'jupyter',
-        'voila'
+	  'protobuf~=3.20',
     ],
     keywords='Seeq Prism System Identification ARX FIR ARIMAX Subspace State-Space Neural-Network Addon Time-Series Transfer Function',
     include_package_data=True,

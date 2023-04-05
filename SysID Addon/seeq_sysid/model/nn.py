@@ -84,8 +84,8 @@ class NN(Model):
         self.option_maker()
 
         # Early Stopping
-        tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=3)
-        fit_es = callbacks.EarlyStopping(monitor='val_loss', patience=15)
+        tune_es = callbacks.EarlyStopping(monitor='val_loss', patience=3, verbose=0)
+        fit_es = callbacks.EarlyStopping(monitor='val_loss', patience=15, verbose=0)
 
         # Number of Inputs & Outputs
         self.p = len(self.mv + self.cv)
@@ -130,7 +130,9 @@ class NN(Model):
         # Get the optimal hyperparameters
         best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
 
+
         model = tuner.hypermodel.build(best_hps)
+        
 
         # Training Performance
         self.history = model.fit(x_train, y_train, epochs=1000, validation_split=0.2, callbacks=[fit_es], verbose=0)
@@ -146,8 +148,8 @@ class NN(Model):
         in_df = df_norm[self.mv+self.cv]
         x_train, _ = self.create_snapshot(in_df=in_df)
 
-        yp_norm = self.model.predict(x_train)
-
+        yp_norm = self.model.predict(x_train, verbose=0)
+        
         yp_norm_df = DataFrame(yp_norm, columns=self.cv)
         yp_df = self.denormalize(yp_norm_df)
         dummy_rows = df[self.cv].iloc[:self.window].shift(self.window)
@@ -199,4 +201,4 @@ class HyperTuner(BayesianOptimization):
 
     def run_trial(self, trial, *args, **kwargs):
         kwargs['batch_size'] = trial.hyperparameters.Choice('batch_size', self.auto_bs)
-        super(HyperTuner, self).run_trial(trial, *args, **kwargs)
+        return super(HyperTuner, self).run_trial(trial, *args, **kwargs)
