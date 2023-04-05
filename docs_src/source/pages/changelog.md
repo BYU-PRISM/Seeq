@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.0
+- Minor improvements
+- Empty worksheet warning
+- Performance improvements
+
 ## v0.7.1
 - Hotfix: dependencies updated for R57>=
 

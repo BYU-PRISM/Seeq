@@ -1,10 +1,13 @@
-from seeq import spy
-
 from .tf_item import TransferItem, TransferOption
 from numpy import empty, array, zeros, arange, linspace, zeros_like, isnan
 from pandas import DataFrame
 from scipy.signal import TransferFunction
 from .arx import create_formula_variable_name
+
+try:
+    from seeq import spy
+except:
+    from seeq_sysid.model.utils import SPY as spy
 
 
 class TF(TransferItem):

@@ -11,7 +11,11 @@ from seeq_sysid.gui.app_bar import AppBar
 from seeq_sysid.gui._backend import *
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
-from seeq import spy
+
+try:
+    from seeq import spy
+except:
+    from seeq_sysid.model.utils import SPY as spy
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -61,6 +65,14 @@ class SYSID:
             self.signal_df = DataFrame()
             self.capsule_df = DataFrame()
             self.tags_df = DataFrame()
+            
+        # Empty df warning
+        self.not_enough_data = v.Snackbar(v_model=False, 
+                                          class_='ma-4 pa-4', 
+                                          children=['Not enough data. Please add at least two numerical signals.'],
+                                          color='rgba(0, 0, 0, 0.8)', 
+                                          multi_line=True,
+                                          timeout=8000)
         
         # Local Mode
         # self.signal_df = read_csv('data/TE_signal_lite.csv', index_col='Time')
@@ -142,7 +154,11 @@ class SYSID:
     def run(self):
         clear_output()
         display(HTML("""<style>.container {width:100% !important}</style>"""))
-        self.app.children = [self.app_bar, SYSID.additional_styles]
+        self.app.children = [self.app_bar, SYSID.additional_styles, self.not_enough_data]
+        
+        if len(self.signal_df.columns) < 2:
+            self.not_enough_data.v_model = True
+            
         return self.app
     
     
@@ -156,6 +172,7 @@ class SYSID:
                 self.signal_df, self.capsule_df, self.tags_df = pull_signals(self.worksheet_url)
         else:
             self.signal_df = self.app_bar.ham_menu.local_data
+
          
         
         self.arx_sheet = ARXAppSheet()
@@ -193,6 +210,10 @@ class SYSID:
 
         items = [self.tf_tab_items, self.arx_tab_item, self.ss_tab_items, self.nn_tab_items]
 
+        if self.app_bar.ham_menu.sl_switch.v_model:
+            if not self.signal_df.empty:
+                self.sl_switch()
+    
         self.app_bar = AppBar(self.tabs, items)
 
         self.worksheet_url_box = self.app_bar.ham_menu.worksheet_url
@@ -208,8 +229,12 @@ class SYSID:
 
         clear_output()
         display(HTML("""<style>.container {width:100% !important}</style>"""))
-        self.app.children = [self.app_bar, SYSID.additional_styles]
-        display(self.app)            
+        self.app.children = [self.app_bar, SYSID.additional_styles, self.not_enough_data]
+            
+        display(self.app)       
+        
+        if len(self.signal_df.columns) < 2:
+            self.not_enough_data.v_model = True
 
     def close_url_action(self, *args):
         self.worksheet_url_box.v_model = self.worksheet_url
@@ -222,6 +247,13 @@ class SYSID:
         self.worksheet_url_box.v_model = self.worksheet_url
         self.ok_url_dialog_btn.loading = False
         self.app_bar.ham_menu.url_dialog.v_model = None
+        
+    def sl_switch(self):
+        self.arx_sheet.panel.push_model_btn.on_event('click', lambda _, *args: _)
+        self.ss_sheet.panel.push_model_btn.on_event('click', lambda _, *args: _)
+        self.nn_sheet.panel.push_model_btn.on_event('click', lambda _, *args: _)
+        self.tf_sheet.app_bar.push_btn.on_event('click', lambda _, *args: _)
+        self.app_bar.ham_menu.sl_switch.show()
         
     # DataEditor event functions (Post)
     def load_data_editor_action(self, *args):

@@ -1,5 +1,4 @@
 from gekko import GEKKO
-from seeq import spy
 
 from numpy import vstack, zeros, ones, reshape, array, zeros_like, diff
 from pandas import DataFrame
@@ -8,6 +7,10 @@ from .base import Model
 from re import split
 from scipy.linalg import lstsq
 
+try:
+    from seeq import spy
+except:
+    from seeq_sysid.model.utils import SPY as spy
 
 def create_formula_variable_name(names):
     formula_name = []
