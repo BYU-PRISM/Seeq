@@ -1,7 +1,7 @@
 <!-- workflow badges -->
 [![CodeQL](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/BYU-PRISM/Seeq/actions/workflows/codeql-analysis.yml)
 [![Documentation](https://github.com/BYU-PRISM/Seeq/actions/workflows/pages/pages-build-deployment/badge.svg)](https://byu-prism.github.io/Seeq/)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BYU-PRISM/Seeq/binder?urlpath=apps%2Fsysid_notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/BYU-PRISM/Seeq/binder?urlpath=voila%2Frender%2Fsysid_notebook.ipynb)
 
 <p align="left">
 <img src="https://github.com/BYU-PRISM/Seeq/blob/main/docs/images/Title.png?raw=true" width="400" height="100"></p>
