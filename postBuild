@@ -2,3 +2,4 @@
 
 pip install gekko
 pip install seeq
+pip install seeq-spy
