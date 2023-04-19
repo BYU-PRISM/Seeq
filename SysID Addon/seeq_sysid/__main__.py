@@ -10,7 +10,7 @@ from seeq.spy import _url
 from ._copy import copy
 import seeq
 
-NB_EXTENSIONS = ['widgetsnbextension', 'plotlywidget', 'ipyvuetify', 'ipyvue']
+NB_EXTENSIONS = ['widgetsnbextension', 'ipyvuetify', 'ipyvue']
 DEPLOYMENT_FOLDER = 'deployment'
 SYSID_NOTEBOOK = "sysid_notebook.ipynb"
 DEFAULT_GROUP = ['Everyone']

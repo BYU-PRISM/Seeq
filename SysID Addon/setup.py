@@ -5,7 +5,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='1.0.0',
+    version='1.0.1',
     packages=find_packages(),
     url='https://github.com/BYU-PRISM/Seeq',
     license='MIT',
@@ -18,8 +18,8 @@ setup(
 	  'ipyvuetify>=1.5.1',
 	  'gekko>=1.0.6',
 	  'numpy',
-	  'pandas>=1.2.1',
-	  'plotly>=4.5.0',
+	  'pandas<2.0.0,>=1.2.1',
+	  'plotly>=5.10.0',
         'python-dateutil>=2.8.1',
 	  'tensorflow>=2.5',
 	  'keras-tuner==1.0.4',
