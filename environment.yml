@@ -2,10 +2,11 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - appmode
+  - voila
   - ipyvuetify
-  - ipywidgets
   - numpy
   - pandas
   - plotly
-#   - scipy
+  - scipy
+  - tensorflow
+  - keras-tuner

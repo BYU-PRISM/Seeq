@@ -2,5 +2,3 @@
 
 pip install gekko
 pip install seeq
-pip install keras-tuner==1.0.4
-pip install tensorflow>=2.1
