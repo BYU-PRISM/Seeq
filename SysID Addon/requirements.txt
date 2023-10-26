@@ -10,3 +10,4 @@ tensorflow
 keras-tuner==1.0.4
 scipy
 setuptools>=65.5.1
+werkzeug>=3.0.1 # not directly required, pinned by Snyk to avoid a vulnerability
