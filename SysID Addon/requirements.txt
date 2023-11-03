@@ -10,3 +10,6 @@ tensorflow
 keras-tuner==1.0.4
 scipy
 setuptools>=65.5.1
+pillow>=10.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
+tornado>=6.3.3 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=3.0.1 # not directly required, pinned by Snyk to avoid a vulnerability
