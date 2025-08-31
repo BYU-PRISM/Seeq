@@ -314,7 +314,7 @@ class TransferItem(GEKKO):
             self.tc[i].value = self.t
             self.um[i].value = u[i]
 
-            self.cspline(self.tc[i], self.um[i], self.t, u[i], bound_x=True)
+            self.cspline(self.tc[i], self.um[i], self.t, u[i], bound_x=False)
 
         self.ym[0].value = y[0]
         # self.ym[0].fstatus = 1
@@ -429,7 +429,7 @@ class TransferItem(GEKKO):
             self.tc[i].value = self.t
             # self.tc[i].lower = 0
 
-            self.cspline(self.tc[i], self.um[i], self.t, u[i], bound_x=True)
+            self.cspline(self.tc[i], self.um[i], self.t, u[i], bound_x=False)
 
         self.tt.value = t
         self.ym[0].value = 0
