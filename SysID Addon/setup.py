@@ -26,7 +26,6 @@ setup(
 	  'keras-tuner>=1.4.7',
 	  'scipy>=1.16.0',
 	  'scikit-learn>=1.7.1',
-	  'protobuf>=5.29.5',
       'seeq',
 	  'seeq-spy'
     ],
