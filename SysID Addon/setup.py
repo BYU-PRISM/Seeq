@@ -5,7 +5,7 @@ with open(file='README.md', mode='r') as readme_handle:
 
 setup(
     name='seeq_sysid',
-    version='1.0.1',
+    version='1.0.2-dev0',
     packages=find_packages(),
     url='https://github.com/BYU-PRISM/Seeq',
     license='MIT',
@@ -15,22 +15,25 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=[
-	  'ipyvuetify>=1.5.1',
-	  'gekko>=1.0.6',
-	  'numpy',
-	  'pandas<2.0.0,>=1.2.1',
-	  'plotly>=5.10.0',
-        'python-dateutil>=2.8.1',
-	  'tensorflow>=2.5',
-	  'keras-tuner==1.0.4',
-	  'scipy',
-	  'protobuf~=3.20',
+	  'ipyvuetify>=1.6.2',
+	  'ipywidgets==7.7.2',
+	  'gekko>=1.3.0',
+	  'numpy>=1.26.4',
+	  'pandas>=2.2.3',
+	  'plotly==5.24.1',
+      'python-dateutil>=2.8.1',
+	  'tensorflow>=2.19.0',
+	  'keras-tuner>=1.4.7',
+	  'scipy>=1.16.0',
+	  'scikit-learn>=1.7.1',
+      'seeq',
+	  'seeq-spy'
     ],
     keywords='Seeq Prism System Identification ARX FIR ARIMAX Subspace State-Space Neural-Network Addon Time-Series Transfer Function',
     include_package_data=True,
     package_data={'seeq_sysid': ['data/seeq_logo.png']},
     classifiers=[
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.11',
     ]
 )
